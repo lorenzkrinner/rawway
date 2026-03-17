@@ -1,10 +1,11 @@
 import { Carousel } from "components/carousel";
 import { ThreeItemGrid } from "components/grid/three-items";
 import Footer from "components/layout/footer";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   description:
-    "High-performance ecommerce store built with Next.js, Vercel, and Shopify.",
+    "Rawway is a direct-to-consumer protein bar brand with a custom headless e-commerce storefront. The store sells protein bars in three flavors with a brand identity centered on minimal ingredients (5 or fewer), natural/earthy aesthetics, and sustainable paper packaging.",
   openGraph: {
     type: "website",
   },
