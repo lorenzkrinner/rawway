@@ -4,7 +4,8 @@ import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { updateItemQuantity } from "components/cart/actions";
 import type { CartItem } from "lib/shopify/types";
-import { useActionState } from "react";
+import { useAction } from "next-safe-action/hooks";
+import { toast } from "sonner";
 
 function SubmitButton({ type }: { type: "plus" | "minus" }) {
   return (
@@ -36,26 +37,30 @@ export function EditItemQuantityButton({
 }: {
   item: CartItem;
   type: "plus" | "minus";
-  optimisticUpdate: any;
+  optimisticUpdate: (
+    merchandiseId: string,
+    updateType: "plus" | "minus" | "delete",
+  ) => void;
 }) {
-  const [message, formAction] = useActionState(updateItemQuantity, null);
   const payload = {
     merchandiseId: item.merchandise.id,
     quantity: type === "plus" ? item.quantity + 1 : item.quantity - 1,
   };
-  const updateItemQuantityAction = formAction.bind(null, payload);
+
+  const { execute } = useAction(updateItemQuantity, {
+    onError: ({ error }) => {
+      toast.error(error.serverError || "Failed to update item quantity");
+    },
+  });
 
   return (
     <form
       action={async () => {
         optimisticUpdate(payload.merchandiseId, type);
-        updateItemQuantityAction();
+        execute(payload);
       }}
     >
       <SubmitButton type={type} />
-      <p aria-live="polite" className="sr-only" role="status">
-        {message}
-      </p>
     </form>
   );
 }

@@ -1,8 +1,7 @@
 export default {
+  cacheComponents: true,
   experimental: {
-    ppr: true,
     inlineCss: true,
-    useCache: true,
   },
   images: {
     formats: ["image/avif", "image/webp"],
@@ -13,5 +12,8 @@ export default {
         pathname: "/s/files/**",
       },
     ],
+  },
+  turbopack: {
+    root: process.cwd(),
   },
 };

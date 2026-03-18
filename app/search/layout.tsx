@@ -25,7 +25,9 @@ export default function SearchLayout({
           <FilterList list={sorting} title="Sort by" />
         </div>
       </div>
-      <Footer />
+      <Suspense>
+        <Footer />
+      </Suspense>
     </>
   );
 }
