@@ -1,14 +1,14 @@
-import { GeistSans } from "geist/font/sans";
 import { Metadata } from "next";
+import { Geist } from "next/font/google";
 import { ReactNode, Suspense } from "react";
 import { Toaster } from "sonner";
 import { CartProvider } from "src/components/cart/cart-context";
 import { Navbar } from "src/components/layout/navbar";
 import { WelcomeToast } from "src/components/welcome-toast";
 import { getCart } from "src/lib/shopify";
-import { baseUrl, cn } from "src/lib/utils";
+import { cn } from "~/lib/cn";
+import { baseUrl } from "~/lib/utils";
 import "./globals.css";
-import { Geist } from "next/font/google";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 

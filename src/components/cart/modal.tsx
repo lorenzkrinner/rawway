@@ -10,7 +10,7 @@ import { useFormStatus } from "react-dom";
 import LoadingDots from "src/components/loading-dots";
 import Price from "src/components/price";
 import { DEFAULT_OPTION } from "src/lib/constants";
-import { createUrl } from "src/lib/utils";
+import { createUrl } from "~/lib/utils";
 import { createCartAndSetCookie, redirectToCheckout } from "./actions";
 import { useCart } from "./cart-context";
 import { DeleteItemButton } from "./delete-item-button";

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { GridTileImage } from "src/components/grid/tile";
 import { getCollectionProducts } from "src/lib/shopify";
 import type { Product } from "src/lib/shopify/types";
+import { HOMEPAGE_FEATURED_ITEMS_COLLECTION_HANDLE } from "~/constants/shopify";
 
 function ThreeItemGridItem({
   item,
@@ -50,7 +51,7 @@ function ThreeItemGridItem({
 export async function ThreeItemGrid() {
   // Collections that start with `hidden-*` are hidden from the search page.
   const homepageItems = await getCollectionProducts({
-    collection: "hidden-homepage-featured-items",
+    collection: HOMEPAGE_FEATURED_ITEMS_COLLECTION_HANDLE,
   });
 
   if (!homepageItems[0] || !homepageItems[1] || !homepageItems[2]) return null;

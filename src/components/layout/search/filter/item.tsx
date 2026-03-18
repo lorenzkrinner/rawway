@@ -4,7 +4,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import type { SortFilterItem } from "src/lib/constants";
-import { createUrl } from "src/lib/utils";
+import { createUrl } from "~/lib/utils";
 import type { ListItem, PathFilterItem } from ".";
 
 function PathFilterItem({ item }: { item: PathFilterItem }) {

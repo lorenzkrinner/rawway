@@ -4,13 +4,14 @@ import CartModal from "src/components/cart/modal";
 import LogoSquare from "src/components/logo-square";
 import { getMenu } from "src/lib/shopify";
 import { Menu } from "src/lib/shopify/types";
+import { FRONT_HEADER_MENU_HANDLE } from "~/constants/shopify";
 import MobileMenu from "./mobile-menu";
 import Search, { SearchSkeleton } from "./search";
 
 const { SITE_NAME } = process.env;
 
 export async function Navbar() {
-  const menu = await getMenu("next-js-frontend-header-menu");
+  const menu = await getMenu(FRONT_HEADER_MENU_HANDLE);
 
   return (
     <nav className="relative flex items-center justify-between p-4 lg:px-6">

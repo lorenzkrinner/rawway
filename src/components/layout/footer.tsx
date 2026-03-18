@@ -5,13 +5,14 @@ import { Suspense } from "react";
 import FooterMenu from "src/components/layout/footer-menu";
 import LogoSquare from "src/components/logo-square";
 import { getMenu } from "src/lib/shopify";
+import { FRONT_FOOTER_MENU_HANDLE } from "~/constants/shopify";
 
 const { COMPANY_NAME, SITE_NAME } = process.env;
 
 export default async function Footer() {
   await connection();
   const currentYear = new Date().getFullYear();
-  const menu = await getMenu("next-js-frontend-footer-menu");
+  const menu = await getMenu(FRONT_FOOTER_MENU_HANDLE);
   const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : "");
   const skeleton =
     "w-full h-6 animate-pulse rounded-sm bg-neutral-200 dark:bg-neutral-700";
