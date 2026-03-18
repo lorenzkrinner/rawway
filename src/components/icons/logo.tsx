@@ -8,6 +8,6 @@ export default function Logo({
 } & React.ComponentProps<"span">) {
   
   return (
-    <span className={cn("text-4xl font-loud font-black tracking-tighter", className)} {...props}>KEON</span>
+    <span className={cn("text-2xl font-loud font-black", className)} {...props}>KEON</span>
   );
 }

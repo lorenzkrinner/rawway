@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { ShoppingBagIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -18,17 +18,17 @@ import {
   SheetTitle,
 } from "~/components/ui/sheet";
 import { createUrl } from "~/lib/utils";
+import { Badge } from "../ui/badge";
 import { createCartAndSetCookie, redirectToCheckout } from "./actions";
 import { useCart } from "./cart-context";
 import { DeleteItemButton } from "./delete-item-button";
 import { EditItemQuantityButton } from "./edit-item-quantity-button";
-import OpenCart from "./open-cart";
 
 type MerchandiseSearchParams = {
   [key: string]: string;
 };
 
-export default function CartModal() {
+export default function CartModal({ navTextClass }: { navTextClass: string }) {
   const { cart, updateCartItem } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const quantityRef = useRef(cart?.totalQuantity);
@@ -56,9 +56,20 @@ export default function CartModal() {
 
   return (
     <>
-      <button aria-label="Open cart" onClick={openCart}>
-        <OpenCart quantity={cart?.totalQuantity} />
-      </button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className={`${navTextClass} hover:bg-muted/20 rounded-lg`}
+        onClick={openCart}
+      >
+        <ShoppingBagIcon className="size-6" />
+
+        {cart?.totalQuantity ? (
+          <Badge className="absolute right-0 top-0 -mr-2 -mt-2 h-4 w-4 rounded-sm px-0 text-[11px] font-medium">
+            {cart?.totalQuantity}
+          </Badge>
+        ) : null}
+      </Button>
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetContent
           side="right"
@@ -67,11 +78,9 @@ export default function CartModal() {
         >
           <SheetHeader className="p-0">
             <div className="flex items-center justify-between">
-              <SheetTitle className="text-lg font-semibold">
-                My Cart
-              </SheetTitle>
+              <SheetTitle className="text-lg font-semibold">My Cart</SheetTitle>
               <Button variant="ghost" size="icon" onClick={closeCart}>
-                <XMarkIcon className='size-6' />
+                <XMarkIcon className="size-6" />
               </Button>
             </div>
           </SheetHeader>
@@ -100,8 +109,7 @@ export default function CartModal() {
                       item.merchandise.selectedOptions.forEach(
                         ({ name, value }) => {
                           if (value !== DEFAULT_OPTION) {
-                            merchandiseSearchParams[name.toLowerCase()] =
-                              value;
+                            merchandiseSearchParams[name.toLowerCase()] = value;
                           }
                         },
                       );
@@ -131,8 +139,7 @@ export default function CartModal() {
                                   height={64}
                                   alt={
                                     item.merchandise.product.featuredImage
-                                      .altText ||
-                                    item.merchandise.product.title
+                                      .altText || item.merchandise.product.title
                                   }
                                   src={
                                     item.merchandise.product.featuredImage.url
@@ -148,8 +155,7 @@ export default function CartModal() {
                                   <span className="leading-tight">
                                     {item.merchandise.product.title}
                                   </span>
-                                  {item.merchandise.title !==
-                                  DEFAULT_OPTION ? (
+                                  {item.merchandise.title !== DEFAULT_OPTION ? (
                                     <p className="text-sm text-muted-foreground">
                                       {item.merchandise.title}
                                     </p>

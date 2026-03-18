@@ -31,92 +31,180 @@
 - Climate Crisis headline: "TYPE THE NEXT BIG THING."
 - Subtitle + "Order Today" CTA button
 - Scroll indicator at bottom
+- **No carousel** — a single focused hero outperforms rotating slides
 
 ---
 
-## 3. Product Showcase — 3D Keyboard Assembly
+## 3. Trust Bar
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  ★★★★★ 4.9 / 5  •  120+ Reviews  •  Free Shipping  •  30-Day     │
+│                                                        Returns     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+- Thin, single-row strip immediately below the hero
+- Aggregate star rating + review count (pulls from Shopify reviews or hardcoded for v1)
+- Key purchase incentives (free shipping, return policy)
+- Optional: press logos if/when available ("As seen in …")
+- Builds trust before the visitor reaches any product content
+
+---
+
+## 4. Product Spotlight — Keyboard 1 (Flagship)
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
-│              [3D Keyboard Model — scroll-driven animation]          │
-│                                                                     │
-│    Frame 1 (top):  Keys floating chaotically above the board        │
-│         ↓ scroll                                                    │
-│    Frame 2 (mid):  Keys drifting into loose formation               │
-│         ↓ scroll                                                    │
-│    Frame 3 (end):  Keys snap into correct positions —               │
-│                    fully assembled keyboard                         │
-│                                                                     │
-│              "Precision in every keystroke."                         │
+│  ┌─────────────────────────────┐  ┌────────────────────────────┐   │
+│  │                             │  │                            │   │
+│  │  [Lifestyle image:          │  │  THE KNOB ONE™             │   │
+│  │   Keyboard 1 on a desk]     │  │                            │   │
+│  │                             │  │  Built for the ones        │   │
+│  │                             │  │  who ship.                 │   │
+│  │                             │  │                            │   │
+│  │                             │  │  • Hot-swappable switches  │   │
+│  │                             │  │  • Programmable knob       │   │
+│  │                             │  │  • Wireless & wired        │   │
+│  │                             │  │                            │   │
+│  │                             │  │  $XXX                      │   │
+│  │                             │  │  ┌─────────────────┐       │   │
+│  │                             │  │  │   SHOP NOW      │       │   │
+│  │                             │  │  └─────────────────┘       │   │
+│  └─────────────────────────────┘  └────────────────────────────┘   │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
-- Pinned/sticky 3D canvas that plays as user scrolls
-- Chaotic → ordered key assembly animation
-- Scroll progress maps 1:1 to animation timeline
-- Optional tagline at the end of the sequence
+- Dedicated "hero moment" for the flagship keyboard
+- Lifestyle image on the left, product info on the right
+- Benefit-led bullet points (not raw specs)
+- Price + CTA linking to product page
+- Subtle fade-in on scroll
 
 ---
 
-## 4. Feature Highlights
+## 5. Product Spotlight — Keyboard 2
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                                                                     │
+│  ┌────────────────────────────┐  ┌─────────────────────────────┐   │
+│  │                            │  │                             │   │
+│  │  THE KNOB ONE LITE™        │  │  [Lifestyle image:          │   │
+│  │                            │  │   Keyboard 2 in context]    │   │
+│  │  All the essentials.       │  │                             │   │
+│  │  None of the bulk.         │  │                             │   │
+│  │                            │  │                             │   │
+│  │  • Compact 75% layout     │  │                             │   │
+│  │  • USB-C                   │  │                             │   │
+│  │  • PBT keycaps             │  │                             │   │
+│  │                            │  │                             │   │
+│  │  $XXX                      │  │                             │   │
+│  │  ┌─────────────────┐       │  │                             │   │
+│  │  │   SHOP NOW      │       │  │                             │   │
+│  │  └─────────────────┘       │  │                             │   │
+│  └────────────────────────────┘  └─────────────────────────────┘   │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+- Mirrored layout (text left, image right) for visual rhythm
+- Clearly differentiated positioning from Keyboard 1
+- Same structure: lifestyle image, benefits, price, CTA
+
+---
+
+## 6. Why Keon — Benefits
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
 │  ┌─────────────────────────┐  ┌──────────────────────────────┐     │
-│  │                         │  │  FEATURE 1                   │     │
-│  │    [Product close-up]   │  │  Headline                    │     │
-│  │                         │  │  Short description of the    │     │
-│  │                         │  │  feature and why it matters. │     │
+│  │                         │  │  YOUR KEYBOARD, YOUR FEEL    │     │
+│  │    [Close-up: switches  │  │                              │     │
+│  │     being swapped]      │  │  Swap switches in seconds    │     │
+│  │                         │  │  without soldering. Find      │     │
+│  │                         │  │  your perfect keystroke.      │     │
 │  └─────────────────────────┘  └──────────────────────────────┘     │
 │                                                                     │
 │  ┌──────────────────────────────┐  ┌─────────────────────────┐     │
-│  │  FEATURE 2                   │  │                         │     │
-│  │  Headline                    │  │    [Product close-up]   │     │
-│  │  Short description of the    │  │                         │     │
-│  │  feature and why it matters. │  │                         │     │
-│  └──────────────────────────────┘  └─────────────────────────┘     │
+│  │  ONE KNOB, ZERO              │  │                         │     │
+│  │  DISTRACTIONS                │  │    [Close-up: knob      │     │
+│  │                              │  │     being turned]       │     │
+│  │  Volume, zoom, scroll —      │  │                         │     │
+│  │  map it to whatever keeps    │  │                         │     │
+│  │  you in flow.                │  └─────────────────────────┘     │
+│  └──────────────────────────────┘                                   │
 │                                                                     │
 │  ┌─────────────────────────┐  ┌──────────────────────────────┐     │
-│  │                         │  │  FEATURE 3                   │     │
-│  │    [Product close-up]   │  │  Headline                    │     │
-│  │                         │  │  Short description of the    │     │
-│  │                         │  │  feature and why it matters. │     │
+│  │                         │  │  BUILT TO OUTLAST YOUR       │     │
+│  │    [Close-up: aluminum  │  │  NEXT THREE STARTUPS         │     │
+│  │     case detail]        │  │                              │     │
+│  │                         │  │  CNC aluminum frame, PBT     │     │
+│  │                         │  │  keycaps, gasket-mount.      │     │
+│  │                         │  │  This thing doesn't quit.    │     │
 │  └─────────────────────────┘  └──────────────────────────────┘     │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 - Alternating image/text layout (image left → image right → image left)
-- 2–3 key features (e.g., hot-swappable switches, knob control, build quality)
-- Each feature: bold headline (Climate Crisis), short body text (DM Sans)
+- 3 key benefits — framed for the entrepreneur audience, not raw specs
+- Each benefit: bold headline (Climate Crisis), short body text (DM Sans)
 - Subtle fade-in on scroll
 
 ---
 
-## 5. Social Proof — Review Carousel
+## 7. Social Proof — Reviews
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
 │  "Don't take our word for it."                                      │
 │                                                                     │
-│  ← ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ →          │
-│    │ [Review  ] │ [Review  ] │ [Review  ] │ [Review  ] │            │
-│    │ screenshot│ │ screenshot│ │ screenshot│ │ screenshot│           │
-│    │ or embed  │ │ or embed  │ │ or embed  │ │ or embed  │           │
-│    │           │ │           │ │           │ │           │            │
-│    │ @user     │ │ @user     │ │ @user     │ │ @user     │           │
-│    │ Platform  │ │ Platform  │ │ Platform  │ │ Platform  │           │
-│    └──────────┘ └──────────┘ └──────────┘ └──────────┘              │
+│  ← ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ →           │
+│    │ ★★★★★        │ │ ★★★★★        │ │ ★★★★★        │             │
+│    │              │ │              │ │              │              │
+│    │ "Best        │ │ [Photo       │ │ "Finally a   │              │
+│    │  keyboard    │ │  review:     │ │  keyboard    │              │
+│    │  I've ever   │ │  keyboard    │ │  that        │              │
+│    │  owned."     │ │  on desk]    │ │  matches my  │              │
+│    │              │ │              │ │  ambition."  │              │
+│    │ — @user      │ │ "Love the    │ │              │              │
+│    │   Platform   │ │  build."     │ │ — @user      │              │
+│    │              │ │ — @user      │ │   Platform   │              │
+│    └──────────────┘ └──────────────┘ └──────────────┘              │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
-- Horizontal scroll carousel (drag or arrow navigation)
-- Cards with social media review screenshots or styled quotes
+- Horizontal scroll carousel (drag or arrow navigation, CSS scroll-snap)
+- **Mixed formats**: text quotes, photo reviews, star ratings on every card
 - Username + platform icon on each card
 - Auto-scroll optional, pausable on hover
+- Consider adding a video testimonial card if available (+80% conversion impact)
 
 ---
 
-## 6. Brand Story
+## 8. Complete Your Setup — Accessories
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                                                                     │
+│  COMPLETE YOUR SETUP                                                │
+│                                                                     │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐        │
+│  │                │  │                │  │                │        │
+│  │  [Leather      │  │  [Palm rest    │  │  [Switch       │        │
+│  │   case image]  │  │   image]       │  │   puller       │        │
+│  │                │  │                │  │   image]       │        │
+│  │  Leather Case  │  │  Walnut Palm   │  │  Switch        │        │
+│  │  $XX           │  │  Rest          │  │  Puller        │        │
+│  │                │  │  $XX           │  │  $XX           │        │
+│  │  [+ ADD]       │  │  [+ ADD]       │  │  [+ ADD]       │        │
+│  └────────────────┘  └────────────────┘  └────────────────┘        │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+- Cross-sell section to boost average order value
+- 3–4 accessory cards in a clean grid (or horizontal scroll on mobile)
+- Each card: product image, name, price, quick-add button
+- Framed as a curated bundle, not a generic product grid
+
+---
+
+## 9. Brand Story
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
@@ -138,7 +226,7 @@
 
 ---
 
-## 7. Final CTA
+## 10. Final CTA
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
@@ -156,10 +244,11 @@
 - Clean, focused section — product name, price, single CTA
 - Studio product shot or render
 - Links directly to add-to-cart / checkout
+- Catches bottom-of-page scrollers who've read the full pitch
 
 ---
 
-## 8. Footer
+## 11. Footer
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │  KEON                                                               │
@@ -177,7 +266,7 @@
 
 ## Technical Notes
 
-- **3D Section**: Three.js / React Three Fiber for the keyboard model. Scroll progress drives the animation via `useScroll` from Framer Motion or R3F's `ScrollControls`.
 - **Carousel**: CSS scroll-snap or a lightweight library (Embla Carousel).
-- **Animations**: Framer Motion for fade-in / stagger effects on feature sections.
-- **Responsive**: Hero image swaps to portrait crop on mobile. 3D section may simplify to a video fallback on low-end devices. Feature highlights stack vertically.
+- **Animations**: Framer Motion for fade-in / stagger effects on feature and product spotlight sections.
+- **Responsive**: Hero image swaps to portrait crop on mobile. Feature highlights and product spotlights stack vertically. Accessories grid becomes horizontal scroll.
+- **Quick-add**: Accessory cards use the existing cart server actions for frictionless add-to-cart without leaving the homepage.

@@ -6,6 +6,7 @@ import { CartProvider } from "src/components/cart/cart-context";
 import { Navbar } from "src/components/layout/navbar";
 import { getCart } from "src/lib/shopify";
 import Footer from "~/components/layout/footer";
+import { NAV_HEIGHT } from "~/constants/layout";
 import { cn } from "~/lib/cn";
 import { baseUrl } from "~/lib/utils";
 import "./globals.css";
@@ -40,7 +41,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Suspense>
           <CartProviderWithData>
             <Navbar />
-            <main>
+            <main style={{ paddingTop: NAV_HEIGHT }}>
               {children}
               <Toaster closeButton />
             </main>

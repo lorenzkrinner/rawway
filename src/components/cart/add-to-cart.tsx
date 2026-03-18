@@ -32,7 +32,7 @@ function SubmitButton({
       <Button
         aria-label="Please select an option"
         disabled
-        className="relative w-full rounded-full p-4 tracking-wide opacity-60"
+        className="relative w-full rounded-full p-4 tracking-wide opacity-60 py-8"
       >
         <div className="absolute left-0 ml-4">
           <PlusIcon className="h-5" />
@@ -45,7 +45,7 @@ function SubmitButton({
   return (
     <Button
       aria-label="Add to cart"
-      className="relative w-full rounded-full p-4 tracking-wide hover:opacity-90"
+      className="relative w-full rounded-full p-4 tracking-wide hover:opacity-90 py-8"
     >
       <div className="absolute left-0 ml-4">
         <PlusIcon className="h-5" />
