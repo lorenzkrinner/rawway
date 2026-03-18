@@ -43,17 +43,6 @@ export default async function Footer() {
         >
           <FooterMenu menu={menu} />
         </Suspense>
-        <div className="md:ml-auto">
-          <a
-            className="flex h-8 w-max flex-none items-center justify-center rounded-md border border-border bg-background text-xs text-foreground"
-            aria-label="Deploy on Vercel"
-            href="https://vercel.com/templates/next.js/nextjs-commerce"
-          >
-            <span className="px-3">▲</span>
-            <Separator orientation="vertical" className="h-full" />
-            <span className="px-3">Deploy</span>
-          </a>
-        </div>
       </div>
       <div className="border-t border-border py-6 text-sm">
         <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-1 px-4 md:flex-row md:gap-0 md:px-4 min-[1320px]:px-0">
@@ -68,14 +57,6 @@ export default async function Footer() {
             orientation="vertical"
             className="mx-4 hidden h-4 md:inline-block"
           />
-          <p>
-            <a href="https://github.com/vercel/commerce">View the source</a>
-          </p>
-          <p className="md:ml-auto">
-            <a href="https://vercel.com" className="text-foreground">
-              Created by ▲ Vercel
-            </a>
-          </p>
         </div>
       </div>
     </footer>

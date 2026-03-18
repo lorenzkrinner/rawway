@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Rawway is a headless e-commerce storefront for a protein bar brand, built on the Vercel Commerce template. Next.js frontend connects to Shopify via the Storefront GraphQL API. Shopify owns all commerce data (products, cart, checkout, orders) — this repo is purely the frontend.
+Keon is a headless e-commerce storefront for a mechanical keyboard brand targeting entrepreneurs. Built on the Vercel Commerce template, Next.js frontend connects to Shopify via the Storefront GraphQL API. Shopify owns all commerce data (products, cart, checkout, orders, customer accounts) — this repo is purely the frontend. Price range: $90–$200.
 
 ## Commands
 
@@ -19,7 +19,7 @@ pnpm prettier         # Auto-fix formatting
 ## Environment Variables
 
 Required in `.env` (see `.env.example`):
-- `SHOPIFY_STORE_DOMAIN` — e.g. `rawway.myshopify.com`
+- `SHOPIFY_STORE_DOMAIN` — `usekeon.myshopify.com`
 - `SHOPIFY_STOREFRONT_ACCESS_TOKEN` — from Shopify Partners app
 - `SHOPIFY_REVALIDATION_SECRET` — for webhook-based ISR
 - `COMPANY_NAME`, `SITE_NAME` — branding strings
@@ -45,6 +45,10 @@ Cart state uses React 19's `useOptimistic` for instant UI updates while server a
 - `components/cart/actions.ts` — Server Actions that call Shopify mutations. Cart ID stored in cookies.
 - Checkout redirects to Shopify's hosted checkout URL (`cart.checkoutUrl`).
 
+### Customer Accounts
+
+Customer accounts (login, registration, order history, addresses) are handled entirely by Shopify's hosted account pages. No custom auth frontend in v1.
+
 ### Caching Strategy
 
 Uses Next.js experimental `"use cache"` directive with `cacheLife()` and `cacheTag()`:
@@ -56,10 +60,17 @@ Uses Next.js experimental `"use cache"` directive with `cacheLife()` and `cacheT
 
 Collections are rendered at `/search/[collection]` (not `/collections/`). Shopify menu URLs are rewritten: `/collections` → `/search`, `/pages` → root. Products at `/product/[handle]`. CMS pages at `/[page]`.
 
+### Design System
+
+- **Typography**: Climate Crisis (bold display/headings), DM Sans (body/paragraph)
+- **Style**: Clean, minimalistic, Apple-inspired
+- **Colors**: Defined via CSS custom properties in `globals.css` (oklch color space), supports light/dark mode
+- **i18n**: German and English, multi-currency support
+- **Components**: `@headlessui/react` for accessible unstyled components, `@heroicons/react` for icons, shadcn/ui
+
 ### Key Patterns
 
 - Server Components by default; `"use client"` only for interactive pieces (cart modal, variant selector, search, mobile menu)
 - Products tagged `nextjs-frontend-hidden` are filtered from listings but accessible via direct URL
 - `noUncheckedIndexedAccess` is enabled in tsconfig — handle potential `undefined` on array access
 - PPR (Partial Pre-Rendering) is enabled experimentally
-- Uses `@headlessui/react` for accessible unstyled components, `@heroicons/react` for icons

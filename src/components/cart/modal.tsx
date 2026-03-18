@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -70,30 +70,15 @@ export default function CartModal() {
               <SheetTitle className="text-lg font-semibold">
                 My Cart
               </SheetTitle>
-              <button aria-label="Close cart" onClick={closeCart}>
-                <div className="relative flex h-11 w-11 items-center justify-center rounded-md border border-border text-foreground transition-colors">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="h-6 transition-all ease-in-out hover:scale-110"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </div>
-              </button>
+              <Button variant="ghost" size="icon" onClick={closeCart}>
+                <XMarkIcon className='size-6' />
+              </Button>
             </div>
           </SheetHeader>
 
           {!cart || cart.lines.length === 0 ? (
             <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
-              <ShoppingCartIcon className="h-16" />
+              <ShoppingBagIcon className="h-16" />
               <p className="mt-6 text-center text-2xl font-bold">
                 Your cart is empty.
               </p>

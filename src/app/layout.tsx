@@ -4,8 +4,8 @@ import { ReactNode, Suspense } from "react";
 import { Toaster } from "sonner";
 import { CartProvider } from "src/components/cart/cart-context";
 import { Navbar } from "src/components/layout/navbar";
-import { WelcomeToast } from "src/components/welcome-toast";
 import { getCart } from "src/lib/shopify";
+import Footer from "~/components/layout/footer";
 import { cn } from "~/lib/cn";
 import { baseUrl } from "~/lib/utils";
 import "./globals.css";
@@ -36,15 +36,17 @@ async function CartProviderWithData({ children }: { children: ReactNode }) {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={cn("font-sans", geist.variable, climateCrisis.variable)}>
-      <body className="bg-background text-foreground selection:bg-primary/30 dark:selection:bg-primary/40">
+      <body className="relative bg-background text-foreground selection:bg-primary/30 dark:selection:bg-primary/40">
         <Suspense>
           <CartProviderWithData>
             <Navbar />
             <main>
               {children}
               <Toaster closeButton />
-              <WelcomeToast />
             </main>
+            <Suspense>
+              <Footer />
+            </Suspense>
           </CartProviderWithData>
         </Suspense>
       </body>

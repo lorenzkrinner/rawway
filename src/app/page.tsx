@@ -1,8 +1,5 @@
 import { Metadata } from "next";
-import { Suspense } from "react";
-import { Carousel } from "src/components/carousel";
-import { ThreeItemGrid } from "src/components/grid/three-items";
-import Footer from "src/components/layout/footer";
+import Home from "~/components/pages/home";
 
 export const metadata: Metadata = {
   description:
@@ -15,11 +12,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      <ThreeItemGrid />
-      <Carousel />
-      <Suspense>
-        <Footer />
-      </Suspense>
+      <Home />
     </>
   );
 }
