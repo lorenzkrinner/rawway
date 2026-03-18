@@ -3,11 +3,13 @@
 import { UserIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import CartModal from "src/components/cart/modal";
 import type { Collection, Menu } from "src/lib/shopify/types";
 import Logo from "~/components/icons/logo";
 import { Button } from "~/components/ui/button";
 import { NAV_HEIGHT } from "~/constants/layout";
+import { cn } from "~/lib/cn";
 import MobileMenu from "./mobile-menu";
 import Search from "./search";
 
@@ -19,21 +21,60 @@ export default function NavbarClient({
   collections: Collection[];
 }) {
   const pathname = usePathname();
+  const [windowHeight, setWindowHeight] = useState(
+    typeof window !== "undefined" ? window.innerHeight : 0
+  );
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowHeight(window.innerHeight);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    function handleScroll() {
+      setScrollPosition(window.scrollY);
+    }
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const isHome = pathname === "/";
+  const isAboveTheFold = scrollPosition < windowHeight;
 
-  const navTextClass = isHome
-    ? "text-background dark:text-foreground"
-    : "text-foreground";
-  const navTextMutedClass = isHome
-    ? "text-background/60 dark:text-foreground/60"
-    : "text-foreground/60";
+  const maxBlurPx = 12;
+  const blurProgress = Math.min(scrollPosition / (Math.max(windowHeight, 1) * 0.3), 1);
+  const backdropBlurPx = isHome ? blurProgress * maxBlurPx : 0;
+  const backgroundAlphaPercent = isHome ? blurProgress * 30 : 0;
 
-  const searchBgClass = isHome ? "bg-background/30" : "bg-foreground/5";
+  const navTextClass = (isHome && isAboveTheFold)
+    ? "text-background dark:text-foreground transition-colors duration-300 ease-in-out"
+    : "text-foreground transition-colors duration-300 ease-in-out";
+  const navTextMutedClass = (isHome && isAboveTheFold)
+    ? "text-background/60 dark:text-foreground/60 transition-colors duration-300 ease-in-out"
+    : "text-foreground/60 transition-colors duration-300 ease-in-out";
+
+  const searchBgClass = isHome && isAboveTheFold
+    ? "bg-background/30 transition-colors duration-300 ease-in-out"
+    : "bg-foreground/5 transition-colors duration-300 ease-in-out";
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-1 w-full flex items-center justify-between px-4 lg:px-6"
-      style={{ height: NAV_HEIGHT }}
+      className={cn(
+        "fixed top-0 left-0 right-0 z-10 w-full flex items-center justify-between px-4 lg:px-6 transition-[background-color,backdrop-filter] duration-300 ease-in-out",
+        "bg-transparent"
+      )}
+      style={{
+        height: NAV_HEIGHT,
+        backgroundColor: isHome
+          ? `color-mix(in srgb, var(--color-background) ${backgroundAlphaPercent}%, transparent)`
+          : "transparent",
+        backdropFilter: `blur(${backdropBlurPx}px)`,
+        WebkitBackdropFilter: `blur(${backdropBlurPx}px)`,
+      }}
     >
       <div className="block flex-none md:hidden">
         <MobileMenu menu={menu} navTextClass={navTextClass} />
