@@ -16,6 +16,9 @@
     "jsx": "react-jsx",
     "incremental": true,
     "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"]
+    },
     "noUncheckedIndexedAccess": true,
     "plugins": [
       {
