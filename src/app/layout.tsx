@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Climate_Crisis, Geist } from "next/font/google";
 import { ReactNode, Suspense } from "react";
 import { Toaster } from "sonner";
 import { CartProvider } from "src/components/cart/cart-context";
@@ -11,6 +11,7 @@ import { baseUrl } from "~/lib/utils";
 import "./globals.css";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const climateCrisis = Climate_Crisis({subsets:['latin'],variable:'--font-loud',weight:["400"]});
 
 const { SITE_NAME } = process.env;
 
@@ -34,8 +35,8 @@ async function CartProviderWithData({ children }: { children: ReactNode }) {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
-      <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
+    <html lang="en" className={cn("font-sans", geist.variable, climateCrisis.variable)}>
+      <body className="bg-background text-foreground selection:bg-primary/30 dark:selection:bg-primary/40">
         <Suspense>
           <CartProviderWithData>
             <Navbar />

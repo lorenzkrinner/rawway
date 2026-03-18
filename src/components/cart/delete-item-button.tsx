@@ -5,6 +5,7 @@ import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { removeItem } from "src/components/cart/actions";
 import type { CartItem } from "src/lib/shopify/types";
+import { Button } from "~/components/ui/button";
 
 export function DeleteItemButton({
   item,
@@ -31,13 +32,14 @@ export function DeleteItemButton({
         execute({ merchandiseId });
       }}
     >
-      <button
+      <Button
         type="submit"
         aria-label="Remove cart item"
-        className="flex h-[24px] w-[24px] items-center justify-center rounded-full bg-neutral-500"
+        size="icon-xs"
+        className="rounded-full bg-muted-foreground text-primary-foreground"
       >
-        <XMarkIcon className="mx-[1px] h-4 w-4 text-white dark:text-black" />
-      </button>
+        <XMarkIcon className="mx-[1px] h-4 w-4" />
+      </Button>
     </form>
   );
 }

@@ -1,12 +1,12 @@
 "use client";
 
 import { PlusIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
 import { useAction } from "next-safe-action/hooks";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { addItem } from "src/components/cart/actions";
 import { Product, ProductVariant } from "src/lib/shopify/types";
+import { Button } from "~/components/ui/button";
 import { useCart } from "./cart-context";
 
 function SubmitButton({
@@ -16,45 +16,42 @@ function SubmitButton({
   availableForSale: boolean;
   selectedVariantId: string | undefined;
 }) {
-  const buttonClasses =
-    "relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white";
-  const disabledClasses = "cursor-not-allowed opacity-60 hover:opacity-60";
-
   if (!availableForSale) {
     return (
-      <button disabled className={clsx(buttonClasses, disabledClasses)}>
+      <Button
+        disabled
+        className="w-full rounded-full p-4 tracking-wide opacity-60"
+      >
         Out Of Stock
-      </button>
+      </Button>
     );
   }
 
   if (!selectedVariantId) {
     return (
-      <button
+      <Button
         aria-label="Please select an option"
         disabled
-        className={clsx(buttonClasses, disabledClasses)}
+        className="relative w-full rounded-full p-4 tracking-wide opacity-60"
       >
         <div className="absolute left-0 ml-4">
           <PlusIcon className="h-5" />
         </div>
         Add To Cart
-      </button>
+      </Button>
     );
   }
 
   return (
-    <button
+    <Button
       aria-label="Add to cart"
-      className={clsx(buttonClasses, {
-        "hover:opacity-90": true,
-      })}
+      className="relative w-full rounded-full p-4 tracking-wide hover:opacity-90"
     >
       <div className="absolute left-0 ml-4">
         <PlusIcon className="h-5" />
       </div>
       Add To Cart
-    </button>
+    </Button>
   );
 }
 

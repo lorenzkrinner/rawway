@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import CartModal from "src/components/cart/modal";
-import LogoSquare from "src/components/logo-square";
 import { getMenu } from "src/lib/shopify";
 import { Menu } from "src/lib/shopify/types";
+import Logo from "~/components/icons/logo";
 import { FRONT_HEADER_MENU_HANDLE } from "~/constants/shopify";
 import MobileMenu from "./mobile-menu";
 import Search, { SearchSkeleton } from "./search";
@@ -27,10 +27,7 @@ export async function Navbar() {
             prefetch={true}
             className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6"
           >
-            <LogoSquare />
-            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block">
-              {SITE_NAME}
-            </div>
+            <Logo />
           </Link>
           {menu.length ? (
             <ul className="hidden gap-6 text-sm md:flex md:items-center">
@@ -39,7 +36,7 @@ export async function Navbar() {
                   <Link
                     href={item.path}
                     prefetch={true}
-                    className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+                    className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
                   >
                     {item.title}
                   </Link>

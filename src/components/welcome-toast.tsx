@@ -20,7 +20,7 @@ export function WelcomeToast() {
             Next.js, and Vercel.{" "}
             <a
               href="https://vercel.com/templates/next.js/nextjs-commerce"
-              className="text-blue-600 hover:underline"
+              className="text-primary hover:underline"
               target="_blank"
             >
               Deploy your own

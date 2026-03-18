@@ -2,24 +2,26 @@ import { AddToCart } from "src/components/cart/add-to-cart";
 import Price from "src/components/price";
 import Prose from "src/components/prose";
 import { Product } from "src/lib/shopify/types";
+import { Separator } from "~/components/ui/separator";
 import { VariantSelector } from "./variant-selector";
 
 export function ProductDescription({ product }: { product: Product }) {
   return (
     <>
-      <div className="mb-6 flex flex-col border-b pb-6 dark:border-neutral-700">
+      <div className="mb-6 flex flex-col pb-6">
         <h1 className="mb-2 text-5xl font-medium">{product.title}</h1>
-        <div className="mr-auto w-auto rounded-full bg-blue-600 p-2 text-sm text-white">
+        <div className="mr-auto w-auto rounded-full bg-primary p-2 text-sm text-primary-foreground">
           <Price
             amount={product.priceRange.maxVariantPrice.amount}
             currencyCode={product.priceRange.maxVariantPrice.currencyCode}
           />
         </div>
+        <Separator className="mt-6" />
       </div>
       <VariantSelector options={product.options} variants={product.variants} />
       {product.descriptionHtml ? (
         <Prose
-          className="mb-6 text-sm leading-tight dark:text-white/[60%]"
+          className="mb-6 text-sm leading-tight text-foreground/60"
           html={product.descriptionHtml}
         />
       ) : null}
