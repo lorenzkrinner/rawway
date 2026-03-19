@@ -21,24 +21,24 @@ const trustBarItems = [
 
 function TrustBar() {
   return (
-    <div className="flex px-4 py-2 justify-around items-center backdrop-blur-xs">
-      <div className="flex items-center gap-1.5 text-sm text-background">
+    <div className="flex px-4 py-4 justify-around items-center bg-muted -scale-z-100 text-foreground">
+       <div className="flex items-center gap-1.5 text-sm text-foreground">
         <div className="flex items-center gap-0.5">
           {Array.from({ length: 5 }).map((_, i) => (
             <StarIcon key={i} className="size-3.5 text-chart-1" />
           ))}
         </div>
-        <span className="font-medium">4.9 / 5</span>
-        <span className="text-background/60">(120+ Reviews)</span>
+        <span className="font-medium">Rated 4.9 / 5</span>
+        <span className="text-muted-foreground/60">by 120+ Customers</span>
       </div>
-      <div className="size-2 rounded-full bg-background" />
+      <div className="size-2 rounded-full bg-foreground" />
       {trustBarItems.map((item, idx) => (
         <>
-          <div key={item.label} className="flex items-center gap-1.5 text-sm text-background">
+          <div key={item.label} className="flex items-center gap-1.5 text-sm text-foreground">
             <item.icon className="size-4" />
             <span className="font-medium">{item.label}</span>
           </div>
-          {idx < trustBarItems.length - 1 && <div className="size-2 rounded-full bg-background" />}
+          {idx < trustBarItems.length - 1 && <div className="size-2 rounded-full bg-foreground" />}
         </>
       ))}
     </div>
@@ -48,18 +48,20 @@ function TrustBar() {
 export default function Hero() {
   return (
     <div
-      className="flex w-full h-dvh flex-1 flex-col relative"
+      className="flex w-full h-[95dvh] flex-1 flex-col relative max-w-dvw overflow-hidden bg-foreground"
       style={{ marginTop: -NAV_HEIGHT }}
     >
-      <Image
-        src="/images/hero2.png"
-        className="absolute inset-0 w-full h-full object-cover"
-        alt="Hero"
-        width={1000}
-        height={1000}
-        priority
-      />
-      <div className="absolute inset-0 flex flex-col">
+      <div className="absolute inset-0 w-full h-full">
+        <Image
+          src="/images/hero2.png"
+          className="w-full h-full object-cover rounded-t-xl rounded-b-2xl"
+          alt="Hero"
+          width={1000}
+          height={1000}
+          priority
+        />
+      </div>
+      <div className="z-0 h-full w-full flex flex-col">
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 p-5">
           <div className="col-span-1 flex items-end flex-1 justify-start">
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold leading-tight lg:leading-35 text-background font-loud uppercase tracking-wide">
@@ -74,15 +76,6 @@ export default function Hero() {
                   <ArrowRightIcon />
                 </Button>
               </Link>
-              <div className="flex items-center gap-1.5 text-sm text-background">
-                <div className="flex items-center gap-0.5">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <StarIcon key={i} className="size-3.5 text-chart-1" />
-                  ))}
-                </div>
-                <span className="font-medium">Rated 4.9 / 5</span>
-                <span className="text-background/60">by 120+ Customers</span>
-              </div>
               <p className="text-background text-lg font-medium text-end max-w-100">
                 The Knob One™ is a keyboard made to endure long nights and
                 launch parties.
@@ -91,6 +84,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
+      <TrustBar />
     </div>
   );
 }

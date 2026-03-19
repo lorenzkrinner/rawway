@@ -1,70 +1,95 @@
+"use client";
+
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "~/components/ui/button";
+import { useState } from "react";
 import Price from "~/components/price";
+import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/cn";
 import type { Product } from "~/lib/shopify/types";
 
 interface ProductSpotlightProps {
-  product: Product;
-  reverse?: boolean;
+  products: Product[];
 }
 
-export function ProductSpotlight({
-  product,
-  reverse = false,
-}: ProductSpotlightProps) {
+export function ProductSpotlight({ products }: ProductSpotlightProps) {
   return (
-    <section className="mx-auto w-full max-w-(--breakpoint-xl) px-6 py-16 md:py-24">
-      <div
-        className={`grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center ${
-          reverse ? "md:direction-rtl" : ""
-        }`}
-      >
-        {/* Product image */}
-        <div
-          className={`aspect-[4/3] w-full rounded-lg bg-muted overflow-hidden relative ${
-            reverse ? "md:direction-ltr" : ""
-          }`}
-        >
-          <Image
-            src={product.featuredImage.url}
-            alt={product.featuredImage.altText || product.title}
-            fill
-            sizes="(min-width: 768px) 50vw, 100vw"
-            className="object-cover"
+    <section className="flex w-full px-8 gap-8 pb-20 pt-8">
+      {products.slice(0, 2).map((product) => {
+        return (
+          <ProductSpotlightCard
+            key={product.id}
+            product={product}
           />
-        </div>
-
-        {/* Product info */}
-        <div
-          className={`flex flex-col gap-6 ${reverse ? "md:direction-ltr" : ""}`}
-        >
-          <div className="flex flex-col gap-3">
-            <h2 className="text-4xl md:text-5xl font-bold font-loud uppercase tracking-wide">
-              {product.title}
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              {product.description}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4 mt-2">
-            <Price
-              amount={product.priceRange.minVariantPrice.amount}
-              currencyCode={product.priceRange.minVariantPrice.currencyCode}
-              className="text-2xl font-semibold"
-            />
-          </div>
-
-          <Link href={`/product/${product.handle}`}>
-            <Button className="rounded-full uppercase font-mono py-7 px-8 text-base w-fit">
-              Shop Now
-              <ArrowRightIcon />
-            </Button>
-          </Link>
-        </div>
-      </div>
+        );
+      })}
     </section>
+  );
+}
+
+function ProductSpotlightCard({
+  product,
+}: {
+  product: Product;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const primaryImage = product.featuredImage;
+  const hoverImage = product.images[1];
+
+  return (
+    <Link
+      href={`/product/${product.handle}`}
+      className={`flex w-full flex-col justify-between items-center min-h-[700px] bg-background text-foreground`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+
+      <div className="relative w-full h-full">
+        <div className={cn("absolute top-4 left-4 right-4 text-center z-10 flex items-center justify-between text-sm text-background transition-colors duration-500 ease-in-out", isHovered && "text-muted-foreground")}>
+          {/* <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
+            {product.title}
+          </h2> */}
+          <p>Keyboard</p>
+          <p>{product.title}</p>
+        </div>
+        <Image
+          src={primaryImage.url}
+          alt={primaryImage.altText || product.title}
+          fill
+          sizes="50vw"
+          className={`object-cover object-top transition-opacity duration-500 ease-in-out absolute inset-0 ${
+            isHovered && hoverImage ? "opacity-0" : "opacity-100"
+          }`}
+        />
+        {hoverImage && (
+          <Image
+            src={hoverImage.url}
+            alt={hoverImage.altText || `${product.title} preview`}
+            fill
+            sizes="50vw"
+            className={`object-cover transition-opacity duration-500 ease-in-out ${
+              isHovered ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        )}
+      </div>
+
+      <div className="w-full flex items-center justify-between px-6 py-5 min-h-20 bg-muted z-10 border">
+        <div className="flex flex-col *:items-start gap-1">
+          <Price
+            amount={product.priceRange.minVariantPrice.amount}
+            currencyCode={product.priceRange.minVariantPrice.currencyCode}
+          />
+          <p className="text-xs text-muted-foreground/80 text-balance max-w-4/5">
+            {product.description}
+          </p>
+        </div>
+        <Button className="font-mono text-sm font-normal rounded-full py-6 px-10">
+          Buy now
+          <ArrowRightIcon />
+        </Button>
+      </div>
+    </Link>
   );
 }

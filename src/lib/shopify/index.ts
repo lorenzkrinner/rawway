@@ -177,6 +177,19 @@ const reshapeImages = (images: Connection<Image>, productTitle: string) => {
   });
 };
 
+const reshapeMetafields = (
+  metafields: ShopifyProduct["metafields"]
+): Record<string, Image[]> => {
+  const custom: Record<string, Image[]> = {};
+
+  for (const mf of metafields ?? []) {
+    if (!mf?.key || !mf.references) continue;
+    custom[mf.key] = removeEdgesAndNodes(mf.references).map((ref) => ref.image);
+  }
+
+  return custom;
+};
+
 const reshapeProduct = (
   product: ShopifyProduct,
   filterHiddenProducts: boolean = true
@@ -188,12 +201,13 @@ const reshapeProduct = (
     return undefined;
   }
 
-  const { images, variants, ...rest } = product;
+  const { images, variants, metafields, ...rest } = product;
 
   return {
     ...rest,
     images: reshapeImages(images, product.title),
     variants: removeEdgesAndNodes(variants),
+    custom: reshapeMetafields(metafields),
   };
 };
 

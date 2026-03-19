@@ -25,6 +25,9 @@ export default function NavbarClient({
     typeof window !== "undefined" ? window.innerHeight : 0
   );
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [navTextClass, setNavTextClass] = useState("text-foreground");
+  const [navTextMutedClass, setNavTextMutedClass] = useState("text-foreground/60");
+  const [searchBgClass, setSearchBgClass] = useState("bg-foreground/5");
 
   useEffect(() => {
     function handleResize() {
@@ -45,26 +48,27 @@ export default function NavbarClient({
   const isHome = pathname === "/";
   const isAboveTheFold = scrollPosition < windowHeight;
 
+  useEffect(() => {
+    setNavTextClass((isHome && isAboveTheFold)
+    ? "text-background dark:text-foreground transition-colors duration-300 ease-in-out"
+    : "text-foreground transition-colors duration-300 ease-in-out")
+    setNavTextMutedClass((isHome && isAboveTheFold)
+    ? "text-background/60 dark:te)xt-foreground/60 transition-colors duration-300 ease-in-out"
+    : "text-foreground/60 transition-colors duration-300 ease-in-out");
+    setSearchBgClass(isHome && isAboveTheFold
+      ? "bg-background/30 transition-colors duration-300 ease-in-out"
+      : "bg-foreground/5 transition-colors duration-300 ease-in-out");
+  }, [isHome, isAboveTheFold]);
+
   const maxBlurPx = 12;
   const blurProgress = Math.min(scrollPosition / (Math.max(windowHeight, 1) * 0.3), 1);
   const backdropBlurPx = isHome ? blurProgress * maxBlurPx : 0;
   const backgroundAlphaPercent = isHome ? blurProgress * 30 : 0;
 
-  const navTextClass = (isHome && isAboveTheFold)
-    ? "text-background dark:text-foreground transition-colors duration-300 ease-in-out"
-    : "text-foreground transition-colors duration-300 ease-in-out";
-  const navTextMutedClass = (isHome && isAboveTheFold)
-    ? "text-background/60 dark:text-foreground/60 transition-colors duration-300 ease-in-out"
-    : "text-foreground/60 transition-colors duration-300 ease-in-out";
-
-  const searchBgClass = isHome && isAboveTheFold
-    ? "bg-background/30 transition-colors duration-300 ease-in-out"
-    : "bg-foreground/5 transition-colors duration-300 ease-in-out";
-
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-10 w-full flex items-center justify-between px-4 lg:px-6 transition-[background-color,backdrop-filter] duration-300 ease-in-out",
+        "fixed top-0 left-0 right-0 z-10 w-full flex items-center justify-between px-6 transition-[background-color,backdrop-filter] duration-300 ease-in-out",
         "bg-transparent"
       )}
       style={{

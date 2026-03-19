@@ -4,14 +4,12 @@ import { HOMEPAGE_CAROUSEL_COLLECTION_HANDLE } from "~/constants/shopify";
 import { GridTileImage } from "./grid/tile";
 
 export async function Carousel() {
-  // Collections that start with `hidden-*` are hidden from the search page.
   const products = await getCollectionProducts({
     collection: HOMEPAGE_CAROUSEL_COLLECTION_HANDLE,
   });
 
   if (!products?.length) return null;
 
-  // Purposefully duplicating products to make the carousel loop and not run out of products on wide screens.
   const carouselProducts = [...products, ...products, ...products];
 
   return (

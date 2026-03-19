@@ -68,9 +68,10 @@ export type Page = {
   updatedAt: string;
 };
 
-export type Product = Omit<ShopifyProduct, "variants" | "images"> & {
+export type Product = Omit<ShopifyProduct, "variants" | "images" | "metafields"> & {
   variants: ProductVariant[];
   images: Image[];
+  custom: Record<string, Image[]>;
 };
 
 export type ProductOption = {
@@ -115,6 +116,13 @@ export type ShopifyCollection = {
   updatedAt: string;
 };
 
+export type ShopifyMetafield = {
+  key: string;
+  references?: Connection<{
+    image: Image;
+  }>;
+} | null;
+
 export type ShopifyProduct = {
   id: string;
   handle: string;
@@ -133,6 +141,7 @@ export type ShopifyProduct = {
   seo: SEO;
   tags: string[];
   updatedAt: string;
+  metafields: ShopifyMetafield[];
 };
 
 export type ShopifyCartOperation = {

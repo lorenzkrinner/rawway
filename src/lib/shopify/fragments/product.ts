@@ -56,6 +56,22 @@ const productFragment = /* GraphQL */ `
     }
     tags
     updatedAt
+    metafields(identifiers: [
+      { namespace: "custom", key: "spotlight_images" }
+    ]) {
+      key
+      references(first: 10) {
+        edges {
+          node {
+            ... on MediaImage {
+              image {
+                ...image
+              }
+            }
+          }
+        }
+      }
+    }
   }
   ${imageFragment}
   ${seoFragment}
