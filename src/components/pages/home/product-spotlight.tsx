@@ -16,6 +16,19 @@ interface ProductSpotlightProps {
 export function ProductSpotlight({ products }: ProductSpotlightProps) {
   return (
     <section className="flex w-full px-8 gap-8 pb-20 pt-8">
+       <div className="flex flex-col gap-8 h-full items-start justify-between w-100">
+        <h2 className="text-2xl md:text-4xl font-bold font-loud uppercase tracking-wide">
+          Our flagship products
+        </h2>
+        <Link
+          href="/search"
+        >
+          <Button variant={"ghost"}>
+            View all
+            <ArrowRightIcon />
+          </Button>
+        </Link> 
+      </div>
       {products.slice(0, 2).map((product) => {
         return (
           <ProductSpotlightCard
@@ -40,18 +53,17 @@ function ProductSpotlightCard({
   return (
     <Link
       href={`/product/${product.handle}`}
-      className={`flex w-full flex-col justify-between items-center min-h-[700px] bg-background text-foreground`}
+      className={`flex w-full flex-col justify-between items-center min-h-[700px] bg-background text-foreground group`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-
       <div className="relative w-full h-full">
         <div className={cn("absolute top-4 left-4 right-4 text-center z-10 flex items-center justify-between text-sm text-background transition-colors duration-500 ease-in-out", isHovered && "text-muted-foreground")}>
           {/* <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
             {product.title}
           </h2> */}
           <p>Keyboard</p>
-          <p>{product.title}</p>
+          <p>Original Series</p>
         </div>
         <Image
           src={primaryImage.url}
@@ -75,15 +87,18 @@ function ProductSpotlightCard({
         )}
       </div>
 
-      <div className="w-full flex items-center justify-between px-6 py-5 min-h-20 bg-muted z-10 border">
-        <div className="flex flex-col *:items-start gap-1">
+      <div className="w-full flex items-center justify-between px-6 py-5 bg-muted z-10">
+       <div className="flex flex-col gap-1">
+          <h3 className="text-lg font-medium text-foreground group-hover:underline">
+            {product.title}
+          </h3>
           <Price
             amount={product.priceRange.minVariantPrice.amount}
-            currencyCode={product.priceRange.minVariantPrice.currencyCode}
+            currencyCode={
+              product.priceRange.minVariantPrice.currencyCode
+            }
+            className="text-sm text-muted-foreground"
           />
-          <p className="text-xs text-muted-foreground/80 text-balance max-w-4/5">
-            {product.description}
-          </p>
         </div>
         <Button className="font-mono text-sm font-normal rounded-full py-6 px-10">
           Buy now

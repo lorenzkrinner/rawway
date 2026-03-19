@@ -4,11 +4,10 @@ import {
 } from "~/constants/shopify";
 import { getCollectionProducts } from "~/lib/shopify";
 import { Accessories } from "./accessories";
-import { Benefits } from "./benefits";
 import { BrandStory } from "./brand-story";
-import { FinalCta } from "./final-cta";
 import Hero from "./hero";
 import { ProductSpotlight } from "./product-spotlight";
+import { Spirit } from "./spirit";
 import { TrustpilotReviews } from "./trustpilot-reviews";
 
 export default async function Home() {
@@ -30,14 +29,9 @@ export default async function Home() {
       <div className="flex flex-col max-w-(--breakpoint-2xl) mx-auto">
         <ProductSpotlight products={featuredProducts} />
         <TrustpilotReviews />
-        <Benefits />
         <Accessories products={accessoryProducts} />
+        <Spirit />
         <BrandStory />
-        {featuredProducts[0] && (
-          <>
-            <FinalCta product={featuredProducts[0]} />
-          </>
-        )}
       </div>
     </div>
   );

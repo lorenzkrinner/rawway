@@ -1,6 +1,9 @@
 "use client";
 
+import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
+
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -68,7 +71,7 @@ export default function NavbarClient({
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-10 w-full flex items-center justify-between px-6 transition-[background-color,backdrop-filter] duration-300 ease-in-out",
+        "fixed top-0 left-0 right-0 z-50 w-full flex items-center justify-between px-6 transition-[background-color,backdrop-filter] duration-300 ease-in-out",
         "bg-transparent"
       )}
       style={{
@@ -112,21 +115,31 @@ export default function NavbarClient({
         ) : null}
 
         <div className="flex justify-end w-1/3 gap-3">
-          <Search
-            collections={collections}
-            navTextMutedClass={navTextMutedClass}
-            searchBgClass={searchBgClass}
-          />
-
-          <div className="flex gap-1">
+          <div className="flex gap-2 items-center">
+            <Search
+              collections={collections}
+              navTextMutedClass={navTextMutedClass}
+              searchBgClass={searchBgClass}
+            />
+            <button className="size-6 rounded-full overflow-hidden">
+              <Image src="/images/flags/germany.svg" alt="German" width={24} height={24} className="object-cover w-full h-full" />
+            </button>
+          </div>
+          <div className="flex gap-1 items-center">
             <Button
               variant="ghost"
               size="icon"
-              className={`${navTextClass} hover:bg-muted/20 rounded-lg`}
+              className={`${navTextClass} hover:bg-muted/20 rounded-lg hover:text-background`}
             >
               <UserIcon className="size-6" />
             </Button>
-
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`${navTextClass} hover:bg-muted/20 rounded-lg hover:text-background`}
+            >
+              <HeartIconOutline className="size-6" />
+            </Button>
             <CartModal navTextClass={navTextClass} />
           </div>
         </div>

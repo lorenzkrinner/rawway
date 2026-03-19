@@ -59,13 +59,13 @@ export default function CartModal({ navTextClass }: { navTextClass: string }) {
       <Button
         variant="ghost"
         size="icon"
-        className={`${navTextClass} hover:bg-muted/20 rounded-lg`}
+        className={`${navTextClass} relative hover:bg-muted/20 rounded-lg hover:text-background`}
         onClick={openCart}
       >
         <ShoppingBagIcon className="size-6" />
 
         {cart?.totalQuantity ? (
-          <Badge className="absolute right-0 top-0 -mr-2 -mt-2 h-4 w-4 rounded-sm px-0 text-[11px] font-medium">
+          <Badge className="absolute right-0 top-0 -mr-1 -mt-1 size-4 rounded-full px-0 text-[11px] font-medium">
             {cart?.totalQuantity}
           </Badge>
         ) : null}
