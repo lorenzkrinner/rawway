@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { GridTileImage } from "src/components/grid/tile";
 import { Gallery } from "src/components/product/gallery";
 import { ProductDescription } from "src/components/product/product-description";
 import { HIDDEN_PRODUCT_TAG } from "src/lib/constants";
-import { getProduct, getProductRecommendations } from "src/lib/shopify";
+import { getProduct } from "src/lib/shopify";
 import type { Image } from "src/lib/shopify/types";
 
 export async function generateMetadata(props: {
@@ -71,6 +69,11 @@ export default async function ProductPage(props: {
     },
   };
 
+  const galleryImages = product.images.map((image: Image) => ({
+    src: image.url,
+    altText: image.altText,
+  }));
+
   return (
     <>
       <script
@@ -79,69 +82,27 @@ export default async function ProductPage(props: {
           __html: JSON.stringify(productJsonLd),
         }}
       />
-      <div className="mx-auto max-w-(--breakpoint-2xl) px-4">
-        <div className="flex flex-col rounded-lg border border-border bg-background p-8 md:p-12 lg:flex-row lg:gap-8">
-          <div className="h-full w-full basis-full lg:basis-4/6">
-            <Suspense
-              fallback={
-                <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />
-              }
-            >
-              <Gallery
-                images={product.images.slice(0, 5).map((image: Image) => ({
-                  src: image.url,
-                  altText: image.altText,
-                }))}
-              />
-            </Suspense>
+      <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8">
+        <div className="flex flex-col lg:flex-row lg:gap-12">
+          <div className="w-full lg:w-[55%]">
+            <div className="lg:sticky lg:top-24">
+              <Suspense
+                fallback={
+                  <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-muted" />
+                }
+              >
+                <Gallery images={galleryImages} />
+              </Suspense>
+            </div>
           </div>
 
-          <div className="basis-full lg:basis-2/6">
+          <div className="mt-8 w-full lg:mt-0 lg:w-[45%]">
             <Suspense fallback={null}>
               <ProductDescription product={product} />
             </Suspense>
           </div>
         </div>
-        <RelatedProducts id={product.id} />
       </div>
     </>
-  );
-}
-
-async function RelatedProducts({ id }: { id: string }) {
-  const relatedProducts = await getProductRecommendations(id);
-
-  if (!relatedProducts.length) return null;
-
-  return (
-    <div className="py-8">
-      <h2 className="mb-4 text-2xl font-bold">Related Products</h2>
-      <ul className="flex w-full gap-4 overflow-x-auto pt-1">
-        {relatedProducts.map((product) => (
-          <li
-            key={product.handle}
-            className="aspect-square w-full flex-none min-[475px]:w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5"
-          >
-            <Link
-              className="relative h-full w-full"
-              href={`/product/${product.handle}`}
-              prefetch={true}
-            >
-              <GridTileImage
-                alt={product.title}
-                label={{
-                  title: product.title,
-                  amount: product.priceRange.maxVariantPrice.amount,
-                  currencyCode: product.priceRange.maxVariantPrice.currencyCode,
-                }}
-                src={product.featuredImage?.url}
-                fill
-                sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, (min-width: 475px) 50vw, 100vw"
-              />
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }

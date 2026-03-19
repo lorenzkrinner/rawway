@@ -19,6 +19,7 @@ pnpm prettier         # Auto-fix formatting
 ## Environment Variables
 
 Required in `.env` (see `.env.example`):
+
 - `SHOPIFY_STORE_DOMAIN` — `usekeon.myshopify.com`
 - `SHOPIFY_STOREFRONT_ACCESS_TOKEN` — from Shopify Partners app
 - `SHOPIFY_REVALIDATION_SECRET` — for webhook-based ISR
@@ -52,6 +53,7 @@ Customer accounts (login, registration, order history, addresses) are handled en
 ### Caching Strategy
 
 Uses Next.js experimental `"use cache"` directive with `cacheLife()` and `cacheTag()`:
+
 - Products and collections: cached for days, revalidated via Shopify webhooks hitting `/api/revalidate`
 - Cart: cached for seconds (private cache)
 - Webhooks verify `SHOPIFY_REVALIDATION_SECRET` before revalidating

@@ -21,15 +21,15 @@ Entrepreneurs and professionals who value quality tools for their daily work. Th
 
 ### 3.1 Pages
 
-| Page | Route | Description |
-|------|-------|-------------|
-| Home | `/` | Hero, featured products, brand story |
-| Product listing | `/search`, `/search/[collection]` | Browse/filter all keyboards |
-| Product detail | `/product/[handle]` | Images, variants, specs, add-to-cart |
-| Cart | Slide-over modal | Cart contents, quantity controls, checkout CTA |
-| Checkout | Shopify hosted | Redirects to `checkout.shopify.com` |
-| CMS pages | `/[page]` | About, FAQ, shipping policy, etc. (managed in Shopify) |
-| Search | `/search?q=` | Full-text product search |
+| Page            | Route                             | Description                                            |
+| --------------- | --------------------------------- | ------------------------------------------------------ |
+| Home            | `/`                               | Hero, featured products, brand story                   |
+| Product listing | `/search`, `/search/[collection]` | Browse/filter all keyboards                            |
+| Product detail  | `/product/[handle]`               | Images, variants, specs, add-to-cart                   |
+| Cart            | Slide-over modal                  | Cart contents, quantity controls, checkout CTA         |
+| Checkout        | Shopify hosted                    | Redirects to `checkout.shopify.com`                    |
+| CMS pages       | `/[page]`                         | About, FAQ, shipping policy, etc. (managed in Shopify) |
+| Search          | `/search?q=`                      | Full-text product search                               |
 
 ### 3.2 Core Features
 
@@ -58,11 +58,11 @@ Entrepreneurs and professionals who value quality tools for their daily work. Th
 
 ### 3.5 Integrations
 
-| Service | Purpose | Scope |
-|---------|---------|-------|
-| Shopify Storefront API | Products, collections, cart, checkout | Frontend |
-| Shopify Customer Accounts | Login, registration, order history | Shopify-hosted |
-| Klaviyo | Email marketing | Managed in Shopify backend |
+| Service                   | Purpose                               | Scope                      |
+| ------------------------- | ------------------------------------- | -------------------------- |
+| Shopify Storefront API    | Products, collections, cart, checkout | Frontend                   |
+| Shopify Customer Accounts | Login, registration, order history    | Shopify-hosted             |
+| Klaviyo                   | Email marketing                       | Managed in Shopify backend |
 
 ### 3.6 Technical Stack
 
@@ -82,6 +82,7 @@ These features are scoped but **not included in the initial launch**.
 ### 4.1 Original Series Collection
 
 A dedicated collection page showcasing the first 1–3 keyboards in Keon's lineup. Serves as the brand's flagship product line with:
+
 - Curated collection page with editorial layout
 - Story/narrative section for the series
 - Individual product highlights
@@ -97,6 +98,7 @@ Migrate from `usekeon.myshopify.com` to a branded custom domain.
 ### 5.1 Custom Keyboard Builder
 
 Interactive configurator allowing customers to build their own keyboard by selecting:
+
 - Base/case
 - Switches
 - Keycaps
@@ -107,6 +109,7 @@ Implementation: likely a multi-step wizard component with live preview and dynam
 ### 5.2 Custom Account Frontend
 
 Replace Shopify-hosted account pages with a fully branded account experience:
+
 - Custom login/registration UI matching Keon's design
 - Order history and tracking
 - Saved addresses
@@ -122,15 +125,15 @@ Expand product lines beyond keyboards (switches, keycaps, cables, desk mats, acc
 
 ## 6. Non-Functional Requirements
 
-| Requirement | Target |
-|-------------|--------|
-| Lighthouse Performance | > 90 |
-| First Contentful Paint | < 1.5s |
-| Time to Interactive | < 3s |
-| Core Web Vitals | All green |
-| Accessibility | WCAG 2.1 AA |
-| Browser support | Last 2 versions of Chrome, Firefox, Safari, Edge |
-| Mobile support | iOS Safari 16+, Chrome Android |
+| Requirement            | Target                                           |
+| ---------------------- | ------------------------------------------------ |
+| Lighthouse Performance | > 90                                             |
+| First Contentful Paint | < 1.5s                                           |
+| Time to Interactive    | < 3s                                             |
+| Core Web Vitals        | All green                                        |
+| Accessibility          | WCAG 2.1 AA                                      |
+| Browser support        | Last 2 versions of Chrome, Firefox, Safari, Edge |
+| Mobile support         | iOS Safari 16+, Chrome Android                   |
 
 ---
 

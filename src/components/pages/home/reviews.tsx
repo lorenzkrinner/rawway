@@ -94,11 +94,11 @@ export function Reviews() {
 
           {/* Text content */}
           <div className="flex flex-col items-start gap-5 w-full md:w-1/2">
-          <div className="flex items-center gap-0.5">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <StarIcon key={i} className="size-5 text-chart-1" />
-            ))}
-          </div>
+            <div className="flex items-center gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <StarIcon key={i} className="size-5 text-chart-1" />
+              ))}
+            </div>
 
             <h3 className="text-xl md:text-2xl font-bold font-loud">
               {review.title}

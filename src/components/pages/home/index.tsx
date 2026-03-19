@@ -20,7 +20,7 @@ export default async function Home() {
       collection: HOMEPAGE_ACCESSORIES_COLLECTION_HANDLE,
     }),
   ]);
- 
+
   return (
     <div>
       <Hero />

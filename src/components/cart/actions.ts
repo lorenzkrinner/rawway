@@ -6,11 +6,11 @@ import { redirect } from "next/navigation";
 import { TAGS } from "src/lib/constants";
 import { actionClient } from "src/lib/safe-action";
 import {
-    addToCart,
-    createCart,
-    getCart,
-    removeFromCart,
-    updateCart,
+  addToCart,
+  createCart,
+  getCart,
+  removeFromCart,
+  updateCart,
 } from "src/lib/shopify";
 import { z } from "zod";
 
@@ -18,6 +18,23 @@ export const addItem = actionClient
   .inputSchema(z.object({ selectedVariantId: z.string().min(1) }))
   .action(async ({ parsedInput: { selectedVariantId } }) => {
     await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
+    updateTag(TAGS.cart);
+    return { success: true };
+  });
+
+export const addItems = actionClient
+  .inputSchema(
+    z.object({
+      lines: z.array(
+        z.object({
+          merchandiseId: z.string().min(1),
+          quantity: z.number().int().min(1),
+        }),
+      ),
+    }),
+  )
+  .action(async ({ parsedInput: { lines } }) => {
+    await addToCart(lines);
     updateTag(TAGS.cart);
     return { success: true };
   });

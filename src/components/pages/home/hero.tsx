@@ -1,44 +1,28 @@
-import { ArrowPathIcon, ArrowRightIcon, CheckCircleIcon, StarIcon, TruckIcon } from "@heroicons/react/24/solid";
+import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
+import { TrustpilotRatedBy } from "~/components/trustpilot";
 import { Button } from "~/components/ui/button";
 import { NAV_HEIGHT } from "~/constants/layout";
-
-const trustBarItems = [
-  {
-    icon: TruckIcon,
-    label: "Free Shipping",
-  },
-  {
-    icon: ArrowPathIcon,
-    label: "30-Day Returns",
-  },
-  {
-    icon: CheckCircleIcon,
-    label: "2-Year Warranty",
-  },
-];
+import { trustBarItems } from "~/constants/trust";
 
 function TrustBar() {
   return (
     <div className="flex px-4 py-4 justify-around items-center bg-muted -scale-z-100 text-foreground">
-       <div className="flex items-center gap-1.5 text-sm text-foreground">
-        <div className="flex items-center gap-0.5">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <StarIcon key={i} className="size-3.5 text-chart-1" />
-          ))}
-        </div>
-        <span className="font-medium">Rated 4.9 / 5</span>
-        <span className="text-muted-foreground/60">by 120+ Customers</span>
-      </div>
+      <TrustpilotRatedBy />
       <div className="size-2 rounded-full bg-foreground" />
       {trustBarItems.map((item, idx) => (
         <>
-          <div key={item.label} className="flex items-center gap-1.5 text-sm text-foreground">
+          <div
+            key={item.label}
+            className="flex items-center gap-1.5 text-sm text-foreground"
+          >
             <item.icon className="size-4" />
             <span className="font-medium">{item.label}</span>
           </div>
-          {idx < trustBarItems.length - 1 && <div className="size-2 rounded-full bg-foreground" />}
+          {idx < trustBarItems.length - 1 && (
+            <div className="size-2 rounded-full bg-foreground" />
+          )}
         </>
       ))}
     </div>

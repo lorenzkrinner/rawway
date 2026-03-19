@@ -16,36 +16,25 @@ interface ProductSpotlightProps {
 export function ProductSpotlight({ products }: ProductSpotlightProps) {
   return (
     <section className="flex w-full px-8 gap-8 pb-12 pt-8">
-       <div className="flex flex-col gap-8 h-full items-start justify-between w-100">
+      <div className="flex flex-col gap-8 h-full items-start justify-between w-100">
         <h2 className="text-2xl md:text-4xl font-bold font-loud uppercase tracking-wide">
           Our flagship products
         </h2>
-        <Link
-          href="/search"
-        >
+        <Link href="/search">
           <Button variant={"ghost"}>
             View all
             <ArrowRightIcon />
           </Button>
-        </Link> 
+        </Link>
       </div>
       {products.slice(0, 2).map((product) => {
-        return (
-          <ProductSpotlightCard
-            key={product.id}
-            product={product}
-          />
-        );
+        return <ProductSpotlightCard key={product.id} product={product} />;
       })}
     </section>
   );
 }
 
-function ProductSpotlightCard({
-  product,
-}: {
-  product: Product;
-}) {
+function ProductSpotlightCard({ product }: { product: Product }) {
   const [isHovered, setIsHovered] = useState(false);
   const primaryImage = product.featuredImage;
   const hoverImage = product.images[1];
@@ -58,7 +47,12 @@ function ProductSpotlightCard({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="relative w-full h-full">
-        <div className={cn("absolute top-4 left-4 right-4 text-center z-10 flex items-center justify-between text-sm text-background transition-colors duration-500 ease-in-out", isHovered && "text-muted-foreground")}>
+        <div
+          className={cn(
+            "absolute top-4 left-4 right-4 text-center z-10 flex items-center justify-between text-sm text-background transition-colors duration-500 ease-in-out",
+            isHovered && "text-muted-foreground",
+          )}
+        >
           {/* <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
             {product.title}
           </h2> */}
@@ -88,15 +82,13 @@ function ProductSpotlightCard({
       </div>
 
       <div className="w-full flex items-center justify-between px-6 py-5 bg-muted z-10">
-       <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1">
           <h3 className="text-lg font-medium text-foreground group-hover:underline">
             {product.title}
           </h3>
           <Price
             amount={product.priceRange.minVariantPrice.amount}
-            currencyCode={
-              product.priceRange.minVariantPrice.currencyCode
-            }
+            currencyCode={product.priceRange.minVariantPrice.currencyCode}
             className="text-sm text-muted-foreground"
           />
         </div>

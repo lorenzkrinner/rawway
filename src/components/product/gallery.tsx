@@ -1,97 +1,196 @@
 "use client";
 
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useMemo, useState } from "react";
 import { GridTileImage } from "src/components/grid/tile";
-import { Separator } from "~/components/ui/separator";
+import { Button } from "../ui/button";
+import { Lightbox } from "./lightbox";
+
+function filterImagesByVariant(
+  images: { src: string; altText: string }[],
+  selectedOptions: Record<string, string>,
+): { src: string; altText: string }[] {
+  if (Object.keys(selectedOptions).length === 0) return images;
+
+  const tagged: { src: string; altText: string }[] = [];
+  const shared: { src: string; altText: string }[] = [];
+
+  for (const img of images) {
+    const pipeIndex = img.altText.indexOf("|");
+    if (pipeIndex === -1) {
+      shared.push(img);
+      continue;
+    }
+
+    const tag = img.altText.substring(0, pipeIndex).trim();
+    const colonIndex = tag.indexOf(":");
+    if (colonIndex === -1) {
+      shared.push(img);
+      continue;
+    }
+
+    const optionName = tag.substring(0, colonIndex).toLowerCase();
+    const optionValue = tag.substring(colonIndex + 1).toLowerCase();
+    const selectedValue = selectedOptions[optionName]?.toLowerCase();
+
+    if (selectedValue && selectedValue === optionValue) {
+      tagged.push({
+        ...img,
+        altText: img.altText.substring(pipeIndex + 1).trim(),
+      });
+    }
+  }
+
+  return tagged.length > 0 ? [...tagged, ...shared] : images;
+}
+
+const LEFT_CURSOR = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='31.5' fill='white'/%3E%3Cpath d='M35 24l-8 8 8 8' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 32 32, pointer`;
+const RIGHT_CURSOR = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='31.5' fill='white'/%3E%3Cpath d='M29 24l8 8-8 8' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 32 32, pointer`;
 
 export function Gallery({
-  images,
+  images: allImages,
 }: {
   images: { src: string; altText: string }[];
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
+
+  const selectedOptions = useMemo(() => {
+    const opts: Record<string, string> = {};
+    searchParams.forEach((v, k) => {
+      if (k !== "image") opts[k] = v;
+    });
+    return opts;
+  }, [searchParams]);
+
+  const images = useMemo(
+    () => filterImagesByVariant(allImages, selectedOptions),
+    [allImages, selectedOptions],
+  );
+
   const imageIndex = searchParams.has("image")
     ? parseInt(searchParams.get("image")!)
     : 0;
 
-  const updateImage = (index: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("image", index);
-    router.replace(`?${params.toString()}`, { scroll: false });
+  const safeIndex = Math.min(imageIndex, images.length - 1);
+
+  const canGoLeft = safeIndex > 0;
+  const canGoRight = safeIndex < images.length - 1;
+
+  const updateImage = useCallback(
+    (index: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("image", index.toString());
+      router.replace(`?${params.toString()}`, { scroll: false });
+    },
+    [router, searchParams],
+  );
+
+  const handleMainClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (images.length <= 1) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const midpoint = rect.width / 2;
+
+    if (canGoLeft && canGoRight) {
+      if (clickX < midpoint) updateImage(safeIndex - 1);
+      else updateImage(safeIndex + 1);
+    } else if (canGoLeft) {
+      updateImage(safeIndex - 1);
+    } else if (canGoRight) {
+      updateImage(safeIndex + 1);
+    }
   };
 
-  const nextImageIndex = imageIndex + 1 < images.length ? imageIndex + 1 : 0;
-  const previousImageIndex =
-    imageIndex === 0 ? images.length - 1 : imageIndex - 1;
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (images.length <= 1) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const midpoint = rect.width / 2;
+    setHoverSide(x < midpoint ? "left" : "right");
+  };
 
-  const buttonClassName =
-    "h-full px-6 transition-all ease-in-out hover:scale-110 hover:text-foreground flex items-center justify-center";
+  const getCursor = () => {
+    if (images.length <= 1) return "default";
+    if (canGoLeft && canGoRight) {
+      return hoverSide === "left" ? LEFT_CURSOR : RIGHT_CURSOR;
+    }
+    if (canGoLeft) return LEFT_CURSOR;
+    if (canGoRight) return RIGHT_CURSOR;
+    return "default";
+  };
 
   return (
-    <form>
-      <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden">
-        {images[imageIndex] && (
-          <Image
-            className="h-full w-full object-contain"
-            fill
-            sizes="(min-width: 1024px) 66vw, 100vw"
-            alt={images[imageIndex]?.altText as string}
-            src={images[imageIndex]?.src as string}
-            priority={true}
-          />
-        )}
+    <>
+      <div className="flex flex-col gap-3">
+        <div
+          className="relative aspect-square w-full overflow-hidden rounded-lg bg-muted"
+          style={{ cursor: getCursor() }}
+          onClick={handleMainClick}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={() => setHoverSide(null)}
+        >
+          {images[safeIndex] && (
+            <Image
+              className="h-full w-full object-contain"
+              fill
+              sizes="(min-width: 1024px) 55vw, 100vw"
+              alt={images[safeIndex]!.altText}
+              src={images[safeIndex]!.src}
+              priority={true}
+            />
+          )}
 
-        {images.length > 1 ? (
-          <div className="absolute bottom-[15%] flex w-full justify-center">
-            <div className="mx-auto flex h-11 items-center rounded-full border border-background bg-muted/80 text-muted-foreground backdrop-blur-sm">
-              <button
-                formAction={() => updateImage(previousImageIndex.toString())}
-                aria-label="Previous product image"
-                className={buttonClassName}
-              >
-                <ArrowLeftIcon className="h-5" />
-              </button>
-              <Separator orientation="vertical" className="mx-1 h-6" />
-              <button
-                formAction={() => updateImage(nextImageIndex.toString())}
-                aria-label="Next product image"
-                className={buttonClassName}
-              >
-                <ArrowRightIcon className="h-5" />
-              </button>
-            </div>
-          </div>
-        ) : null}
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              setLightboxOpen(true);
+            }}
+            className="absolute top-3 left-3 z-10 size-10 rounded-full"
+            variant="ghost"
+            size="icon-sm"
+            aria-label="Zoom image"
+          >
+            <MagnifyingGlassIcon className="size-5" />
+          </Button>
+        </div>
+
+        {images.length > 1 && (
+          <ul className="flex items-center gap-2 overflow-x-auto py-1">
+            {images.map((image, index) => {
+              const isActive = index === safeIndex;
+              return (
+                <li key={image.src} className="h-16 w-16 shrink-0">
+                  <button
+                    onClick={() => updateImage(index)}
+                    aria-label={`Select image ${index + 1}`}
+                    className="h-full w-full"
+                  >
+                    <GridTileImage
+                      alt={image.altText}
+                      src={image.src}
+                      width={64}
+                      height={64}
+                      active={isActive}
+                    />
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
 
-      {images.length > 1 ? (
-        <ul className="my-12 flex items-center flex-wrap justify-center gap-2 overflow-auto py-1 lg:mb-0">
-          {images.map((image, index) => {
-            const isActive = index === imageIndex;
-
-            return (
-              <li key={image.src} className="h-20 w-20">
-                <button
-                  formAction={() => updateImage(index.toString())}
-                  aria-label="Select product image"
-                  className="h-full w-full"
-                >
-                  <GridTileImage
-                    alt={image.altText}
-                    src={image.src}
-                    width={80}
-                    height={80}
-                    active={isActive}
-                  />
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      ) : null}
-    </form>
+      <Lightbox
+        images={images}
+        initialIndex={safeIndex}
+        open={lightboxOpen}
+        onOpenAction={setLightboxOpen}
+      />
+    </>
   );
 }

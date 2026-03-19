@@ -1,11 +1,13 @@
 # Keon Homepage — Wireframe
 
 ## 1. Navigation Bar
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │  KEON (logo)                    Search 🔍   Cart 🛒   Menu ☰      │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
 - Sticky top nav
 - Logo left, icons right (search, cart, mobile menu)
 - Transparent over hero, solid on scroll
@@ -13,6 +15,7 @@
 ---
 
 ## 2. Hero Section
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
@@ -27,6 +30,7 @@
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
 - Full-viewport hero with the desk lifestyle image
 - Climate Crisis headline: "TYPE THE NEXT BIG THING."
 - Subtitle + "Order Today" CTA button
@@ -36,12 +40,14 @@
 ---
 
 ## 3. Trust Bar
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │  ★★★★★ 4.9 / 5  •  120+ Reviews  •  Free Shipping  •  30-Day     │
 │                                                        Returns     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
 - Thin, single-row strip immediately below the hero
 - Aggregate star rating + review count (pulls from Shopify reviews or hardcoded for v1)
 - Key purchase incentives (free shipping, return policy)
@@ -51,6 +57,7 @@
 ---
 
 ## 4. Product Spotlight — Keyboard 1 (Flagship)
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
@@ -73,6 +80,7 @@
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
 - Dedicated "hero moment" for the flagship keyboard
 - Lifestyle image on the left, product info on the right
 - Benefit-led bullet points (not raw specs)
@@ -82,6 +90,7 @@
 ---
 
 ## 5. Product Spotlight — Keyboard 2
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
@@ -104,6 +113,7 @@
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
 - Mirrored layout (text left, image right) for visual rhythm
 - Clearly differentiated positioning from Keyboard 1
 - Same structure: lifestyle image, benefits, price, CTA
@@ -111,6 +121,7 @@
 ---
 
 ## 6. Why Keon — Benefits
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
@@ -142,6 +153,7 @@
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
 - Alternating image/text layout (image left → image right → image left)
 - 3 key benefits — framed for the entrepreneur audience, not raw specs
 - Each benefit: bold headline (Climate Crisis), short body text (DM Sans)
@@ -150,6 +162,7 @@
 ---
 
 ## 7. Social Proof — Reviews
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
@@ -170,6 +183,7 @@
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
 - Horizontal scroll carousel (drag or arrow navigation, CSS scroll-snap)
 - **Mixed formats**: text quotes, photo reviews, star ratings on every card
 - Username + platform icon on each card
@@ -179,6 +193,7 @@
 ---
 
 ## 8. Complete Your Setup — Accessories
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
@@ -197,6 +212,7 @@
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
 - Cross-sell section to boost average order value
 - 3–4 accessory cards in a clean grid (or horizontal scroll on mobile)
 - Each card: product image, name, price, quick-add button
@@ -205,6 +221,7 @@
 ---
 
 ## 9. Brand Story
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
@@ -220,6 +237,7 @@
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
 - Short brand narrative — origin, mission, audience
 - Founder or team image alongside text
 - Keep concise: 3–4 sentences max
@@ -227,6 +245,7 @@
 ---
 
 ## 10. Final CTA
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
@@ -241,6 +260,7 @@
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
 - Clean, focused section — product name, price, single CTA
 - Studio product shot or render
 - Links directly to add-to-cart / checkout
@@ -249,6 +269,7 @@
 ---
 
 ## 11. Footer
+
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │  KEON                                                               │

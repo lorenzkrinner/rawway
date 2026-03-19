@@ -1,93 +1,129 @@
 "use client";
 
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useAction } from "next-safe-action/hooks";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { addItem } from "src/components/cart/actions";
-import { Product, ProductVariant } from "src/lib/shopify/types";
+import { addItems } from "src/components/cart/actions";
+import Price from "src/components/price";
+import type {
+  CrossSellProduct,
+  Product,
+  ProductVariant,
+} from "src/lib/shopify/types";
 import { Button } from "~/components/ui/button";
 import { useCart } from "./cart-context";
 
-function SubmitButton({
-  availableForSale,
-  selectedVariantId,
+export function AddToCart({
+  product,
+  enabledAddOns = [],
 }: {
-  availableForSale: boolean;
-  selectedVariantId: string | undefined;
+  product: Product;
+  enabledAddOns?: CrossSellProduct[];
 }) {
-  if (!availableForSale) {
-    return (
-      <Button
-        disabled
-        className="w-full rounded-full p-4 tracking-wide opacity-60"
-      >
-        Out Of Stock
-      </Button>
-    );
-  }
-
-  if (!selectedVariantId) {
-    return (
-      <Button
-        aria-label="Please select an option"
-        disabled
-        className="relative w-full rounded-full p-4 tracking-wide opacity-60 py-8"
-      >
-        <div className="absolute left-0 ml-4">
-          <PlusIcon className="h-5" />
-        </div>
-        Add To Cart
-      </Button>
-    );
-  }
-
-  return (
-    <Button
-      aria-label="Add to cart"
-      className="relative w-full rounded-full p-4 tracking-wide hover:opacity-90 py-8"
-    >
-      <div className="absolute left-0 ml-4">
-        <PlusIcon className="h-5" />
-      </div>
-      Add To Cart
-    </Button>
-  );
-}
-
-export function AddToCart({ product }: { product: Product }) {
   const { variants, availableForSale } = product;
   const { addCartItem } = useCart();
   const searchParams = useSearchParams();
 
-  const { execute } = useAction(addItem, {
+  const { execute } = useAction(addItems, {
     onError: ({ error }) => {
       toast.error(error.serverError || "Failed to add item to cart");
     },
   });
 
-  const variant = variants.find((variant: ProductVariant) =>
-    variant.selectedOptions.every(
+  const variant = variants.find((v: ProductVariant) =>
+    v.selectedOptions.every(
       (option) => option.value === searchParams.get(option.name.toLowerCase()),
     ),
   );
   const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;
   const selectedVariantId = variant?.id || defaultVariantId;
-  const finalVariant = variants.find(
-    (variant) => variant.id === selectedVariantId,
-  )!;
+  const finalVariant = variants.find((v) => v.id === selectedVariantId);
+
+  const isOutOfStock =
+    !availableForSale || (finalVariant && !finalVariant.availableForSale);
+
+  const mainPrice = finalVariant ? parseFloat(finalVariant.price.amount) : 0;
+  const addOnTotal = enabledAddOns.reduce(
+    (sum, addon) => sum + parseFloat(addon.priceRange.maxVariantPrice.amount),
+    0,
+  );
+  const totalPrice = mainPrice + addOnTotal;
+  const currencyCode =
+    finalVariant?.price.currencyCode ??
+    product.priceRange.maxVariantPrice.currencyCode;
+
+  const handleSubmit = () => {
+    if (!selectedVariantId || !finalVariant) return;
+
+    addCartItem(finalVariant, product);
+
+    const lines = [{ merchandiseId: selectedVariantId, quantity: 1 }];
+    for (const addon of enabledAddOns) {
+      if (addon.firstVariantId) {
+        lines.push({ merchandiseId: addon.firstVariantId, quantity: 1 });
+      }
+    }
+
+    execute({ lines });
+  };
+
+  if (isOutOfStock) {
+    return (
+      <div>
+        <Button
+          className="w-full rounded-full py-7 text-sm font-semibold uppercase tracking-wider"
+          onClick={() => {
+            toast.info("We'll notify you when this product is back in stock.");
+          }}
+        >
+          Notify Me When Available
+        </Button>
+        <p className="mt-2 text-center text-xs text-muted-foreground">
+          Shipping calculated at checkout
+        </p>
+      </div>
+    );
+  }
+
+  if (!selectedVariantId) {
+    return (
+      <div>
+        <Button
+          disabled
+          className="w-full rounded-full py-7 text-sm font-semibold uppercase tracking-wider opacity-60"
+        >
+          <ShoppingCartIcon className="size-5 mr-1" />
+          Select an Option
+        </Button>
+        <p className="mt-2 text-center text-xs text-muted-foreground">
+          Shipping calculated at checkout
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <form
-      action={async () => {
-        addCartItem(finalVariant, product);
-        execute({ selectedVariantId: selectedVariantId! });
-      }}
-    >
-      <SubmitButton
-        availableForSale={availableForSale}
-        selectedVariantId={selectedVariantId}
-      />
-    </form>
+    <div>
+      <form action={handleSubmit}>
+        <Button
+          type="submit"
+          aria-label="Add to cart"
+          className="w-full rounded-full py-7 text-sm font-semibold uppercase tracking-wider hover:opacity-90"
+        >
+          <ShoppingCartIcon className="size-5 mr-1" />
+          <span>Add to Cart</span>
+          <span className="mx-2">·</span>
+          <Price
+            amount={totalPrice.toString()}
+            currencyCode={currencyCode}
+            className="inline"
+          />
+        </Button>
+      </form>
+      <p className="mt-2 text-center text-xs text-muted-foreground">
+        Shipping calculated at checkout
+      </p>
+    </div>
   );
 }

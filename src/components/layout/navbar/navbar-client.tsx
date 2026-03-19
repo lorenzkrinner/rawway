@@ -25,11 +25,12 @@ export default function NavbarClient({
 }) {
   const pathname = usePathname();
   const [windowHeight, setWindowHeight] = useState(
-    typeof window !== "undefined" ? window.innerHeight : 0
+    typeof window !== "undefined" ? window.innerHeight : 0,
   );
   const [scrollPosition, setScrollPosition] = useState(0);
   const [navTextClass, setNavTextClass] = useState("text-foreground");
-  const [navTextMutedClass, setNavTextMutedClass] = useState("text-foreground/60");
+  const [navTextMutedClass, setNavTextMutedClass] =
+    useState("text-foreground/60");
   const [searchBgClass, setSearchBgClass] = useState("bg-foreground/5");
 
   useEffect(() => {
@@ -52,19 +53,28 @@ export default function NavbarClient({
   const isAboveTheFold = scrollPosition < windowHeight;
 
   useEffect(() => {
-    setNavTextClass((isHome && isAboveTheFold)
-    ? "text-background dark:text-foreground transition-colors duration-300 ease-in-out"
-    : "text-foreground transition-colors duration-300 ease-in-out")
-    setNavTextMutedClass((isHome && isAboveTheFold)
-    ? "text-background/60 dark:te)xt-foreground/60 transition-colors duration-300 ease-in-out"
-    : "text-foreground/60 transition-colors duration-300 ease-in-out");
-    setSearchBgClass(isHome && isAboveTheFold
-      ? "bg-background/30 transition-colors duration-300 ease-in-out"
-      : "bg-foreground/5 transition-colors duration-300 ease-in-out");
+    setNavTextClass(
+      isHome && isAboveTheFold
+        ? "text-background dark:text-foreground transition-colors duration-300 ease-in-out"
+        : "text-foreground transition-colors duration-300 ease-in-out",
+    );
+    setNavTextMutedClass(
+      isHome && isAboveTheFold
+        ? "text-background/60 dark:te)xt-foreground/60 transition-colors duration-300 ease-in-out"
+        : "text-foreground/60 transition-colors duration-300 ease-in-out",
+    );
+    setSearchBgClass(
+      isHome && isAboveTheFold
+        ? "bg-background/30 transition-colors duration-300 ease-in-out"
+        : "bg-foreground/5 transition-colors duration-300 ease-in-out",
+    );
   }, [isHome, isAboveTheFold]);
 
   const maxBlurPx = 12;
-  const blurProgress = Math.min(scrollPosition / (Math.max(windowHeight, 1) * 0.3), 1);
+  const blurProgress = Math.min(
+    scrollPosition / (Math.max(windowHeight, 1) * 0.3),
+    1,
+  );
   const backdropBlurPx = isHome ? blurProgress * maxBlurPx : 0;
   const backgroundAlphaPercent = isHome ? blurProgress * 30 : 0;
 
@@ -72,7 +82,7 @@ export default function NavbarClient({
     <nav
       className={cn(
         "fixed top-0 left-0 right-0 z-50 w-full flex items-center justify-between px-6 transition-[background-color,backdrop-filter] duration-300 ease-in-out",
-        "bg-transparent"
+        "bg-transparent",
       )}
       style={{
         height: NAV_HEIGHT,
@@ -122,7 +132,13 @@ export default function NavbarClient({
               searchBgClass={searchBgClass}
             />
             <button className="size-6 rounded-full overflow-hidden">
-              <Image src="/images/flags/germany.svg" alt="German" width={24} height={24} className="object-cover w-full h-full" />
+              <Image
+                src="/images/flags/germany.svg"
+                alt="German"
+                width={24}
+                height={24}
+                className="object-cover w-full h-full"
+              />
             </button>
           </div>
           <div className="flex gap-1 items-center">

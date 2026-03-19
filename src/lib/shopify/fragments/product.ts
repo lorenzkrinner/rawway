@@ -56,16 +56,70 @@ const productFragment = /* GraphQL */ `
     }
     tags
     updatedAt
-    metafields(identifiers: [
-      { namespace: "custom", key: "spotlight_images" }
-    ]) {
+    metafields(
+      identifiers: [
+        { namespace: "custom", key: "spotlight_images" }
+        { namespace: "custom", key: "faq_item" }
+        { namespace: "custom", key: "cross_sell_products" }
+        { namespace: "custom", key: "feature_bullets" }
+      ]
+    ) {
       key
+      value
       references(first: 10) {
         edges {
           node {
             ... on MediaImage {
               image {
                 ...image
+              }
+            }
+            ... on Metaobject {
+              fields {
+                key
+                value
+              }
+            }
+            ... on Product {
+              id
+              handle
+              title
+              description
+              availableForSale
+              featuredImage {
+                ...image
+              }
+              images(first: 10) {
+                edges {
+                  node {
+                    ...image
+                  }
+                }
+              }
+              priceRange {
+                maxVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
+              variants(first: 1) {
+                edges {
+                  node {
+                    id
+                    title
+                    availableForSale
+                    price {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
+              }
+              metafields(
+                identifiers: [{ namespace: "custom", key: "feature_bullets" }]
+              ) {
+                key
+                value
               }
             }
           }

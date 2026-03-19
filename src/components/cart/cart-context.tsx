@@ -1,17 +1,17 @@
 "use client";
 
 import React, {
-    createContext,
-    use,
-    useContext,
-    useMemo,
-    useOptimistic,
+  createContext,
+  use,
+  useContext,
+  useMemo,
+  useOptimistic,
 } from "react";
 import type {
-    Cart,
-    CartItem,
-    Product,
-    ProductVariant,
+  Cart,
+  CartItem,
+  Product,
+  ProductVariant,
 } from "src/lib/shopify/types";
 
 type UpdateType = "plus" | "minus" | "delete";

@@ -73,7 +73,7 @@ export function TrustpilotReviews() {
                 </span>
               </div>
             </div>
-           
+
             <CarouselContent className="-ml-0">
               {TRUSTPILOT_REVIEWS.map((review) => (
                 <CarouselItem
@@ -85,7 +85,7 @@ export function TrustpilotReviews() {
               ))}
             </CarouselContent>
           </div>
-          
+
           <div className="w-full flex justify-between mt-24">
             <p className="mt-3 text-center text-xs text-gray-500 lg:text-left">
               Showing our 5 star reviews

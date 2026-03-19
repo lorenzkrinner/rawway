@@ -21,7 +21,8 @@ export default function Footer() {
           <div>
             <Logo className="text-lg text-foreground" />
             <p className="mt-4 text-sm leading-relaxed">
-              Nowadays people become successful by pressing the right keys at the right time with the right mindset. Will you be the next one?
+              Nowadays people become successful by pressing the right keys at
+              the right time with the right mindset. Will you be the next one?
             </p>
             <p className="mt-6 text-sm">
               E-Mail:{" "}

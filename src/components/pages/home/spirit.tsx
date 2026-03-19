@@ -4,7 +4,10 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const IMAGES = [
-  { src: "/images/spirit/1.png", alt: "Entrepreneur working late with Keon keyboard" },
+  {
+    src: "/images/spirit/1.png",
+    alt: "Entrepreneur working late with Keon keyboard",
+  },
   { src: "/images/spirit/2.png", alt: "Keon keyboard on a minimal desk setup" },
   { src: "/images/spirit/3.png", alt: "Close-up of Keon keyboard in use" },
   { src: "/images/spirit/4.png", alt: "Keon keyboard at a startup workspace" },
@@ -22,7 +25,7 @@ export function Spirit() {
       const rect = section.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      const progress = 1 - (rect.bottom / (windowHeight + rect.height));
+      const progress = (1 - rect.bottom / (windowHeight + rect.height));
       setScrollProgress(Math.max(0, Math.min(1, progress)));
     };
 
@@ -59,7 +62,12 @@ export function Spirit() {
               style={{ transform: `translateY(${outerOffset}px)` }}
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
-                <Image src={IMAGES[0]!.src} alt={IMAGES[0]!.alt} fill className="object-cover" />
+                <Image
+                  src={IMAGES[0]!.src}
+                  alt={IMAGES[0]!.alt}
+                  fill
+                  className="object-cover"
+                />
               </div>
             </div>
 
@@ -68,7 +76,12 @@ export function Spirit() {
               style={{ transform: `translateY(${innerOffset}px)` }}
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
-                <Image src={IMAGES[1]!.src} alt={IMAGES[1]!.alt} fill className="object-cover" />
+                <Image
+                  src={IMAGES[1]!.src}
+                  alt={IMAGES[1]!.alt}
+                  fill
+                  className="object-cover"
+                />
               </div>
             </div>
           </div>
@@ -81,7 +94,12 @@ export function Spirit() {
               style={{ transform: `translateY(${innerOffset}px)` }}
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
-                <Image src={IMAGES[2]!.src} alt={IMAGES[2]!.alt} fill className="object-cover" />
+                <Image
+                  src={IMAGES[2]!.src}
+                  alt={IMAGES[2]!.alt}
+                  fill
+                  className="object-cover"
+                />
               </div>
             </div>
 
@@ -90,7 +108,12 @@ export function Spirit() {
               style={{ transform: `translateY(${outerOffset}px)` }}
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
-                <Image src={IMAGES[3]!.src} alt={IMAGES[3]!.alt} fill className="object-cover" />
+                <Image
+                  src={IMAGES[3]!.src}
+                  alt={IMAGES[3]!.alt}
+                  fill
+                  className="object-cover"
+                />
               </div>
             </div>
           </div>
@@ -102,7 +125,12 @@ export function Spirit() {
             style={{ transform: `translateY(${outerOffset * 0.6}px)` }}
           >
             <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
-              <Image src={IMAGES[0]!.src} alt={IMAGES[0]!.alt} fill className="object-cover" />
+              <Image
+                src={IMAGES[0]!.src}
+                alt={IMAGES[0]!.alt}
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
           <div
@@ -110,7 +138,12 @@ export function Spirit() {
             style={{ transform: `translateY(${innerOffset * 0.6}px)` }}
           >
             <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
-              <Image src={IMAGES[1]!.src} alt={IMAGES[1]!.alt} fill className="object-cover" />
+              <Image
+                src={IMAGES[1]!.src}
+                alt={IMAGES[1]!.alt}
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
           <div
@@ -118,7 +151,12 @@ export function Spirit() {
             style={{ transform: `translateY(${innerOffset * 0.6}px)` }}
           >
             <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
-              <Image src={IMAGES[2]!.src} alt={IMAGES[2]!.alt} fill className="object-cover" />
+              <Image
+                src={IMAGES[2]!.src}
+                alt={IMAGES[2]!.alt}
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
           <div
@@ -126,7 +164,12 @@ export function Spirit() {
             style={{ transform: `translateY(${outerOffset * 0.6}px)` }}
           >
             <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
-              <Image src={IMAGES[3]!.src} alt={IMAGES[3]!.alt} fill className="object-cover" />
+              <Image
+                src={IMAGES[3]!.src}
+                alt={IMAGES[3]!.alt}
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
         </div>

@@ -11,8 +11,12 @@ import { cn } from "~/lib/cn";
 import { baseUrl } from "~/lib/utils";
 import "./globals.css";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-const climateCrisis = Climate_Crisis({subsets:['latin'],variable:'--font-loud',weight:["400"]});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const climateCrisis = Climate_Crisis({
+  subsets: ["latin"],
+  variable: "--font-loud",
+  weight: ["400"],
+});
 
 const { SITE_NAME } = process.env;
 
@@ -36,7 +40,10 @@ async function CartProviderWithData({ children }: { children: ReactNode }) {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable, climateCrisis.variable)}>
+    <html
+      lang="en"
+      className={cn("font-sans", geist.variable, climateCrisis.variable)}
+    >
       <body className="relative bg-background text-foreground selection:bg-primary/30 dark:selection:bg-primary/40">
         <Suspense>
           <CartProviderWithData>

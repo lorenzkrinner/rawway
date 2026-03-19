@@ -48,9 +48,7 @@ export function BrandStory() {
               <p className="text-xs text-background font-mono uppercase tracking-wide">
                 Premium Build
               </p>
-              <p className="text-sm text-background/60">
-                Engineered to last
-              </p>
+              <p className="text-sm text-background/60">Engineered to last</p>
             </div>
           </div>
 
@@ -68,9 +66,7 @@ export function BrandStory() {
               <p className="text-xs text-background font-mono uppercase tracking-wide">
                 Community
               </p>
-              <p className="text-sm text-background/60">
-                Made for creators
-              </p>
+              <p className="text-sm text-background/60">Made for creators</p>
             </div>
           </div>
         </div>

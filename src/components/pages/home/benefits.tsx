@@ -7,8 +7,7 @@ const BENEFITS = [
   },
   {
     headline: "One knob, zero distractions",
-    description:
-      "Volume, zoom, scroll — map it to whatever keeps you in flow.",
+    description: "Volume, zoom, scroll — map it to whatever keeps you in flow.",
     imagePlaceholder: "Close-up: knob being turned",
   },
   {

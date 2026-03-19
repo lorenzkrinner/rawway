@@ -68,10 +68,37 @@ export type Page = {
   updatedAt: string;
 };
 
-export type Product = Omit<ShopifyProduct, "variants" | "images" | "metafields"> & {
+export type FaqItem = {
+  title: string;
+  icon: string;
+  content: string;
+};
+
+export type CrossSellProduct = {
+  id: string;
+  handle: string;
+  title: string;
+  description: string;
+  availableForSale: boolean;
+  featuredImage: Image;
+  images: Image[];
+  priceRange: {
+    maxVariantPrice: Money;
+  };
+  firstVariantId: string;
+  featureBullets: string[];
+};
+
+export type Product = Omit<
+  ShopifyProduct,
+  "variants" | "images" | "metafields"
+> & {
   variants: ProductVariant[];
   images: Image[];
   custom: Record<string, Image[]>;
+  faqItems: FaqItem[];
+  crossSellProducts: CrossSellProduct[];
+  featureBullets: string[];
 };
 
 export type ProductOption = {
@@ -116,11 +143,37 @@ export type ShopifyCollection = {
   updatedAt: string;
 };
 
+export type ShopifyMetaobjectField = {
+  key: string;
+  value: string;
+};
+
+export type ShopifyMetafieldReference = {
+  image?: Image;
+  fields?: ShopifyMetaobjectField[];
+  id?: string;
+  handle?: string;
+  title?: string;
+  description?: string;
+  availableForSale?: boolean;
+  featuredImage?: Image;
+  images?: Connection<Image>;
+  priceRange?: {
+    maxVariantPrice: Money;
+  };
+  variants?: Connection<{
+    id: string;
+    title: string;
+    availableForSale: boolean;
+    price: Money;
+  }>;
+  metafields?: (ShopifyMetafield | null)[];
+};
+
 export type ShopifyMetafield = {
   key: string;
-  references?: Connection<{
-    image: Image;
-  }>;
+  value?: string;
+  references?: Connection<ShopifyMetafieldReference>;
 } | null;
 
 export type ShopifyProduct = {

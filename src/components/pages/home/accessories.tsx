@@ -130,10 +130,7 @@ export function Accessories({ products }: AccessoriesProps) {
     const el = scrollRef.current;
     if (!track || !el) return;
     const rect = track.getBoundingClientRect();
-    const ratio = Math.max(
-      0,
-      Math.min(1, (clientX - rect.left) / rect.width),
-    );
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     const maxScroll = el.scrollWidth - el.clientWidth;
     el.scrollLeft = ratio * maxScroll;
   }
@@ -148,9 +145,7 @@ export function Accessories({ products }: AccessoriesProps) {
         <h2 className="text-2xl md:text-4xl font-bold font-loud uppercase tracking-wide w-100">
           Complete your setup
         </h2>
-        <Link
-          href="/search/accessoires"
-        >
+        <Link href="/search/accessoires">
           <Button variant={"ghost"}>
             Shop all
             <ArrowRightIcon />

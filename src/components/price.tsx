@@ -1,4 +1,3 @@
-
 const Price = ({
   amount,
   className,
