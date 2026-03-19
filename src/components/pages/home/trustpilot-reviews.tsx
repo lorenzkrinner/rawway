@@ -51,7 +51,7 @@ function ReviewCard({ review }: { review: TrustpilotReview }) {
 
 export function TrustpilotReviews() {
   return (
-    <section className="w-full bg-muted px-16 py-16 md:py-24">
+    <section className="w-full bg-muted px-16 py-20 md:py-28">
       <Carousel opts={{ align: "start" }} className="w-full">
         <div className="flex flex-col">
           <div className="flex items-center gap-6">
@@ -73,27 +73,33 @@ export function TrustpilotReviews() {
                 </span>
               </div>
             </div>
-
-            <CarouselPrevious
-              className="static order-none m-0 shrink-0 translate-x-0 translate-y-0 hidden lg:flex"
-              aria-label="Previous reviews"
-            />
-            <div className="min-w-0 flex-1">
-              <CarouselContent className="-ml-0">
-                {TRUSTPILOT_REVIEWS.map((review) => (
-                  <CarouselItem
-                    key={review.author}
-                    className="basis-full pl-0 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
-                  >
-                    <ReviewCard review={review} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
+           
+            <CarouselContent className="-ml-0">
+              {TRUSTPILOT_REVIEWS.map((review) => (
+                <CarouselItem
+                  key={review.author}
+                  className="basis-full pl-0 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+                >
+                  <ReviewCard review={review} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </div>
+          
+          <div className="w-full flex justify-between mt-24">
+            <p className="mt-3 text-center text-xs text-gray-500 lg:text-left">
+              Showing our 5 star reviews
+            </p>
+            <div className="flex gap-2">
+              <CarouselPrevious
+                className="size-12 static order-none m-0 shrink-0 translate-x-0 translate-y-0 hidden lg:flex"
+                aria-label="Previous reviews"
+              />
+              <CarouselNext
+                className="size-12 static order-none m-0 shrink-0 translate-x-0 translate-y-0 hidden lg:flex"
+                aria-label="Next reviews"
+              />
             </div>
-            <CarouselNext
-              className="static order-none m-0 shrink-0 translate-x-0 translate-y-0 hidden lg:flex"
-              aria-label="Next reviews"
-            />
           </div>
 
           <div className="mt-4 flex items-center justify-between lg:hidden">
@@ -119,10 +125,6 @@ export function TrustpilotReviews() {
               />
             </div>
           </div>
-
-          <p className="mt-3 text-center text-xs text-gray-500 lg:text-left">
-            Showing our 5 star reviews
-          </p>
         </div>
       </Carousel>
     </section>

@@ -37,7 +37,7 @@ export function Spirit() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden py-20 md:py-32"
+      className="relative w-full overflow-hidden pb-16 pt-30 md:pb-28 md:pt-42"
     >
       <div className="relative z-10 mx-auto max-w-(--breakpoint-xl) px-6 text-center">
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-loud uppercase tracking-wide">

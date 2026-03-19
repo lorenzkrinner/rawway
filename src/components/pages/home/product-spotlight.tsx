@@ -15,7 +15,7 @@ interface ProductSpotlightProps {
 
 export function ProductSpotlight({ products }: ProductSpotlightProps) {
   return (
-    <section className="flex w-full px-8 gap-8 pb-20 pt-8">
+    <section className="flex w-full px-8 gap-8 pb-12 pt-8">
        <div className="flex flex-col gap-8 h-full items-start justify-between w-100">
         <h2 className="text-2xl md:text-4xl font-bold font-loud uppercase tracking-wide">
           Our flagship products
