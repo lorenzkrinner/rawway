@@ -6,6 +6,7 @@ import { ProductDescription } from "src/components/product/product-description";
 import { HIDDEN_PRODUCT_TAG } from "src/lib/constants";
 import { getProduct } from "src/lib/shopify";
 import type { Image } from "src/lib/shopify/types";
+import Specs from "~/components/product/sections/specs";
 
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;
@@ -102,6 +103,8 @@ export default async function ProductPage(props: {
             </Suspense>
           </div>
         </div>
+
+        {Boolean(product.custom.keyboard_specs) && <Specs product={product} />}
       </div>
     </>
   );

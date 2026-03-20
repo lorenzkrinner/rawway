@@ -95,10 +95,16 @@ export type Product = Omit<
 > & {
   variants: ProductVariant[];
   images: Image[];
-  custom: Record<string, Image[]>;
+  custom: Record<string, unknown>;
   faqItems: FaqItem[];
   crossSellProducts: CrossSellProduct[];
   featureBullets: string[];
+};
+
+export type Dimensions = {
+  width?: number;
+  height?: number;
+  depth?: number;
 };
 
 export type ProductOption = {
@@ -116,6 +122,8 @@ export type ProductVariant = {
     value: string;
   }[];
   price: Money;
+  weight?: number;
+  weightUnit?: string;
 };
 
 export type SEO = {
@@ -146,6 +154,14 @@ export type ShopifyCollection = {
 export type ShopifyMetaobjectField = {
   key: string;
   value: string;
+};
+
+export type ShopifyMetaobjectFieldWithReference = {
+  key: string;
+  value: string;
+  reference?: {
+    image?: Image;
+  } | null;
 };
 
 export type ShopifyMetafieldReference = {
@@ -330,5 +346,29 @@ export type ShopifyProductsOperation = {
     query?: string;
     reverse?: boolean;
     sortKey?: string;
+  };
+};
+
+export type ShopifyMetaobjectByIdOperation = {
+  data: {
+    node: {
+      id: string;
+      fields: ShopifyMetaobjectFieldWithReference[];
+    } | null;
+  };
+  variables: {
+    id: string;
+  };
+};
+
+export type ShopifyMediaImageByIdOperation = {
+  data: {
+    node: {
+      id: string;
+      image: Image;
+    } | null;
+  };
+  variables: {
+    id: string;
   };
 };

@@ -1,10 +1,7 @@
 import { cacheLife, cacheTag, revalidateTag } from "next/cache";
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import {
-  SHOPIFY_GRAPHQL_API_ENDPOINT,
-  TAGS,
-} from "src/lib/constants";
+import { SHOPIFY_GRAPHQL_API_ENDPOINT, TAGS } from "src/lib/constants";
 import { isShopifyError } from "src/lib/type-guards";
 import { ensureStartsWith } from "~/lib/utils";
 import {
@@ -26,7 +23,15 @@ import {
   getProductRecommendationsQuery,
   getProductsQuery,
 } from "./queries/product";
-import { reshapeCart, reshapeCollection, reshapeCollections, reshapeProduct, reshapeProducts } from "./reshape";
+import { getMetaobjectByIdQuery } from "./queries/metaobject";
+import { getMediaImageByIdQuery } from "./queries/mediaImage";
+import {
+  reshapeCart,
+  reshapeCollection,
+  reshapeCollections,
+  reshapeProduct,
+  reshapeProducts,
+} from "./reshape";
 import {
   Cart,
   Collection,
@@ -34,6 +39,9 @@ import {
   Menu,
   Page,
   Product,
+  Image,
+  ShopifyMetaobjectByIdOperation,
+  ShopifyMediaImageByIdOperation,
   ShopifyAddToCartOperation,
   ShopifyCartOperation,
   ShopifyCollectionOperation,
@@ -117,8 +125,6 @@ export async function shopifyFetch<T>({
 export const removeEdgesAndNodes = <T>(array: Connection<T>): T[] => {
   return array.edges.map((edge) => edge?.node);
 };
-
-
 
 export async function createCart(): Promise<Cart> {
   const res = await shopifyFetch<ShopifyCreateCartOperation>({
@@ -361,6 +367,48 @@ export async function getProduct(handle: string): Promise<Product | undefined> {
   });
 
   return reshapeProduct(res.body.data.product, false);
+}
+
+export async function getMetaobjectById(
+  id: string,
+): Promise<ShopifyMetaobjectByIdOperation["data"]["node"]> {
+  "use cache";
+  cacheTag(TAGS.products);
+  cacheLife("days");
+
+  if (!endpoint) {
+    console.log(
+      `Skipping getMetaobjectById for '${id}' - Shopify not configured`,
+    );
+    return null;
+  }
+
+  const res = await shopifyFetch<ShopifyMetaobjectByIdOperation>({
+    query: getMetaobjectByIdQuery,
+    variables: { id },
+  });
+
+  return res.body.data.node;
+}
+
+export async function getMediaImageById(id: string): Promise<Image | null> {
+  "use cache";
+  cacheTag(TAGS.products);
+  cacheLife("days");
+
+  if (!endpoint) {
+    console.log(
+      `Skipping getMediaImageById for '${id}' - Shopify not configured`,
+    );
+    return null;
+  }
+
+  const res = await shopifyFetch<ShopifyMediaImageByIdOperation>({
+    query: getMediaImageByIdQuery,
+    variables: { id },
+  });
+
+  return res.body.data.node?.image ?? null;
 }
 
 export async function getProductRecommendations(

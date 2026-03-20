@@ -38,6 +38,8 @@ const productFragment = /* GraphQL */ `
             amount
             currencyCode
           }
+          weight
+          weightUnit
         }
       }
     }
@@ -62,6 +64,9 @@ const productFragment = /* GraphQL */ `
         { namespace: "custom", key: "faq_item" }
         { namespace: "custom", key: "cross_sell_products" }
         { namespace: "custom", key: "feature_bullets" }
+        { namespace: "custom", key: "keyboard_specs" }
+        { namespace: "custom", key: "dimensions" }
+        { namespace: "custom", key: "battery_working_time" }
       ]
     ) {
       key

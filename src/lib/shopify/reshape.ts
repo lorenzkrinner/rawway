@@ -57,16 +57,36 @@ export const reshapeImages = (images: Connection<Image>, productTitle: string) =
   });
 };
 
-export const reshapeCustomImages = (
+export const reshapeCustomFields = (
   metafields: ShopifyProduct["metafields"],
-): Record<string, Image[]> => {
-  const custom: Record<string, Image[]> = {};
+): Record<string, unknown> => {
+  const custom: Record<string, unknown> = {};
 
   for (const mf of metafields ?? []) {
-    if (!mf?.key || mf.key !== "spotlight_images" || !mf.references) continue;
-    custom[mf.key] = removeEdgesAndNodes(mf.references)
-      .filter((ref) => ref.image)
-      .map((ref) => ref.image!);
+    if (!mf?.key) continue;
+
+    if (mf.key === "spotlight_images" && mf.references) {
+      custom[mf.key] = removeEdgesAndNodes(mf.references)
+        .filter((ref) => ref.image)
+        .map((ref) => ref.image!);
+      continue;
+    }
+
+    if (mf.references) {
+      const firstReference = removeEdgesAndNodes(mf.references)[0];
+      const fields = firstReference?.fields;
+      if (fields?.length) {
+        custom[mf.key] = fields.reduce<Record<string, string>>((acc, f) => {
+          acc[f.key] = f.value;
+          return acc;
+        }, {});
+        continue;
+      }
+    }
+
+    if (mf.value) {
+      custom[mf.key] = mf.value;
+    }
   }
 
   return custom;
@@ -169,7 +189,7 @@ export const reshapeProduct = (
     ...rest,
     images: reshapeImages(images, product.title),
     variants: removeEdgesAndNodes(variants),
-    custom: reshapeCustomImages(metafields),
+    custom: reshapeCustomFields(metafields),
     faqItems: reshapeFaqItems(metafields),
     crossSellProducts: reshapeCrossSellProducts(metafields),
     featureBullets: reshapeFeatureBullets(metafields),

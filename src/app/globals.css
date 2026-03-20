@@ -31,6 +31,10 @@ button {
   }
 }
 
+@utility center {
+  @apply items-center justify-center;
+}
+
 :root {
   --background: #fcfcfc;
   --foreground: #212121;
