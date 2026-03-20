@@ -5,9 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
+import { useAction } from "next-safe-action/hooks";
 import LoadingDots from "src/components/loading-dots";
 import Price from "src/components/price";
 import { DEFAULT_OPTION } from "src/lib/constants";
+import type { Product } from "src/lib/shopify/types";
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
@@ -19,7 +21,7 @@ import {
 } from "~/components/ui/sheet";
 import { createUrl } from "~/lib/utils";
 import { Badge } from "../ui/badge";
-import { createCartAndSetCookie, redirectToCheckout } from "./actions";
+import { addItem, createCartAndSetCookie, redirectToCheckout } from "./actions";
 import { useCart } from "./cart-context";
 import { DeleteItemButton } from "./delete-item-button";
 import { EditItemQuantityButton } from "./edit-item-quantity-button";
@@ -28,7 +30,185 @@ type MerchandiseSearchParams = {
   [key: string]: string;
 };
 
-export default function CartModal({ navTextClass }: { navTextClass: string }) {
+const FREE_SHIPPING_THRESHOLD_EUR = 50;
+
+type CartModalProps = {
+  navTextClass: string;
+  crossSellProducts: Product[];
+  recommendedProducts: Product[];
+};
+
+function toPercent(value: number): number {
+  return Math.max(0, Math.min(100, value));
+}
+
+function formatCurrency(value: number, currencyCode: string): string {
+  return new Intl.NumberFormat("de-DE", {
+    style: "currency",
+    currency: currencyCode,
+  }).format(value);
+}
+
+function toCartAddonProduct(product: Product) {
+  const firstVariant = product.variants[0];
+  return {
+    id: product.id,
+    handle: product.handle,
+    title: product.title,
+    featuredImage: product.featuredImage,
+    priceRange: product.priceRange,
+    firstVariant,
+    product,
+  };
+}
+
+function ShippingBanner({
+  amount,
+  currencyCode,
+}: {
+  amount: number;
+  currencyCode: string;
+}) {
+  const remaining = Math.max(FREE_SHIPPING_THRESHOLD_EUR - amount, 0);
+  const progress = toPercent((amount / FREE_SHIPPING_THRESHOLD_EUR) * 100);
+
+  return (
+    <div className="rounded-lg border border-border bg-muted/60 p-4">
+      <p className="text-center text-sm font-semibold text-foreground">
+        {remaining > 0
+          ? `You are ${formatCurrency(remaining, currencyCode)} away from FREE SHIPPING!`
+          : "You unlocked FREE SHIPPING!"}
+      </p>
+      <div className="mt-3 h-1.5 w-full rounded-full bg-border">
+        <div
+          className="h-1.5 rounded-full bg-foreground transition-all duration-500"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function CartCrossSell({
+  products,
+  onClose,
+}: {
+  products: Product[];
+  onClose: () => void;
+}) {
+  const { addCartItem } = useCart();
+  const { execute, isPending } = useAction(addItem);
+  const visibleProducts = products.slice(0, 2).map(toCartAddonProduct);
+
+  if (visibleProducts.length === 0) return null;
+
+  return (
+    <div className="space-y-2 py-4">
+      <h3 className="text-sm font-semibold">Other people also bought</h3>
+      {visibleProducts.map((item) => (
+        <div
+          key={item.id}
+          className="flex items-center gap-3 rounded-lg border border-border bg-muted p-3"
+        >
+          <div className="relative size-14 overflow-hidden rounded-md bg-background">
+            <Image
+              src={item.featuredImage.url}
+              alt={item.featuredImage.altText || item.title}
+              fill
+              className="object-contain"
+              sizes="56px"
+            />
+          </div>
+          <div className="min-w-0 flex-1">
+            <Link
+              href={`/product/${item.handle}`}
+              onClick={onClose}
+              className="truncate text-sm font-medium hover:underline"
+            >
+              {item.title}
+            </Link>
+            <Price
+              amount={item.priceRange.maxVariantPrice.amount}
+              currencyCode={item.priceRange.maxVariantPrice.currencyCode}
+              className="text-xs text-muted-foreground"
+            />
+          </div>
+          <Button
+            size="sm"
+            disabled={isPending || !item.firstVariant}
+            onClick={() => {
+              if (!item.firstVariant) return;
+              addCartItem(item.firstVariant, item.product);
+              execute({ selectedVariantId: item.firstVariant.id });
+            }}
+          >
+            Add
+          </Button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function EmptyCartRecommendations({
+  products,
+  onClose,
+}: {
+  products: Product[];
+  onClose: () => void;
+}) {
+  const visibleProducts = products.slice(0, 2);
+
+  return (
+    <div className="mt-10 w-full space-y-5">
+      <Button asChild className="w-full">
+        <Link href="/search" onClick={onClose}>
+          Browse shop
+        </Link>
+      </Button>
+      {visibleProducts.length > 0 ? (
+        <div className="space-y-2">
+          <h3 className="text-sm font-semibold">Recommended for you</h3>
+          {visibleProducts.map((product) => (
+            <div
+              key={product.id}
+              className="flex items-center gap-3 rounded-lg border border-border bg-muted p-3"
+            >
+              <div className="relative size-14 overflow-hidden rounded-md bg-background">
+                <Image
+                  src={product.featuredImage.url}
+                  alt={product.featuredImage.altText || product.title}
+                  fill
+                  className="object-contain"
+                  sizes="56px"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium">{product.title}</p>
+                <Price
+                  amount={product.priceRange.maxVariantPrice.amount}
+                  currencyCode={product.priceRange.maxVariantPrice.currencyCode}
+                  className="text-xs text-muted-foreground"
+                />
+              </div>
+              <Button size="sm" asChild>
+                <Link href={`/product/${product.handle}`} onClick={onClose}>
+                  Explore
+                </Link>
+              </Button>
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+export default function CartModal({
+  navTextClass,
+  crossSellProducts,
+  recommendedProducts,
+}: CartModalProps) {
   const { cart, updateCartItem } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const quantityRef = useRef(cart?.totalQuantity);
@@ -84,13 +264,23 @@ export default function CartModal({ navTextClass }: { navTextClass: string }) {
               </Button>
             </div>
           </SheetHeader>
+          <div className="pt-4">
+            <ShippingBanner
+              amount={Number(cart?.cost.subtotalAmount.amount ?? "0")}
+              currencyCode={cart?.cost.subtotalAmount.currencyCode ?? "EUR"}
+            />
+          </div>
 
           {!cart || cart.lines.length === 0 ? (
-            <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
+            <div className="mt-10 flex w-full flex-col items-center justify-center overflow-hidden">
               <ShoppingBagIcon className="h-16" />
               <p className="mt-6 text-center text-2xl font-bold">
                 Your cart is empty.
               </p>
+              <EmptyCartRecommendations
+                products={recommendedProducts}
+                onClose={closeCart}
+              />
             </div>
           ) : (
             <div className="flex h-full flex-col justify-between overflow-hidden p-1">
@@ -194,6 +384,7 @@ export default function CartModal({ navTextClass }: { navTextClass: string }) {
                       );
                     })}
                 </ul>
+                <CartCrossSell products={crossSellProducts} onClose={closeCart} />
               </ScrollArea>
               <div className="py-4 text-sm text-muted-foreground">
                 <div className="mb-3 flex items-center justify-between pb-1">

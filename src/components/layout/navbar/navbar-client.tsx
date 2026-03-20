@@ -8,7 +8,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import CartModal from "src/components/cart/modal";
-import type { Collection, Menu } from "src/lib/shopify/types";
+import type { Collection, Menu, Product } from "src/lib/shopify/types";
 import Logo from "~/components/icons/logo";
 import { Button } from "~/components/ui/button";
 import { NAV_HEIGHT } from "~/constants/layout";
@@ -19,9 +19,13 @@ import Search from "./search";
 export default function NavbarClient({
   menu,
   collections,
+  cartCrossSellProducts,
+  cartRecommendedProducts,
 }: {
   menu: Menu[];
   collections: Collection[];
+  cartCrossSellProducts: Product[];
+  cartRecommendedProducts: Product[];
 }) {
   const pathname = usePathname();
   const [windowHeight, setWindowHeight] = useState(
@@ -156,7 +160,11 @@ export default function NavbarClient({
             >
               <HeartIconOutline className="size-6" />
             </Button>
-            <CartModal navTextClass={navTextClass} />
+            <CartModal
+              navTextClass={navTextClass}
+              crossSellProducts={cartCrossSellProducts}
+              recommendedProducts={cartRecommendedProducts}
+            />
           </div>
         </div>
       </div>
