@@ -67,6 +67,10 @@ const productFragment = /* GraphQL */ `
         { namespace: "custom", key: "keyboard_specs" }
         { namespace: "custom", key: "dimensions" }
         { namespace: "custom", key: "battery_working_time" }
+        { namespace: "custom", key: "product_faqs" }
+        { namespace: "custom", key: "sound_test" }
+        { namespace: "custom", key: "showcase_images" }
+        { namespace: "custom", key: "included_items" }
       ]
     ) {
       key

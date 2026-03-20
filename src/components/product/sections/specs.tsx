@@ -116,8 +116,8 @@ export default async function Specs({ product }: { product: Product }) {
   const groupedSpecs = groupSpecs(product, specs, dimensions);
 
   return (
-    <section className="flex max-w-(--breakpoint-xl) mx-auto px-6 py-16 md:py-24 center">
-      <div className="flex flex-col w-full max-w-4xl rounded-4xl bg-muted px-10 py-12">
+    <section className="mx-auto flex max-w-7xl px-6 py-16 md:py-24 center w-full">
+      <div className="flex flex-col w-full rounded-4xl bg-muted px-10 py-12">
         {specs.display_image && (
           <div className="w-full overflow-hidden rounded-4xl max-w-1/3 self-center">
             <Image

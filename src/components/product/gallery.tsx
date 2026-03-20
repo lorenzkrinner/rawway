@@ -152,15 +152,25 @@ export function Gallery({
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setHoverSide(null)}
         >
-          {images[safeIndex] && (
-            <Image
-              className="h-full object-contain w-full "
-              fill
-              alt={images[safeIndex]!.altText}
-              src={images[safeIndex]!.src}
-              priority={true}
-            />
-          )}
+          <div
+            className="flex h-full transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${safeIndex * 100}%)` }}
+          >
+            {images.map((image, index) => (
+              <div
+                key={image.src}
+                className="relative aspect-square h-full shrink-0 w-full"
+              >
+                <Image
+                  className="h-full object-contain w-full"
+                  fill
+                  alt={image.altText}
+                  src={image.src}
+                  priority={index === 0}
+                />
+              </div>
+            ))}
+          </div>
 
           <Button
             onClick={(e) => {

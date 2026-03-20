@@ -81,14 +81,14 @@ export default function NavbarClient({
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-10000 w-full flex items-center justify-between px-6 transition-[background-color,backdrop-filter] duration-300 ease-in-out",
+        "fixed top-0 left-0 right-0 z-50 w-full flex items-center justify-between px-6 transition-[background-color,backdrop-filter] duration-300 ease-in-out",
         "bg-transparent",
       )}
       style={{
         height: NAV_HEIGHT,
         backgroundColor: isHome
           ? `color-mix(in srgb, var(--color-background) ${backgroundAlphaPercent}%, transparent)`
-          : "transparent",
+          : "var(--color-background)",
         backdropFilter: `blur(${backdropBlurPx}px)`,
         WebkitBackdropFilter: `blur(${backdropBlurPx}px)`,
       }}

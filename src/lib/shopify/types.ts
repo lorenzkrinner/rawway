@@ -107,6 +107,17 @@ export type Dimensions = {
   depth?: number;
 };
 
+export type ProductFaqs = {
+  title: string;
+  description: string;
+};
+
+export type IncludedItems = {
+  name: string;
+  amount: number;
+  image: Image;
+};
+
 export type ProductOption = {
   id: string;
   name: string;

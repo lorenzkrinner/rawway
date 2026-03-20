@@ -5,7 +5,11 @@ import { Gallery } from "src/components/product/gallery";
 import { ProductDescription } from "src/components/product/product-description";
 import { HIDDEN_PRODUCT_TAG } from "src/lib/constants";
 import { getProduct } from "src/lib/shopify";
-import type { Image } from "src/lib/shopify/types";
+import type { Image, IncludedItems as IncludedItemsType, ProductFaqs } from "src/lib/shopify/types";
+import Faq from "~/components/product/sections/faq";
+import IncludedItems from "~/components/product/sections/included-items";
+import ShowcaseGallery from "~/components/product/sections/showcase-gallery";
+import SoundTest from "~/components/product/sections/sound-test";
 import Specs from "~/components/product/sections/specs";
 
 export async function generateMetadata(props: {
@@ -75,6 +79,8 @@ export default async function ProductPage(props: {
     altText: image.altText,
   }));
 
+  console.log(product.custom);
+
   return (
     <>
       <script
@@ -83,9 +89,9 @@ export default async function ProductPage(props: {
           __html: JSON.stringify(productJsonLd),
         }}
       />
-      <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8">
-        <div className="flex flex-col lg:flex-row lg:gap-12 lg:items-stretch">
-          <div className="w-full lg:w-[70%] lg:self-stretch">
+      <div>
+        <section className="mx-auto max-w-7xl px-4 py-8 flex flex-col lg:flex-row lg:gap-12 lg:items-stretch pb-16 lg:pb-24">
+          <div className="w-full lg:self-stretch">
             <div className="lg:sticky lg:top-24">
               <Suspense
                 fallback={
@@ -102,9 +108,27 @@ export default async function ProductPage(props: {
               <ProductDescription product={product} />
             </Suspense>
           </div>
-        </div>
+        </section>
 
+        {Array.isArray(product.custom.showcase_images) &&
+          product.custom.showcase_images.length > 0 && (
+            <ShowcaseGallery
+              images={product.custom.showcase_images as Image[]}
+            />
+          )}
+
+        {Boolean(product.custom.sound_test) && (
+          <SoundTest soundTestId={product.custom.sound_test as string} />
+        )}
+
+        {Array.isArray(product.custom.included_items) && (
+          <IncludedItems includedItems={product.custom.included_items as IncludedItemsType[]} />
+        )}
         {Boolean(product.custom.keyboard_specs) && <Specs product={product} />}
+
+        {Array.isArray(product.custom.product_faqs) && (
+          <Faq faqs={product.custom.product_faqs as ProductFaqs[]} />
+        )}
       </div>
     </>
   );

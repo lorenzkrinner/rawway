@@ -38,3 +38,10 @@ export type KeyboardSpecs = {
   type_angle?: string;
   operating_temperature?: string;
 }
+
+export type KeyboardSoundTest = {
+  section_title: string;
+  video_url: string;
+  decibel_range?: string;
+  switch_type?: string;
+}

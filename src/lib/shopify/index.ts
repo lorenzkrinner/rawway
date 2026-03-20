@@ -16,15 +16,15 @@ import {
   getCollectionQuery,
   getCollectionsQuery,
 } from "./queries/collection";
+import { getMediaImageByIdQuery } from "./queries/mediaImage";
 import { getMenuQuery } from "./queries/menu";
+import { getMetaobjectByIdQuery } from "./queries/metaobject";
 import { getPageQuery, getPagesQuery } from "./queries/page";
 import {
   getProductQuery,
   getProductRecommendationsQuery,
   getProductsQuery,
 } from "./queries/product";
-import { getMetaobjectByIdQuery } from "./queries/metaobject";
-import { getMediaImageByIdQuery } from "./queries/mediaImage";
 import {
   reshapeCart,
   reshapeCollection,
@@ -36,19 +36,19 @@ import {
   Cart,
   Collection,
   Connection,
+  Image,
   Menu,
   Page,
   Product,
-  Image,
-  ShopifyMetaobjectByIdOperation,
-  ShopifyMediaImageByIdOperation,
   ShopifyAddToCartOperation,
   ShopifyCartOperation,
   ShopifyCollectionOperation,
   ShopifyCollectionProductsOperation,
   ShopifyCollectionsOperation,
   ShopifyCreateCartOperation,
+  ShopifyMediaImageByIdOperation,
   ShopifyMenuOperation,
+  ShopifyMetaobjectByIdOperation,
   ShopifyPageOperation,
   ShopifyPagesOperation,
   ShopifyProductOperation,
@@ -365,6 +365,8 @@ export async function getProduct(handle: string): Promise<Product | undefined> {
       handle,
     },
   });
+
+  console.log("FULL PRODUCT", res.body.data.product);
 
   return reshapeProduct(res.body.data.product, false);
 }
