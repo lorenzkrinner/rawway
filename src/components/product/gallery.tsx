@@ -1,6 +1,6 @@
 "use client";
 
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassPlusIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
@@ -76,10 +76,10 @@ export function Gallery({
     ? parseInt(searchParams.get("image")!)
     : 0;
 
-  const safeIndex = Math.min(imageIndex, images.length - 1);
-
-  const canGoLeft = safeIndex > 0;
-  const canGoRight = safeIndex < images.length - 1;
+  const safeIndex =
+    images.length > 0
+      ? ((imageIndex % images.length) + images.length) % images.length
+      : 0;
 
   const updateImage = useCallback(
     (index: number) => {
@@ -96,13 +96,10 @@ export function Gallery({
     const clickX = e.clientX - rect.left;
     const midpoint = rect.width / 2;
 
-    if (canGoLeft && canGoRight) {
-      if (clickX < midpoint) updateImage(safeIndex - 1);
-      else updateImage(safeIndex + 1);
-    } else if (canGoLeft) {
-      updateImage(safeIndex - 1);
-    } else if (canGoRight) {
-      updateImage(safeIndex + 1);
+    if (clickX < midpoint) {
+      updateImage((safeIndex - 1 + images.length) % images.length);
+    } else {
+      updateImage((safeIndex + 1) % images.length);
     }
   };
 
@@ -116,19 +113,40 @@ export function Gallery({
 
   const getCursor = () => {
     if (images.length <= 1) return "default";
-    if (canGoLeft && canGoRight) {
-      return hoverSide === "left" ? LEFT_CURSOR : RIGHT_CURSOR;
-    }
-    if (canGoLeft) return LEFT_CURSOR;
-    if (canGoRight) return RIGHT_CURSOR;
-    return "default";
+    if (!hoverSide) return "default";
+    return hoverSide === "left" ? LEFT_CURSOR : RIGHT_CURSOR;
   };
 
   return (
     <>
-      <div className="flex flex-col gap-3">
+      <div className="flex gap-3">
+        {images.length > 1 && (
+          <ul className="flex flex-col gap-2 overflow-y-auto scrollbar-hide py-1 w-fit">
+            {images.map((image, index) => {
+              const isActive = index === safeIndex;
+              return (
+                <li key={image.src} className="size-20 shrink-0 max-w-20 w-fit">
+                  <button
+                    onClick={() => updateImage(index)}
+                    aria-label={`Select image ${index + 1}`}
+                    className="h-full w-full"
+                  >
+                    <GridTileImage
+                      className="w-full"
+                      alt={image.altText}
+                      src={image.src}
+                      width={120}
+                      height={120}
+                      active={isActive}
+                    />
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
         <div
-          className="relative aspect-square w-full overflow-hidden rounded-lg bg-muted"
+          className="relative aspect-square shrink-0 w-full overflow-hidden rounded-lg bg-muted max-w-3xl"
           style={{ cursor: getCursor() }}
           onClick={handleMainClick}
           onMouseMove={handleMouseMove}
@@ -136,9 +154,8 @@ export function Gallery({
         >
           {images[safeIndex] && (
             <Image
-              className="h-full w-full object-contain"
+              className="h-full object-contain w-full "
               fill
-              sizes="(min-width: 1024px) 55vw, 100vw"
               alt={images[safeIndex]!.altText}
               src={images[safeIndex]!.src}
               priority={true}
@@ -150,39 +167,14 @@ export function Gallery({
               e.stopPropagation();
               setLightboxOpen(true);
             }}
-            className="absolute top-3 left-3 z-10 size-10 rounded-full"
+            className="absolute top-3 right-3 z-10 size-10 rounded-full"
             variant="ghost"
             size="icon-sm"
             aria-label="Zoom image"
           >
-            <MagnifyingGlassIcon className="size-5" />
+            <MagnifyingGlassPlusIcon className="size-5" />
           </Button>
         </div>
-
-        {images.length > 1 && (
-          <ul className="flex items-center gap-2 overflow-x-auto py-1">
-            {images.map((image, index) => {
-              const isActive = index === safeIndex;
-              return (
-                <li key={image.src} className="h-16 w-16 shrink-0">
-                  <button
-                    onClick={() => updateImage(index)}
-                    aria-label={`Select image ${index + 1}`}
-                    className="h-full w-full"
-                  >
-                    <GridTileImage
-                      alt={image.altText}
-                      src={image.src}
-                      width={64}
-                      height={64}
-                      active={isActive}
-                    />
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
       </div>
 
       <Lightbox

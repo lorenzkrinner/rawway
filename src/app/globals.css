@@ -19,6 +19,10 @@
   }
 }
 
+button {
+  @apply cursor-pointer;
+}
+
 @utility scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;

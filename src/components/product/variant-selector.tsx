@@ -138,7 +138,7 @@ export function VariantSelector({
                   className={clsx(
                     "relative size-9 rounded-full transition-all duration-200",
                     {
-                      "ring-2 ring-foreground ring-offset-2": isActive,
+                      "ring-2 ring-muted-foreground ring-offset-2": isActive,
                       "ring-1 ring-border hover:ring-foreground":
                         !isActive && isAvailableForSale,
                       "opacity-40 cursor-not-allowed": !isAvailableForSale,

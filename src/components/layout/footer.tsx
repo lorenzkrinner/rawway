@@ -55,7 +55,7 @@ export default function Footer() {
 
           <div>
             <h3 className="font-loud text-2xl font-black text-foreground">
-              Join our community
+              Join our Newsletter
             </h3>
             <p className="mt-4 text-sm leading-relaxed">
               Sign up now to get exclusive{" "}
@@ -67,7 +67,7 @@ export default function Footer() {
               and behind-the-scenes{" "}
               <span className="font-semibold text-foreground">insights</span>!
             </p>
-            <form className="mt-6 flex items-center focus-within:border-foreground border-border border-2 transition-[border] ease-in-out duration-300">
+            <form className="mt-6 flex items-center focus-within:border-foreground border-border border-2 transition-[border] ease-in-out duration-300 bg-background">
               <input
                 type="email"
                 placeholder="E-mail"

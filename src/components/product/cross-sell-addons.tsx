@@ -21,25 +21,25 @@ function AddonRow({
 
   return (
     <>
-      <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+      <div className="bg-muted flex items-center gap-3 rounded-lg border border-border p-4">
         <button
           onClick={() => setInfoOpen(true)}
-          className="relative shrink-0"
+          className="shrink-0"
           aria-label={`More info about ${product.title}`}
         >
-          <InformationCircleIcon className="absolute -top-1 -left-1 z-10 size-4 text-muted-foreground" />
-          <div className="relative size-14 overflow-hidden rounded-md bg-muted">
-            {product.featuredImage.url && (
-              <Image
-                src={product.featuredImage.url}
-                alt={product.featuredImage.altText || product.title}
-                fill
-                className="object-contain"
-                sizes="56px"
-              />
-            )}
-          </div>
+          <InformationCircleIcon className="size-6 text-muted-foreground hover:text-foreground transition-colors duration-300" />
         </button>
+        <div className="relative size-14 overflow-hidden rounded-md bg-muted">
+          {product.featuredImage.url && (
+            <Image
+              src={product.featuredImage.url}
+              alt={product.featuredImage.altText || product.title}
+              fill
+              className="object-contain"
+              sizes="56px"
+            />
+          )}
+        </div>
 
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium truncate">{product.title}</p>
@@ -54,6 +54,8 @@ function AddonRow({
           checked={enabled}
           onCheckedChange={onToggle}
           aria-label={`Add ${product.title}`}
+          className="self-start"
+          size="lg"
         />
       </div>
 
@@ -84,7 +86,7 @@ export function CrossSellAddons({
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold">Popular add-ons</h3>
+      <h3 className="text-sm font-semibold">Other people also bought</h3>
 
       <div className="space-y-2">
         {visibleProducts.map((product) => (

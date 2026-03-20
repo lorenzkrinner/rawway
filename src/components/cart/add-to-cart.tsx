@@ -70,36 +70,26 @@ export function AddToCart({
 
   if (isOutOfStock) {
     return (
-      <div>
-        <Button
-          className="w-full rounded-full py-7 text-sm font-semibold uppercase tracking-wider"
-          onClick={() => {
-            toast.info("We'll notify you when this product is back in stock.");
-          }}
-        >
-          Notify Me When Available
-        </Button>
-        <p className="mt-2 text-center text-xs text-muted-foreground">
-          Shipping calculated at checkout
-        </p>
-      </div>
+      <Button
+        className="w-full rounded-full py-7 text-sm font-semibold uppercase tracking-wider"
+        onClick={() => {
+          toast.info("We'll notify you when this product is back in stock.");
+        }}
+      >
+        Notify Me When Available
+      </Button>
     );
   }
 
   if (!selectedVariantId) {
     return (
-      <div>
-        <Button
-          disabled
-          className="w-full rounded-full py-7 text-sm font-semibold uppercase tracking-wider opacity-60"
-        >
-          <ShoppingCartIcon className="size-5 mr-1" />
-          Select an Option
-        </Button>
-        <p className="mt-2 text-center text-xs text-muted-foreground">
-          Shipping calculated at checkout
-        </p>
-      </div>
+    <Button
+      disabled
+      className="w-full rounded-full py-7 text-sm font-semibold uppercase tracking-wider opacity-60"
+    >
+      <ShoppingCartIcon className="size-5 mr-1" />
+      Select an Option
+    </Button>
     );
   }
 
@@ -109,21 +99,17 @@ export function AddToCart({
         <Button
           type="submit"
           aria-label="Add to cart"
-          className="w-full rounded-full py-7 text-sm font-semibold uppercase tracking-wider hover:opacity-90"
+          className="w-full py-7 hover:opacity-90 gap-1"
         >
-          <ShoppingCartIcon className="size-5 mr-1" />
-          <span>Add to Cart</span>
-          <span className="mx-2">·</span>
           <Price
             amount={totalPrice.toString()}
             currencyCode={currencyCode}
-            className="inline"
+            className="inline text-background/80"
           />
+          <span className="mx-2 text-background/80">-</span>
+          <span className="font-mono text-sm">Add to Cart</span>
         </Button>
       </form>
-      <p className="mt-2 text-center text-xs text-muted-foreground">
-        Shipping calculated at checkout
-      </p>
     </div>
   );
 }

@@ -83,8 +83,8 @@ export default async function ProductPage(props: {
         }}
       />
       <div className="mx-auto max-w-(--breakpoint-xl) px-4 py-8">
-        <div className="flex flex-col lg:flex-row lg:gap-12">
-          <div className="w-full lg:w-[55%]">
+        <div className="flex flex-col lg:flex-row lg:gap-12 lg:items-stretch">
+          <div className="w-full lg:w-[70%] lg:self-stretch">
             <div className="lg:sticky lg:top-24">
               <Suspense
                 fallback={
@@ -96,7 +96,7 @@ export default async function ProductPage(props: {
             </div>
           </div>
 
-          <div className="mt-8 w-full lg:mt-0 lg:w-[45%]">
+          <div className="mt-8 w-full lg:mt-0 lg:w-[30%] lg:self-stretch lg:flex">
             <Suspense fallback={null}>
               <ProductDescription product={product} />
             </Suspense>
