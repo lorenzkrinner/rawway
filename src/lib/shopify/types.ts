@@ -68,12 +68,6 @@ export type Page = {
   updatedAt: string;
 };
 
-export type FaqItem = {
-  title: string;
-  icon: string;
-  content: string;
-};
-
 export type CrossSellProduct = {
   id: string;
   handle: string;
@@ -95,27 +89,23 @@ export type Product = Omit<
 > & {
   variants: ProductVariant[];
   images: Image[];
-  custom: Record<string, unknown>;
-  faqItems: FaqItem[];
+  faqItems: Record<string, string>[];
   crossSellProducts: CrossSellProduct[];
   featureBullets: string[];
+  showcaseImages: Image[];
+  spotlightImages: Image[];
+  productFaqs: Record<string, string>[];
+  includedItems: Record<string, string>[];
+  keyboardSpecsId: string | undefined;
+  dimensionsId: string | undefined;
+  soundTestId: string | undefined;
+  batteryWorkingTime: string | undefined;
 };
 
 export type Dimensions = {
   width?: number;
   height?: number;
   depth?: number;
-};
-
-export type ProductFaqs = {
-  title: string;
-  description: string;
-};
-
-export type IncludedItems = {
-  name: string;
-  amount: number;
-  image: Image;
 };
 
 export type ProductOption = {

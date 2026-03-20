@@ -5,10 +5,10 @@ import {
   Collection,
   Connection,
   CrossSellProduct,
-  FaqItem,
   Image,
   ShopifyCart,
   ShopifyCollection,
+  ShopifyMetafield,
   ShopifyMetafieldReference,
   ShopifyMetaobjectByIdOperation,
   ShopifyProduct
@@ -72,68 +72,41 @@ export const reshapeImages = (
   });
 };
 
-export const reshapeCustomFields = (
-  metafields: ShopifyProduct["metafields"],
-): Record<string, unknown> => {
-  const custom: Record<string, unknown> = {};
+const findMetafield = (
+  metafields: ShopifyMetafield[] | undefined,
+  key: string,
+): string | undefined => {
+  const mf = metafields?.find((m) => m?.key === key);
+  return mf?.value ?? undefined;
+};
 
-  for (const mf of metafields ?? []) {
-    if (!mf?.key) continue;
+const flattenMetafieldReferences = (
+  metafields: ShopifyMetafield[] | undefined,
+  key: string,
+): ShopifyMetafieldReference[] => {
+  const mf = metafields?.find((m) => m?.key === key);
+  if (!mf?.references) return [];
+  return removeEdgesAndNodes(mf.references);
+};
 
-    if (
-      (mf.key === "spotlight_images" || mf.key === "showcase_images") &&
-      mf.references
-    ) {
-      custom[mf.key] = removeEdgesAndNodes(mf.references)
-        .filter((ref) => ref.image)
-        .map((ref) => ref.image!);
-      continue;
-    }
 
-    if (mf.key === "product_faqs" && mf.references) {
-      custom[mf.key] = removeEdgesAndNodes(mf.references)
-        .filter((ref) => ref?.fields?.length)
-        .map((ref) => {
-          const fields = ref.fields!;
-          const getField = (key: string) =>
-            fields.find((f) => f.key === key)?.value ?? "";
-
-          return {
-            title: getField("title"),
-            description: getField("description"),
-          };
-        });
-      continue;
-    }
-
-    if (mf.references) {
-      const firstReference = removeEdgesAndNodes(mf.references)[0];
-      const fields = firstReference?.fields;
-      if (fields?.length) {
-        custom[mf.key] = fields.reduce<Record<string, string>>((acc, f) => {
-          acc[f.key] = f.value;
-          return acc;
-        }, {});
-        continue;
-      }
-    }
-
-    if (mf.value) {
-      custom[mf.key] = mf.value;
-    }
-  }
-
-  return custom;
+const flattenMetafieldImages = (
+  metafields: ShopifyMetafield[] | undefined,
+  key: string,
+): Image[] => {
+  return flattenMetafieldReferences(metafields, key)
+    .filter((ref) => ref.image)
+    .map((ref) => ref.image!);
 };
 
 type ReshapableMetaobject =
   | ShopifyMetaobjectByIdOperation["data"]["node"]
   | ShopifyMetafieldReference;
 
-export const reshapeMetaobject = (metaobject: ReshapableMetaobject) => {
+export const reshapeMetaobject = (metaobject: ReshapableMetaobject): Record<string, string> => {
   const fields = metaobject?.fields;
   if (!fields) return {};
-  const obj: Record<string, unknown> = {};
+  const obj: Record<string, string> = {};
   for (const field of fields) {
     obj[field.key] = field.value;
   }
@@ -143,26 +116,6 @@ export const reshapeMetaobject = (metaobject: ReshapableMetaobject) => {
 export const reshapeMetaobjects = (metaobjects: ReshapableMetaobject[]) => {
   return metaobjects.map((metaobject) => reshapeMetaobject(metaobject));
 }
-
-export const reshapeFaqItems = (
-  metafields: ShopifyProduct["metafields"],
-): FaqItem[] => {
-  const mf = metafields?.find((m) => m?.key === "faq");
-  if (!mf?.references) return [];
-
-  return removeEdgesAndNodes(mf.references)
-    .filter((ref) => ref.fields)
-    .map((ref) => {
-      const fields = ref.fields!;
-      const getField = (key: string) =>
-        fields.find((f) => f.key === key)?.value ?? "";
-      return {
-        title: getField("title"),
-        icon: getField("icon"),
-        content: getField("content"),
-      };
-    });
-};
 
 export const reshapeCrossSellProducts = (
   metafields: ShopifyProduct["metafields"],
@@ -214,14 +167,10 @@ export const reshapeCrossSellProducts = (
     });
 };
 
-export const reshapeFeatureBullets = (
-  metafields: ShopifyProduct["metafields"],
-): string[] => {
-  const mf = metafields?.find((m) => m?.key === "feature_bullets");
-  if (!mf?.value) return [];
-  const parsed: unknown = JSON.parse(mf.value);
-  if (Array.isArray(parsed)) return parsed as string[];
-  return [];
+const parseJsonStringArray = (value: string | undefined): string[] => {
+  if (!value) return [];
+  const parsed: unknown = JSON.parse(value);
+  return Array.isArray(parsed) ? (parsed as string[]) : [];
 };
 
 export const reshapeProduct = (
@@ -241,17 +190,17 @@ export const reshapeProduct = (
     ...rest,
     images: reshapeImages(images, product.title),
     variants: removeEdgesAndNodes(variants),
-    custom: reshapeCustomFields(metafields),
-    faqItems: reshapeFaqItems(metafields),
+    faqItems: reshapeMetaobjects(flattenMetafieldReferences(metafields, "faq")),
     crossSellProducts: reshapeCrossSellProducts(metafields),
-    featureBullets: reshapeFeatureBullets(metafields),
-    includedItems: reshapeMetaobjects(
-      removeEdgesAndNodes(
-        metafields?.find((m) => m?.key === "included_items")?.references ?? {
-          edges: [],
-        },
-      ),
-    ),
+    featureBullets: parseJsonStringArray(findMetafield(metafields, "feature_bullets")),
+    showcaseImages: flattenMetafieldImages(metafields, "showcase_images"),
+    spotlightImages: flattenMetafieldImages(metafields, "spotlight_images"),
+    productFaqs: reshapeMetaobjects(flattenMetafieldReferences(metafields, "product_faqs")),
+    includedItems: reshapeMetaobjects(flattenMetafieldReferences(metafields, "included_items")),
+    keyboardSpecsId: findMetafield(metafields, "keyboard_specs"),
+    dimensionsId: findMetafield(metafields, "dimensions"),
+    soundTestId: findMetafield(metafields, "sound_test"),
+    batteryWorkingTime: findMetafield(metafields, "battery_working_time"),
   };
 };
 

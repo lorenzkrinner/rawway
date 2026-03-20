@@ -5,7 +5,7 @@ import { Gallery } from "src/components/product/gallery";
 import { ProductDescription } from "src/components/product/product-description";
 import { HIDDEN_PRODUCT_TAG } from "src/lib/constants";
 import { getProduct } from "src/lib/shopify";
-import type { Image, IncludedItems as IncludedItemsType, ProductFaqs } from "src/lib/shopify/types";
+import type { Image } from "src/lib/shopify/types";
 import Faq from "~/components/product/sections/faq";
 import IncludedItems from "~/components/product/sections/included-items";
 import ShowcaseGallery from "~/components/product/sections/showcase-gallery";
@@ -79,8 +79,6 @@ export default async function ProductPage(props: {
     altText: image.altText,
   }));
 
-  console.log(product.custom);
-
   return (
     <>
       <script
@@ -110,24 +108,22 @@ export default async function ProductPage(props: {
           </div>
         </section>
 
-        {Array.isArray(product.custom.showcase_images) &&
-          product.custom.showcase_images.length > 0 && (
-            <ShowcaseGallery
-              images={product.custom.showcase_images as Image[]}
-            />
-          )}
-
-        {Boolean(product.custom.sound_test) && (
-          <SoundTest soundTestId={product.custom.sound_test as string} />
+        {product.showcaseImages.length > 0 && (
+          <ShowcaseGallery images={product.showcaseImages} />
         )}
 
-        {Array.isArray(product.custom.included_items) && (
-          <IncludedItems includedItems={product.custom.included_items as IncludedItemsType[]} />
+        {product.soundTestId && (
+          <SoundTest soundTestId={product.soundTestId} />
         )}
-        {Boolean(product.custom.keyboard_specs) && <Specs product={product} />}
 
-        {Array.isArray(product.custom.product_faqs) && (
-          <Faq faqs={product.custom.product_faqs as ProductFaqs[]} />
+        {product.includedItems.length > 0 && (
+          <IncludedItems includedItems={product.includedItems} />
+        )}
+
+        {product.keyboardSpecsId && <Specs product={product} />}
+
+        {product.productFaqs.length > 0 && (
+          <Faq faqs={product.productFaqs} />
         )}
       </div>
     </>

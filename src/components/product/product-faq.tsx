@@ -6,7 +6,6 @@ import {
   InformationCircleIcon,
   TruckIcon,
 } from "@heroicons/react/24/outline";
-import type { FaqItem } from "src/lib/shopify/types";
 import {
   Accordion,
   AccordionContent,
@@ -83,11 +82,11 @@ const HARDCODED_FAQ: {
   },
 ];
 
-export function ProductFaq({ faqItems }: { faqItems: FaqItem[] }) {
+export function ProductFaq({ faqItems }: { faqItems: Record<string, string>[] }) {
   return (
     <Accordion type="single" collapsible className="w-full">
       {faqItems.map((item, index) => {
-        const Icon = getFaqIcon(item.icon);
+        const Icon = getFaqIcon(item.icon ?? "info");
         return (
           <AccordionItem key={`custom-${index}`} value={`custom-${index}`}>
             <AccordionTrigger className="py-4 hover:no-underline">
@@ -99,7 +98,7 @@ export function ProductFaq({ faqItems }: { faqItems: FaqItem[] }) {
             <AccordionContent>
               <div
                 className="text-sm text-muted-foreground pl-8"
-                dangerouslySetInnerHTML={{ __html: item.content }}
+                dangerouslySetInnerHTML={{ __html: item.content ?? "" }}
               />
             </AccordionContent>
           </AccordionItem>

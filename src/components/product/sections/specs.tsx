@@ -53,7 +53,7 @@ function groupSpecs(
     Power: {
       "Working time lights on": specs.working_time_lights_on,
       "Working time lights off": specs.working_time_lights_off,
-      "Working time": product.custom.battery_working_time,
+      "Working time": product.batteryWorkingTime,
     },
     Other: {
       "Type angle": specs.type_angle,
@@ -98,20 +98,13 @@ async function resolveDimensions(metaobjectId: string): Promise<Dimensions> {
 }
 
 export default async function Specs({ product }: { product: Product }) {
-  const keyboardSpecsIdOrObj = product.custom?.keyboard_specs;
-  const dimensionsIdOrObj = product.custom?.dimensions;
+  if (!product.keyboardSpecsId) return null;
 
-  if (!keyboardSpecsIdOrObj) return null;
+  const specs = await resolveKeyboardSpecs(product.keyboardSpecsId);
 
-  const specs =
-    typeof keyboardSpecsIdOrObj === "string"
-      ? await resolveKeyboardSpecs(keyboardSpecsIdOrObj)
-      : (keyboardSpecsIdOrObj as KeyboardSpecs);
-
-  const dimensions =
-    typeof dimensionsIdOrObj === "string"
-      ? await resolveDimensions(dimensionsIdOrObj)
-      : (dimensionsIdOrObj as Dimensions);
+  const dimensions = product.dimensionsId
+    ? await resolveDimensions(product.dimensionsId)
+    : undefined;
 
   const groupedSpecs = groupSpecs(product, specs, dimensions);
 

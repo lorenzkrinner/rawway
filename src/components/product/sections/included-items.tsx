@@ -1,6 +1,4 @@
-import type { IncludedItems as IncludedItemsType } from "~/lib/shopify/types";
-
-export default function IncludedItems({ includedItems }: { includedItems: IncludedItemsType[] }) {
+export default function IncludedItems({ includedItems }: { includedItems: Record<string, string>[] }) {
   return (
     <section className="mx-auto flex max-w-7xl px-6 py-16 md:py-24 items-start justify-start w-full">
       <h2 className="text-start text-4xl font-medium font-loud mb-4 max-w-xl">Included items</h2>

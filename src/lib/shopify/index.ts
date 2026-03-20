@@ -366,8 +366,6 @@ export async function getProduct(handle: string): Promise<Product | undefined> {
     },
   });
 
-  console.log("FULL PRODUCT", res.body.data.product);
-
   return reshapeProduct(res.body.data.product, false);
 }
 
