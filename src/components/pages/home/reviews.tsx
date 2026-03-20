@@ -72,7 +72,7 @@ export function Reviews() {
   const review = reviews[current]!;
 
   return (
-    <section className="flex flex-col items-center px-8 py-20 md:py-28 bg-muted overflow-hidden">
+    <section className="flex flex-col items-center px-8 py-16 lg:py-20 my-16 lg:my-24 bg-muted overflow-hidden">
       <div className="w-full max-w-5xl">
         <div
           className="flex flex-col md:flex-row items-center gap-8 md:gap-16 transition-all duration-300 ease-in-out"

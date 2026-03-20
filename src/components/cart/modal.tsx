@@ -1,11 +1,11 @@
 "use client";
 
-import { ShoppingBagIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { ShoppingBagIcon, TruckIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { useAction } from "next-safe-action/hooks";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { useAction } from "next-safe-action/hooks";
 import LoadingDots from "src/components/loading-dots";
 import Price from "src/components/price";
 import { DEFAULT_OPTION } from "src/lib/constants";
@@ -19,7 +19,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "~/components/ui/sheet";
-import { createUrl } from "~/lib/utils";
+import { cn, createUrl } from "~/lib/utils";
 import { Badge } from "../ui/badge";
 import { addItem, createCartAndSetCookie, redirectToCheckout } from "./actions";
 import { useCart } from "./cart-context";
@@ -30,7 +30,7 @@ type MerchandiseSearchParams = {
   [key: string]: string;
 };
 
-const FREE_SHIPPING_THRESHOLD_EUR = 50;
+const FREE_SHIPPING_THRESHOLD_EUR = 55;
 
 type CartModalProps = {
   navTextClass: string;
@@ -63,27 +63,33 @@ function toCartAddonProduct(product: Product) {
 }
 
 function ShippingBanner({
-  amount,
+  remaining,
+  progress,
   currencyCode,
 }: {
-  amount: number;
+  remaining: number;
+  progress: number;
   currencyCode: string;
 }) {
-  const remaining = Math.max(FREE_SHIPPING_THRESHOLD_EUR - amount, 0);
-  const progress = toPercent((amount / FREE_SHIPPING_THRESHOLD_EUR) * 100);
+  
 
   return (
-    <div className="rounded-lg border border-border bg-muted/60 p-4">
+    <div className="border-y border-muted-foreground/20 p-6 rounded-xl bg-muted space-y-4">
       <p className="text-center text-sm font-semibold text-foreground">
         {remaining > 0
           ? `You are ${formatCurrency(remaining, currencyCode)} away from FREE SHIPPING!`
           : "You unlocked FREE SHIPPING!"}
       </p>
-      <div className="mt-3 h-1.5 w-full rounded-full bg-border">
-        <div
-          className="h-1.5 rounded-full bg-foreground transition-all duration-500"
-          style={{ width: `${progress}%` }}
-        />
+      <div className="flex items-center">
+        <div className="t-3 h-1.5 w-full rounded-full bg-muted-foreground/20">
+          <div
+            className="h-1.5 rounded-full bg-green-500 transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <div className={cn("flex center size-7 rounded-full bg-muted-foreground/20 text-foreground", remaining === 0 && "bg-green-500 text-background")}>
+          <TruckIcon className="size-4" />
+        </div>
       </div>
     </div>
   );
@@ -160,19 +166,19 @@ function EmptyCartRecommendations({
   const visibleProducts = products.slice(0, 2);
 
   return (
-    <div className="mt-10 w-full space-y-5">
-      <Button asChild className="w-full">
-        <Link href="/search" onClick={onClose}>
-          Browse shop
-        </Link>
-      </Button>
+    <div className="mt-10 w-full">
+      <Link href="/search" onClick={onClose}>
+        <Button className="w-full py-8 ">
+            Browse shop
+        </Button>
+      </Link>
       {visibleProducts.length > 0 ? (
-        <div className="space-y-2">
+        <div className="space-y-2 mt-16">
           <h3 className="text-sm font-semibold">Recommended for you</h3>
           {visibleProducts.map((product) => (
             <div
               key={product.id}
-              className="flex items-center gap-3 rounded-lg border border-border bg-muted p-3"
+              className="flex items-center gap-3 rounded-xl border border-border bg-muted p-3"
             >
               <div className="relative size-14 overflow-hidden rounded-md bg-background">
                 <Image
@@ -191,11 +197,11 @@ function EmptyCartRecommendations({
                   className="text-xs text-muted-foreground"
                 />
               </div>
-              <Button size="sm" asChild>
-                <Link href={`/product/${product.handle}`} onClick={onClose}>
+              <Link href={`/product/${product.handle}`} onClick={onClose}>
+                <Button size="sm" variant={"secondary"} className="h-20 px-8 rounded-lg border border-border">
                   Explore
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
           ))}
         </div>
@@ -234,6 +240,9 @@ export default function CartModal({
     }
   }, [isOpen, cart?.totalQuantity, quantityRef]);
 
+  const remaining = Math.max(FREE_SHIPPING_THRESHOLD_EUR - cart?.cost.subtotalAmount.amount ?? 0, 0);
+  const progress = toPercent((cart?.cost.subtotalAmount.amount ?? 0 / FREE_SHIPPING_THRESHOLD_EUR) * 100);
+
   return (
     <>
       <Button
@@ -266,7 +275,8 @@ export default function CartModal({
           </SheetHeader>
           <div className="pt-4">
             <ShippingBanner
-              amount={Number(cart?.cost.subtotalAmount.amount ?? "0")}
+              remaining={remaining}
+              progress={progress}
               currencyCode={cart?.cost.subtotalAmount.currencyCode ?? "EUR"}
             />
           </div>
@@ -398,7 +408,7 @@ export default function CartModal({
                 <Separator className="mb-3" />
                 <div className="mb-3 flex items-center justify-between pb-1 pt-1">
                   <p>Shipping</p>
-                  <p className="text-right">Calculated at checkout</p>
+                  <p className="text-right">{remaining > 0 ? `Calculated at checkout` : `FREE`}</p>
                 </div>
                 <Separator className="mb-3" />
                 <div className="mb-3 flex items-center justify-between pb-1 pt-1">
@@ -427,7 +437,7 @@ function CheckoutButton() {
 
   return (
     <Button
-      className="w-full rounded-full p-3 text-center text-sm font-medium opacity-90 hover:opacity-100"
+      className="w-full py-8 text-center text-sm font-medium opacity-90 hover:opacity-100"
       type="submit"
       disabled={pending}
     >

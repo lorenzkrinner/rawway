@@ -89,16 +89,16 @@ export type Product = Omit<
 > & {
   variants: ProductVariant[];
   images: Image[];
-  faqItems: Record<string, string>[];
+  faqItems: Record<string, unknown>[];
   crossSellProducts: CrossSellProduct[];
   featureBullets: string[];
   showcaseImages: Image[];
   spotlightImages: Image[];
-  productFaqs: Record<string, string>[];
-  includedItems: Record<string, string>[];
-  keyboardSpecsId: string | undefined;
-  dimensionsId: string | undefined;
-  soundTestId: string | undefined;
+  productFaqs: Record<string, unknown>[];
+  includedItems: Record<string, unknown>[];
+  keyboardSpecs: import("~/types/keyboard").KeyboardSpecs | undefined;
+  dimensions: Dimensions | undefined;
+  soundTest: import("~/types/keyboard").KeyboardSoundTest | undefined;
   batteryWorkingTime: string | undefined;
 };
 
@@ -106,6 +106,17 @@ export type Dimensions = {
   width?: number;
   height?: number;
   depth?: number;
+};
+
+export type IncludedItem = {
+  name: string;
+  amount: number;
+  image: Image;
+};
+
+export type FaqItem = {
+  title: string;
+  description: string;
 };
 
 export type ProductOption = {

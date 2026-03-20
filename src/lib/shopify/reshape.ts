@@ -1,10 +1,12 @@
-import { removeEdgesAndNodes } from ".";
+import { KeyboardSoundTest, KeyboardSpecs } from "~/types/keyboard";
+import { getMediaImageById, getMetaobjectById, removeEdgesAndNodes } from ".";
 import { HIDDEN_PRODUCT_TAG } from "../constants";
 import {
   Cart,
   Collection,
   Connection,
   CrossSellProduct,
+  Dimensions,
   Image,
   ShopifyCart,
   ShopifyCollection,
@@ -89,7 +91,6 @@ const flattenMetafieldReferences = (
   return removeEdgesAndNodes(mf.references);
 };
 
-
 const flattenMetafieldImages = (
   metafields: ShopifyMetafield[] | undefined,
   key: string,
@@ -103,18 +104,39 @@ type ReshapableMetaobject =
   | ShopifyMetaobjectByIdOperation["data"]["node"]
   | ShopifyMetafieldReference;
 
-export const reshapeMetaobject = (metaobject: ReshapableMetaobject): Record<string, string> => {
-  const fields = metaobject?.fields;
+type ReshapableField = { key: string; value: string; reference?: { image?: Image } | null };
+
+export const reshapeMetaobject = async (metaobject: ReshapableMetaobject): Promise<Record<string, unknown>> => {
+  const fields = metaobject?.fields as ReshapableField[] | undefined;
   if (!fields) return {};
-  const obj: Record<string, string> = {};
+  const obj: Record<string, unknown> = {};
   for (const field of fields) {
-    obj[field.key] = field.value;
+    if (field.reference?.image) {
+      obj[field.key] = field.reference.image;
+    } else if (field.value.startsWith("gid://shopify/MediaImage/")) {
+      const img = await getMediaImageById(field.value);
+      obj[field.key] = img ?? field.value;
+    } else {
+      obj[field.key] = field.value;
+    }
   }
   return obj;
 }
 
 export const reshapeMetaobjects = (metaobjects: ReshapableMetaobject[]) => {
   return metaobjects.map((metaobject) => reshapeMetaobject(metaobject));
+}
+
+export const resolveMetaobjectById = async (id: string): Promise<Record<string, unknown>> => {
+  const metaobject = await getMetaobjectById(id);
+  if (!metaobject) return {};
+  return reshapeMetaobject(metaobject);
+}
+
+const resolveOptionalMetaobject = async (id: string | undefined): Promise<Record<string, unknown> | undefined> => {
+  if (!id) return undefined;
+  const result = await resolveMetaobjectById(id);
+  return Object.keys(result).length > 0 ? result : undefined;
 }
 
 export const reshapeCrossSellProducts = (
@@ -173,7 +195,7 @@ const parseJsonStringArray = (value: string | undefined): string[] => {
   return Array.isArray(parsed) ? (parsed as string[]) : [];
 };
 
-export const reshapeProduct = (
+export const reshapeProduct = async (
   product: ShopifyProduct,
   filterHiddenProducts: boolean = true,
 ) => {
@@ -190,26 +212,26 @@ export const reshapeProduct = (
     ...rest,
     images: reshapeImages(images, product.title),
     variants: removeEdgesAndNodes(variants),
-    faqItems: reshapeMetaobjects(flattenMetafieldReferences(metafields, "faq")),
+    faqItems: await Promise.all(reshapeMetaobjects(flattenMetafieldReferences(metafields, "faq"))),
     crossSellProducts: reshapeCrossSellProducts(metafields),
     featureBullets: parseJsonStringArray(findMetafield(metafields, "feature_bullets")),
     showcaseImages: flattenMetafieldImages(metafields, "showcase_images"),
     spotlightImages: flattenMetafieldImages(metafields, "spotlight_images"),
-    productFaqs: reshapeMetaobjects(flattenMetafieldReferences(metafields, "product_faqs")),
-    includedItems: reshapeMetaobjects(flattenMetafieldReferences(metafields, "included_items")),
-    keyboardSpecsId: findMetafield(metafields, "keyboard_specs"),
-    dimensionsId: findMetafield(metafields, "dimensions"),
-    soundTestId: findMetafield(metafields, "sound_test"),
+    productFaqs: await Promise.all(reshapeMetaobjects(flattenMetafieldReferences(metafields, "product_faqs"))),
+    includedItems: await Promise.all(reshapeMetaobjects(flattenMetafieldReferences(metafields, "included_items"))),
+    keyboardSpecs: await resolveOptionalMetaobject(findMetafield(metafields, "keyboard_specs")) as KeyboardSpecs | undefined,
+    dimensions: await resolveOptionalMetaobject(findMetafield(metafields, "dimensions")) as Dimensions | undefined,
+    soundTest: await resolveOptionalMetaobject(findMetafield(metafields, "sound_test")) as KeyboardSoundTest | undefined,
     batteryWorkingTime: findMetafield(metafields, "battery_working_time"),
   };
 };
 
-export const reshapeProducts = (products: ShopifyProduct[]) => {
+export const reshapeProducts = async (products: ShopifyProduct[]) => {
   const reshapedProducts = [];
 
   for (const product of products) {
     if (product) {
-      const reshapedProduct = reshapeProduct(product);
+      const reshapedProduct = await reshapeProduct(product);
 
       if (reshapedProduct) {
         reshapedProducts.push(reshapedProduct);

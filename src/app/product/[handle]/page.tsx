@@ -5,7 +5,8 @@ import { Gallery } from "src/components/product/gallery";
 import { ProductDescription } from "src/components/product/product-description";
 import { HIDDEN_PRODUCT_TAG } from "src/lib/constants";
 import { getProduct } from "src/lib/shopify";
-import type { Image } from "src/lib/shopify/types";
+import type { FaqItem, Image, IncludedItem } from "src/lib/shopify/types";
+import { Reviews } from "~/components/pages/home/reviews";
 import Faq from "~/components/product/sections/faq";
 import IncludedItems from "~/components/product/sections/included-items";
 import ShowcaseGallery from "~/components/product/sections/showcase-gallery";
@@ -112,18 +113,21 @@ export default async function ProductPage(props: {
           <ShowcaseGallery images={product.showcaseImages} />
         )}
 
-        {product.soundTestId && (
-          <SoundTest soundTestId={product.soundTestId} />
+
+        {product.soundTest && (
+          <SoundTest soundTest={product.soundTest} />
         )}
+
+        <Reviews />
 
         {product.includedItems.length > 0 && (
-          <IncludedItems includedItems={product.includedItems} />
+          <IncludedItems includedItems={product.includedItems as unknown as IncludedItem[]} />
         )}
 
-        {product.keyboardSpecsId && <Specs product={product} />}
+        {product.keyboardSpecs && <Specs product={product} />}
 
         {product.productFaqs.length > 0 && (
-          <Faq faqs={product.productFaqs} />
+          <Faq faqs={product.productFaqs as FaqItem[]} />
         )}
       </div>
     </>

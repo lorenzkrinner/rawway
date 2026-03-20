@@ -1,6 +1,8 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/components/ui/accordion";
+import { FaqItem } from "~/lib/shopify/types";
 
-export default function Faq({ faqs }: { faqs: Record<string, string>[] }) {
+export default function Faq({ faqs }: { faqs: FaqItem[] }) {
+  console.log(faqs);
   return (
     <section className="mx-auto flex max-w-7xl px-6 py-16 md:py-24 center w-full">
       <div className="flex flex-col w-full rounded-4xl gap-10 px-10 py-12">

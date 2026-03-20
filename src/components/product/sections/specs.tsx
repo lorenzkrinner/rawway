@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { getMediaImageById, getMetaobjectById } from "src/lib/shopify";
 import { Dimensions, Product } from "~/lib/shopify/types";
 import { KeyboardSpecs } from "~/types/keyboard";
 
@@ -62,50 +61,11 @@ function groupSpecs(
   };
 }
 
-async function resolveKeyboardSpecs(
-  metaobjectId: string,
-): Promise<KeyboardSpecs> {
-  const metaobject = await getMetaobjectById(metaobjectId);
-  if (!metaobject) return {};
+export default function Specs({ product }: { product: Product }) {
+  const specs = product.keyboardSpecs;
+  if (!specs) return null;
 
-  const obj: Record<string, unknown> = {};
-  for (const field of metaobject.fields) {
-    if (field.key === "display_image") {
-      if (field.reference?.image) {
-        obj.display_image = field.reference.image;
-      } else if (field.value.startsWith("gid://shopify/MediaImage/")) {
-        const img = await getMediaImageById(field.value);
-        if (img) obj.display_image = img;
-      }
-      continue;
-    }
-    obj[field.key] = field.value;
-  }
-
-  return obj as KeyboardSpecs;
-}
-
-async function resolveDimensions(metaobjectId: string): Promise<Dimensions> {
-  const metaobject = await getMetaobjectById(metaobjectId);
-  if (!metaobject) return {};
-
-  const obj: Record<string, unknown> = {};
-  for (const field of metaobject.fields) {
-    obj[field.key] = field.value;
-  }
-
-  return obj as Dimensions;
-}
-
-export default async function Specs({ product }: { product: Product }) {
-  if (!product.keyboardSpecsId) return null;
-
-  const specs = await resolveKeyboardSpecs(product.keyboardSpecsId);
-
-  const dimensions = product.dimensionsId
-    ? await resolveDimensions(product.dimensionsId)
-    : undefined;
-
+  const dimensions = product.dimensions;
   const groupedSpecs = groupSpecs(product, specs, dimensions);
 
   return (

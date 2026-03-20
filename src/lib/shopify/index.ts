@@ -425,7 +425,7 @@ export async function getProductRecommendations(
     },
   });
 
-  return reshapeProducts(res.body.data.productRecommendations);
+  return await reshapeProducts(res.body.data.productRecommendations);
 }
 
 export async function getProducts({

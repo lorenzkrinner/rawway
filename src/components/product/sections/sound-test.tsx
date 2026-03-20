@@ -1,12 +1,7 @@
 import { KeyIcon, SpeakerWaveIcon } from "@heroicons/react/24/solid";
-import { getMetaobjectById } from "~/lib/shopify";
-import { reshapeMetaobject } from "~/lib/shopify/reshape";
 import { KeyboardSoundTest } from "~/types/keyboard";
 
-export default async function SoundTest({ soundTestId }: { soundTestId: string }) {
-  const soundTest = await getMetaobjectById(soundTestId).then(data => reshapeMetaobject(data)) as KeyboardSoundTest;
-  if (!soundTest) return null;
-
+export default function SoundTest({ soundTest }: { soundTest: KeyboardSoundTest }) {
   return (
     <section className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-16 md:py-24 items-start justify-start w-full">
       <h2 className="text-start text-4xl font-medium font-loud mb-4 max-w-xl">{soundTest.section_title}</h2>
