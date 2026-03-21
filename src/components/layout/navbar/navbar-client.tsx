@@ -1,6 +1,5 @@
 "use client";
 
-import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, UserIcon } from "@heroicons/react/24/solid";
 
 import Link from "next/link";
@@ -208,20 +207,15 @@ export default function NavbarClient({
               />
             </div>
             <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className={cn(`rounded-lg hover:bg-muted/20`, navTextClass)}
-              >
-                <UserIcon className="size-6" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className={cn(`rounded-lg hover:bg-muted/20`, navTextClass)}
-              >
-                <HeartIconOutline className="size-6" />
-              </Button>
+              <Link href={`https://${process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN}/account/login`}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(`rounded-lg hover:bg-muted/20`, navTextClass)}
+                >
+                  <UserIcon className="size-6" />
+                </Button>
+              </Link>
               <CartModal
                 navTextClass={navTextClass}
                 crossSellProducts={cartCrossSellProducts}

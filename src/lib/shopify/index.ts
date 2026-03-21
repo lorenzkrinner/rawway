@@ -6,17 +6,17 @@ import { isShopifyError } from "src/lib/type-guards";
 import { ensureStartsWith } from "~/lib/utils";
 import { getCountryCode } from "../country";
 import {
-  addToCartMutation,
-  cartBuyerIdentityUpdateMutation,
-  createCartMutation,
-  editCartItemsMutation,
-  removeFromCartMutation,
+    addToCartMutation,
+    cartBuyerIdentityUpdateMutation,
+    createCartMutation,
+    editCartItemsMutation,
+    removeFromCartMutation,
 } from "./mutations/cart";
 import { getCartQuery } from "./queries/cart";
 import {
-  getCollectionProductsQuery,
-  getCollectionQuery,
-  getCollectionsQuery,
+    getCollectionProductsQuery,
+    getCollectionQuery,
+    getCollectionsQuery,
 } from "./queries/collection";
 import { getLocalizationQuery } from "./queries/localization";
 import { getMediaImageByIdQuery } from "./queries/mediaImage";
@@ -24,48 +24,48 @@ import { getMenuQuery } from "./queries/menu";
 import { getMetaobjectByIdQuery } from "./queries/metaobject";
 import { getPageQuery, getPagesQuery } from "./queries/page";
 import {
-  getProductQuery,
-  getProductRecommendationsQuery,
-  getProductsQuery,
+    getProductQuery,
+    getProductRecommendationsQuery,
+    getProductsQuery,
 } from "./queries/product";
 import {
-  reshapeCart,
-  reshapeCollection,
-  reshapeCollections,
-  reshapeProduct,
-  reshapeProducts,
+    reshapeCart,
+    reshapeCollection,
+    reshapeCollections,
+    reshapeProduct,
+    reshapeProducts,
 } from "./reshape";
 import {
-  Cart,
-  Collection,
-  Connection,
-  Image,
-  Menu,
-  Page,
-  Product,
-  ShopifyAddToCartOperation,
-  ShopifyCartBuyerIdentityUpdateOperation,
-  ShopifyCartOperation,
-  ShopifyCollectionOperation,
-  ShopifyCollectionProductsOperation,
-  ShopifyCollectionsOperation,
-  ShopifyCountry,
-  ShopifyCreateCartOperation,
-  ShopifyLocalizationOperation,
-  ShopifyMediaImageByIdOperation,
-  ShopifyMenuOperation,
-  ShopifyMetaobjectByIdOperation,
-  ShopifyPageOperation,
-  ShopifyPagesOperation,
-  ShopifyProductOperation,
-  ShopifyProductRecommendationsOperation,
-  ShopifyProductsOperation,
-  ShopifyRemoveFromCartOperation,
-  ShopifyUpdateCartOperation,
+    Cart,
+    Collection,
+    Connection,
+    Image,
+    Menu,
+    Page,
+    Product,
+    ShopifyAddToCartOperation,
+    ShopifyCartBuyerIdentityUpdateOperation,
+    ShopifyCartOperation,
+    ShopifyCollectionOperation,
+    ShopifyCollectionProductsOperation,
+    ShopifyCollectionsOperation,
+    ShopifyCountry,
+    ShopifyCreateCartOperation,
+    ShopifyLocalizationOperation,
+    ShopifyMediaImageByIdOperation,
+    ShopifyMenuOperation,
+    ShopifyMetaobjectByIdOperation,
+    ShopifyPageOperation,
+    ShopifyPagesOperation,
+    ShopifyProductOperation,
+    ShopifyProductRecommendationsOperation,
+    ShopifyProductsOperation,
+    ShopifyRemoveFromCartOperation,
+    ShopifyUpdateCartOperation,
 } from "./types";
 
-const domain = process.env.SHOPIFY_STORE_DOMAIN
-  ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://")
+const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN
+  ? ensureStartsWith(process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN, "https://")
   : "";
 const endpoint = domain ? `${domain}${SHOPIFY_GRAPHQL_API_ENDPOINT}` : "";
 const key = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN!;
@@ -85,7 +85,7 @@ export async function shopifyFetch<T>({
 }): Promise<{ status: number; body: T } | never> {
   try {
     if (!endpoint) {
-      throw new Error("SHOPIFY_STORE_DOMAIN environment variable is not set");
+      throw new Error("NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN environment variable is not set");
     }
 
     const result = await fetch(endpoint, {

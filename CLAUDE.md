@@ -20,7 +20,7 @@ pnpm prettier         # Auto-fix formatting
 
 Required in `.env` (see `.env.example`):
 
-- `SHOPIFY_STORE_DOMAIN` — `usekeon.myshopify.com`
+- `NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN` — `usekeon.myshopify.com`
 - `SHOPIFY_STOREFRONT_ACCESS_TOKEN` — from Shopify Partners app
 - `SHOPIFY_REVALIDATION_SECRET` — for webhook-based ISR
 - `COMPANY_NAME`, `SITE_NAME` — branding strings

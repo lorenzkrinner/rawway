@@ -23,7 +23,7 @@ export const ensureStartsWith = (stringToCheck: string, startsWith: string) =>
 
 export const validateEnvironmentVariables = () => {
   const requiredEnvironmentVariables = [
-    "SHOPIFY_STORE_DOMAIN",
+    "NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN",
     "SHOPIFY_STOREFRONT_ACCESS_TOKEN",
   ];
   const missingEnvironmentVariables = [] as string[];
@@ -43,11 +43,11 @@ export const validateEnvironmentVariables = () => {
   }
 
   if (
-    process.env.SHOPIFY_STORE_DOMAIN?.includes("[") ||
-    process.env.SHOPIFY_STORE_DOMAIN?.includes("]")
+    process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN?.includes("[") ||
+    process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN?.includes("]")
   ) {
     throw new Error(
-      "Your `SHOPIFY_STORE_DOMAIN` environment variable includes brackets (ie. `[` and / or `]`). Your site will not work with them there. Please remove them.",
+      "Your `NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN` environment variable includes brackets (ie. `[` and / or `]`). Your site will not work with them there. Please remove them.",
     );
   }
 };
