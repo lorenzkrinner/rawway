@@ -9,6 +9,7 @@ import type { FaqItem, Image, IncludedItem } from "src/lib/shopify/types";
 import { Reviews } from "~/components/pages/home/reviews";
 import Faq from "~/components/product/sections/faq";
 import IncludedItems from "~/components/product/sections/included-items";
+import JunipReviews from "~/components/product/sections/junip-reviews";
 import ShowcaseGallery from "~/components/product/sections/showcase-gallery";
 import SoundTest from "~/components/product/sections/sound-test";
 import Specs from "~/components/product/sections/specs";
@@ -113,15 +114,14 @@ export default async function ProductPage(props: {
           <ShowcaseGallery images={product.showcaseImages} />
         )}
 
-
-        {product.soundTest && (
-          <SoundTest soundTest={product.soundTest} />
-        )}
+        {product.soundTest && <SoundTest soundTest={product.soundTest} />}
 
         <Reviews />
 
         {product.includedItems.length > 0 && (
-          <IncludedItems includedItems={product.includedItems as unknown as IncludedItem[]} />
+          <IncludedItems
+            includedItems={product.includedItems as unknown as IncludedItem[]}
+          />
         )}
 
         {product.keyboardSpecs && <Specs product={product} />}
@@ -129,6 +129,8 @@ export default async function ProductPage(props: {
         {product.productFaqs.length > 0 && (
           <Faq faqs={product.productFaqs as FaqItem[]} />
         )}
+
+        <JunipReviews product={product} />
       </div>
     </>
   );

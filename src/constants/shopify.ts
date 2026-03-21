@@ -10,3 +10,5 @@ export const HIDDEN_CART_CROSS_SELL_COLLECTION_HANDLE =
   "hidden-cart-cross-sell";
 export const HIDDEN_CART_RECOMMENDED_COLLECTION_HANDLE =
   "hidden-cart-recommended";
+
+export const ORIGINAL_SERIES_COLLECTION_HANDLE = "hidden-original-series";

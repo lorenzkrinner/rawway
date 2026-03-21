@@ -82,23 +82,27 @@ const HARDCODED_FAQ: {
   },
 ];
 
-export function ProductFaq({ faqItems }: { faqItems: Record<string, string>[] }) {
+export function ProductFaq({
+  faqItems,
+}: {
+  faqItems: Record<string, unknown>[];
+}) {
   return (
     <Accordion type="single" collapsible className="w-full">
       {faqItems.map((item, index) => {
-        const Icon = getFaqIcon(item.icon ?? "info");
+        const Icon = getFaqIcon(String(item.icon ?? "info"));
         return (
           <AccordionItem key={`custom-${index}`} value={`custom-${index}`}>
             <AccordionTrigger className="py-4 hover:no-underline">
               <div className="flex items-center gap-3">
                 <Icon className="size-5 shrink-0" />
-                <span className="font-medium">{item.title}</span>
+                <span className="font-medium">{String(item.title ?? "")}</span>
               </div>
             </AccordionTrigger>
             <AccordionContent>
               <div
                 className="text-sm text-muted-foreground pl-8"
-                dangerouslySetInnerHTML={{ __html: item.content ?? "" }}
+                dangerouslySetInnerHTML={{ __html: String(item.content ?? "") }}
               />
             </AccordionContent>
           </AccordionItem>

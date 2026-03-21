@@ -1,6 +1,10 @@
 "use client";
 
-import { ShoppingBagIcon, TruckIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  ShoppingBagIcon,
+  TruckIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
 import { useAction } from "next-safe-action/hooks";
 import Image from "next/image";
 import Link from "next/link";
@@ -71,8 +75,6 @@ function ShippingBanner({
   progress: number;
   currencyCode: string;
 }) {
-  
-
   return (
     <div className="border-y border-muted-foreground/20 p-6 rounded-xl bg-muted space-y-4">
       <p className="text-center text-sm font-semibold text-foreground">
@@ -87,7 +89,12 @@ function ShippingBanner({
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className={cn("flex center size-7 rounded-full bg-muted-foreground/20 text-foreground", remaining === 0 && "bg-green-500 text-background")}>
+        <div
+          className={cn(
+            "flex center size-7 rounded-full bg-muted-foreground/20 text-foreground",
+            remaining === 0 && "bg-green-500 text-background",
+          )}
+        >
           <TruckIcon className="size-4" />
         </div>
       </div>
@@ -168,9 +175,7 @@ function EmptyCartRecommendations({
   return (
     <div className="mt-10 w-full">
       <Link href="/search" onClick={onClose}>
-        <Button className="w-full py-8 ">
-            Browse shop
-        </Button>
+        <Button className="w-full py-8 ">Browse shop</Button>
       </Link>
       {visibleProducts.length > 0 ? (
         <div className="space-y-2 mt-16">
@@ -198,7 +203,11 @@ function EmptyCartRecommendations({
                 />
               </div>
               <Link href={`/product/${product.handle}`} onClick={onClose}>
-                <Button size="sm" variant={"secondary"} className="h-20 px-8 rounded-lg border border-border">
+                <Button
+                  size="sm"
+                  variant={"secondary"}
+                  className="h-20 px-8 rounded-lg border border-border"
+                >
                   Explore
                 </Button>
               </Link>
@@ -240,15 +249,23 @@ export default function CartModal({
     }
   }, [isOpen, cart?.totalQuantity, quantityRef]);
 
-  const remaining = Math.max(FREE_SHIPPING_THRESHOLD_EUR - cart?.cost.subtotalAmount.amount ?? 0, 0);
-  const progress = toPercent((cart?.cost.subtotalAmount.amount ?? 0 / FREE_SHIPPING_THRESHOLD_EUR) * 100);
+  const remaining = Math.max(
+    FREE_SHIPPING_THRESHOLD_EUR -
+      parseFloat(cart?.cost.subtotalAmount.amount ?? "0"),
+    0,
+  );
+  const progress = toPercent(
+    (parseFloat(cart?.cost.subtotalAmount.amount ?? "0") /
+      FREE_SHIPPING_THRESHOLD_EUR) *
+      100,
+  );
 
   return (
     <>
       <Button
         variant="ghost"
         size="icon"
-        className={`${navTextClass} relative hover:bg-muted/20 rounded-lg hover:text-background`}
+        className={cn(`relative hover:bg-muted/20 rounded-lg`, navTextClass)}
         onClick={openCart}
       >
         <ShoppingBagIcon className="size-6" />
@@ -394,7 +411,10 @@ export default function CartModal({
                       );
                     })}
                 </ul>
-                <CartCrossSell products={crossSellProducts} onClose={closeCart} />
+                <CartCrossSell
+                  products={crossSellProducts}
+                  onClose={closeCart}
+                />
               </ScrollArea>
               <div className="py-4 text-sm text-muted-foreground">
                 <div className="mb-3 flex items-center justify-between pb-1">
@@ -408,7 +428,9 @@ export default function CartModal({
                 <Separator className="mb-3" />
                 <div className="mb-3 flex items-center justify-between pb-1 pt-1">
                   <p>Shipping</p>
-                  <p className="text-right">{remaining > 0 ? `Calculated at checkout` : `FREE`}</p>
+                  <p className="text-right">
+                    {remaining > 0 ? `Calculated at checkout` : `FREE`}
+                  </p>
                 </div>
                 <Separator className="mb-3" />
                 <div className="mb-3 flex items-center justify-between pb-1 pt-1">

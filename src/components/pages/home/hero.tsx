@@ -37,7 +37,7 @@ export default function Hero() {
     >
       <div className="absolute inset-0 w-full h-full">
         <Image
-          src="/images/hero2.png"
+          src="/images/hero.png"
           className="w-full h-full object-cover rounded-t-xl rounded-b-2xl"
           alt="Hero"
           width={1000}
@@ -61,8 +61,7 @@ export default function Hero() {
                 </Button>
               </Link>
               <p className="text-background text-lg font-medium text-end max-w-100">
-                The Knob One™ is a keyboard made to endure long nights and
-                launch parties.
+                Keon™ keyboards are crafted for those who ship, those who take bets, and take pride in their work.
               </p>
             </div>
           </div>

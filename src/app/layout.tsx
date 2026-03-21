@@ -6,6 +6,7 @@ import { CartProvider } from "src/components/cart/cart-context";
 import { Navbar } from "src/components/layout/navbar";
 import { getCart } from "src/lib/shopify";
 import Footer from "~/components/layout/footer";
+import Scripts from "~/components/scripts";
 import { NAV_HEIGHT } from "~/constants/layout";
 import { cn } from "~/lib/cn";
 import { baseUrl } from "~/lib/utils";
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={cn("font-sans", geist.variable, climateCrisis.variable)}
     >
       <body className="relative bg-background text-foreground selection:bg-primary/30 dark:selection:bg-primary/40">
+        <Scripts />
         <Suspense>
           <CartProviderWithData>
             <Navbar />
