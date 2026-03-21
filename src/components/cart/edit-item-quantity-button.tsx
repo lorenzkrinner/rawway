@@ -4,8 +4,8 @@ import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
-import { updateItemQuantity } from "src/components/cart/actions";
 import type { CartItem } from "src/lib/shopify/types";
+import { updateItemQuantity } from "~/actions/cart";
 import { Button } from "~/components/ui/button";
 
 function SubmitButton({ type }: { type: "plus" | "minus" }) {

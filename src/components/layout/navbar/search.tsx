@@ -11,7 +11,7 @@ import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Kbd } from "~/components/ui/kbd";
-import { searchProducts } from "../search/actions";
+import { searchProducts } from "../../../actions/search";
 
 export default function Search({
   collections,

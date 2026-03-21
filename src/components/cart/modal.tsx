@@ -24,8 +24,8 @@ import {
   SheetTitle,
 } from "~/components/ui/sheet";
 import { cn, createUrl } from "~/lib/utils";
+import { addItem, createCartAndSetCookie, redirectToCheckout } from "../../actions/cart";
 import { Badge } from "../ui/badge";
-import { addItem, createCartAndSetCookie, redirectToCheckout } from "./actions";
 import { useCart } from "./cart-context";
 import { DeleteItemButton } from "./delete-item-button";
 import { EditItemQuantityButton } from "./edit-item-quantity-button";

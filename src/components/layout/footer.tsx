@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import Logo from "../icons/logo";
+import NewsletterForm from "./newsletter-form";
 
 const helpLinks = [
   { title: "Shop", href: "/search" },
@@ -50,35 +50,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
-            <h3 className="font-loud text-2xl font-black text-foreground">
-              Join our Newsletter
-            </h3>
-            <p className="mt-4 text-sm leading-relaxed">
-              Sign up now to get exclusive{" "}
-              <span className="font-semibold text-foreground">
-                early access
-              </span>{" "}
-              for future drops, important{" "}
-              <span className="font-semibold text-foreground">updates</span>,
-              and behind-the-scenes{" "}
-              <span className="font-semibold text-foreground">insights</span>!
-            </p>
-            <form className="mt-6 flex items-center focus-within:border-foreground border-border border-2 transition-[border] ease-in-out duration-300 bg-background">
-              <input
-                type="email"
-                placeholder="E-mail"
-                className="w-full bg-transparent py-3 pl-5 pr-2 text-sm text-foreground placeholder:text-muted-foreground/50 active:border-1 border-border outline-none border-none focus:ring-0"
-              />
-              <button
-                type="submit"
-                className="mr-1 flex h-8 w-8 flex-shrink-0 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="Subscribe"
-              >
-                <ChevronRightIcon className="h-4 w-4" />
-              </button>
-            </form>
-          </div>
+          <NewsletterForm />
         </div>
       </div>
     </footer>

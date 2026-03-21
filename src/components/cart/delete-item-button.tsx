@@ -3,8 +3,8 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
-import { removeItem } from "src/components/cart/actions";
 import type { CartItem } from "src/lib/shopify/types";
+import { removeItem } from "~/actions/cart";
 import { Button } from "~/components/ui/button";
 
 export function DeleteItemButton({

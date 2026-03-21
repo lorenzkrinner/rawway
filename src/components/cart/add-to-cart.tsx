@@ -4,13 +4,13 @@ import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useAction } from "next-safe-action/hooks";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { addItems } from "src/components/cart/actions";
 import Price from "src/components/price";
 import type {
   CrossSellProduct,
   Product,
   ProductVariant,
 } from "src/lib/shopify/types";
+import { addItems } from "~/actions/cart";
 import { Button } from "~/components/ui/button";
 import { useCart } from "./cart-context";
 
