@@ -6,19 +6,28 @@ import { subscribeToNewsletter } from "~/actions/newsletter";
 import { Spinner } from "../ui/spinner";
 
 export default function NewsletterForm() {
-  const [state, formAction, isPending] = useActionState(subscribeToNewsletter, null);
+  const [state, formAction, isPending] = useActionState(
+    subscribeToNewsletter,
+    null,
+  );
 
   return (
     <div>
-      <h3 className="font-loud text-2xl font-black text-foreground">Join our Newsletter</h3>
+      <h3 className="font-loud text-2xl font-black text-foreground">
+        Join our Newsletter
+      </h3>
       <p className="mt-4 text-sm leading-relaxed">
         Sign up now to get exclusive{" "}
-        <span className="font-semibold text-foreground">early access</span> for future drops,
-        important <span className="font-semibold text-foreground">updates</span>, and
-        behind-the-scenes <span className="font-semibold text-foreground">insights</span>!
+        <span className="font-semibold text-foreground">early access</span> for
+        future drops, important{" "}
+        <span className="font-semibold text-foreground">updates</span>, and
+        behind-the-scenes{" "}
+        <span className="font-semibold text-foreground">insights</span>!
       </p>
       {state?.success ? (
-        <p className="mt-6 text-sm font-medium text-foreground">{state.message}</p>
+        <p className="mt-6 text-sm font-medium text-foreground">
+          {state.message}
+        </p>
       ) : (
         <>
           <form
@@ -39,7 +48,11 @@ export default function NewsletterForm() {
               className="mr-1 flex size-8 flex-shrink-0 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
               aria-label="Subscribe"
             >
-              {isPending ? <Spinner className="size-4" /> : <ChevronRightIcon className="size-4" />}
+              {isPending ? (
+                <Spinner className="size-4" />
+              ) : (
+                <ChevronRightIcon className="size-4" />
+              )}
             </button>
           </form>
           {state?.message && (

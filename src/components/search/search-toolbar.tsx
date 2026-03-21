@@ -56,16 +56,16 @@ export default function SearchToolbar({
         ) : null}
       </div>
 
-      <Select
-        value={currentSort}
-        onValueChange={handleSortChange}
-      >
+      <Select value={currentSort} onValueChange={handleSortChange}>
         <SelectTrigger className="w-auto border-none shadow-none gap-2">
           <SelectValue placeholder={activeSort?.title ?? "Sort by"} />
         </SelectTrigger>
         <SelectContent align="end">
           {sorting.map((option: SortFilterItem) => (
-            <SelectItem key={option.slug ?? "relevance"} value={option.slug ?? "all"}>
+            <SelectItem
+              key={option.slug ?? "relevance"}
+              value={option.slug ?? "all"}
+            >
               {option.title}
             </SelectItem>
           ))}

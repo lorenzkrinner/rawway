@@ -5,7 +5,11 @@ import Image from "next/image";
 import { useCallback, useState } from "react";
 import type { Image as ShopifyImage } from "~/lib/shopify/types";
 
-export default function ShowcaseGallery({ images }: { images: ShopifyImage[] }) {
+export default function ShowcaseGallery({
+  images,
+}: {
+  images: ShopifyImage[];
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToPrevious = useCallback(() => {
@@ -25,10 +29,7 @@ export default function ShowcaseGallery({ images }: { images: ShopifyImage[] }) 
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {images.map((image, index) => (
-          <div
-            key={image.url}
-            className="relative h-full w-full shrink-0"
-          >
+          <div key={image.url} className="relative h-full w-full shrink-0">
             <Image
               src={image.url}
               alt={image.altText}

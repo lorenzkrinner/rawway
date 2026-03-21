@@ -27,7 +27,9 @@ export default async function CategoryPage(props: {
 }) {
   const searchParams = await props.searchParams;
   const params = await props.params;
-  const { sort, minPrice, maxPrice } = searchParams as { [key: string]: string };
+  const { sort, minPrice, maxPrice } = searchParams as {
+    [key: string]: string;
+  };
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
 
@@ -39,12 +41,14 @@ export default async function CategoryPage(props: {
 
   if (minPrice) {
     products = products.filter(
-      (p) => parseFloat(p.priceRange.minVariantPrice.amount) >= parseFloat(minPrice),
+      (p) =>
+        parseFloat(p.priceRange.minVariantPrice.amount) >= parseFloat(minPrice),
     );
   }
   if (maxPrice) {
     products = products.filter(
-      (p) => parseFloat(p.priceRange.minVariantPrice.amount) <= parseFloat(maxPrice),
+      (p) =>
+        parseFloat(p.priceRange.minVariantPrice.amount) <= parseFloat(maxPrice),
     );
   }
 

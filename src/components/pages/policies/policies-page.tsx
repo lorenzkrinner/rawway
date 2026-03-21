@@ -118,8 +118,8 @@ function ShippingPolicy() {
       <Section title="Shipping Costs">
         <p>
           Shipping costs are calculated at checkout based on the weight of your
-          order and destination. We offer free standard shipping on orders over a
-          certain threshold — check the cart for details.
+          order and destination. We offer free standard shipping on orders over
+          a certain threshold — check the cart for details.
         </p>
       </Section>
 
@@ -127,16 +127,16 @@ function ShippingPolicy() {
         <p>
           We ship to most countries worldwide. Please note that international
           orders may be subject to customs duties, taxes, or import fees imposed
-          by the destination country. These charges are the responsibility of the
-          recipient.
+          by the destination country. These charges are the responsibility of
+          the recipient.
         </p>
       </Section>
 
       <Section title="Order Tracking">
         <p>
-          Once your order has shipped, you will receive a confirmation email with
-          a tracking number. You can use this number to track the status of your
-          delivery.
+          Once your order has shipped, you will receive a confirmation email
+          with a tracking number. You can use this number to track the status of
+          your delivery.
         </p>
       </Section>
 
@@ -163,8 +163,8 @@ function RefundPolicy() {
       <Section title="Return Eligibility">
         <p>
           We accept returns within 30 days of delivery. To be eligible for a
-          return, your item must be unused, in its original packaging, and in the
-          same condition that you received it.
+          return, your item must be unused, in its original packaging, and in
+          the same condition that you received it.
         </p>
       </Section>
 
@@ -247,18 +247,18 @@ function PrivacyPolicy() {
 
       <Section title="Data Sharing">
         <p>
-          We do not sell your personal information to third parties. We may share
-          your data with trusted service providers who assist us in operating our
-          website, processing payments, and fulfilling orders. These providers
-          are bound by confidentiality agreements.
+          We do not sell your personal information to third parties. We may
+          share your data with trusted service providers who assist us in
+          operating our website, processing payments, and fulfilling orders.
+          These providers are bound by confidentiality agreements.
         </p>
       </Section>
 
       <Section title="Cookies">
         <p>
           We use cookies and similar tracking technologies to enhance your
-          browsing experience, analyze site traffic, and personalize content. You
-          can control cookie preferences through your browser settings.
+          browsing experience, analyze site traffic, and personalize content.
+          You can control cookie preferences through your browser settings.
         </p>
       </Section>
 
@@ -273,7 +273,8 @@ function PrivacyPolicy() {
       <Section title="Your Rights">
         <p>
           You have the right to access, correct, or delete your personal
-          information at any time. To exercise these rights, please contact us at{" "}
+          information at any time. To exercise these rights, please contact us
+          at{" "}
           <a
             href="mailto:support@usekeon.com"
             className="underline underline-offset-2 transition-colors hover:text-foreground"
@@ -319,8 +320,8 @@ function TermsOfService() {
         <p>
           All prices are subject to change without notice. We reserve the right
           to modify or discontinue any product at any time. We shall not be
-          liable to you or any third party for any modification, price change, or
-          discontinuation of a product.
+          liable to you or any third party for any modification, price change,
+          or discontinuation of a product.
         </p>
       </Section>
 
@@ -345,8 +346,8 @@ function TermsOfService() {
       <Section title="Changes to These Terms">
         <p>
           We reserve the right to update these Terms of Service at any time.
-          Changes will be effective immediately upon posting to the website. Your
-          continued use of the website after any changes indicates your
+          Changes will be effective immediately upon posting to the website.
+          Your continued use of the website after any changes indicates your
           acceptance of the updated terms.
         </p>
       </Section>

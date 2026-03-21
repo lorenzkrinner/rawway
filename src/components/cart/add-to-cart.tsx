@@ -83,13 +83,13 @@ export function AddToCart({
 
   if (!selectedVariantId) {
     return (
-    <Button
-      disabled
-      className="w-full rounded-full py-7 text-sm font-semibold uppercase tracking-wider opacity-60"
-    >
-      <ShoppingCartIcon className="size-5 mr-1" />
-      Select an Option
-    </Button>
+      <Button
+        disabled
+        className="w-full rounded-full py-7 text-sm font-semibold uppercase tracking-wider opacity-60"
+      >
+        <ShoppingCartIcon className="size-5 mr-1" />
+        Select an Option
+      </Button>
     );
   }
 

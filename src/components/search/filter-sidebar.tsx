@@ -27,7 +27,9 @@ function CollectionLinks({ collections }: { collections: Collection[] }) {
           return (
             <li key={collection.path}>
               {active ? (
-                <p className="text-sm font-semibold text-foreground">{collection.title}</p>
+                <p className="text-sm font-semibold text-foreground">
+                  {collection.title}
+                </p>
               ) : (
                 <Link
                   href={createUrl(collection.path, newParams)}
@@ -79,13 +81,21 @@ function PriceFilter({ priceRange }: { priceRange: PriceRange }) {
 
   const ranges = [
     { label: "All prices", min: undefined, max: undefined },
-    { label: `Under €${Math.round(priceRange.max * 0.5)}`, min: undefined, max: Math.round(priceRange.max * 0.5) },
+    {
+      label: `Under €${Math.round(priceRange.max * 0.5)}`,
+      min: undefined,
+      max: Math.round(priceRange.max * 0.5),
+    },
     {
       label: `€${Math.round(priceRange.max * 0.5)} – €${Math.round(priceRange.max * 0.75)}`,
       min: Math.round(priceRange.max * 0.5),
       max: Math.round(priceRange.max * 0.75),
     },
-    { label: `Over €${Math.round(priceRange.max * 0.75)}`, min: Math.round(priceRange.max * 0.75), max: undefined },
+    {
+      label: `Over €${Math.round(priceRange.max * 0.75)}`,
+      min: Math.round(priceRange.max * 0.75),
+      max: undefined,
+    },
   ];
 
   return (
@@ -104,8 +114,10 @@ function PriceFilter({ priceRange }: { priceRange: PriceRange }) {
         }
 
         const isActive =
-          (currentMin ?? "") === (range.min !== undefined ? String(range.min) : "") &&
-          (currentMax ?? "") === (range.max !== undefined ? String(range.max) : "");
+          (currentMin ?? "") ===
+            (range.min !== undefined ? String(range.min) : "") &&
+          (currentMax ?? "") ===
+            (range.max !== undefined ? String(range.max) : "");
 
         return (
           <li key={range.label}>
@@ -113,7 +125,9 @@ function PriceFilter({ priceRange }: { priceRange: PriceRange }) {
               href={createUrl(pathname, params)}
               className={clsx(
                 "text-sm hover:underline underline-offset-4",
-                isActive ? "font-semibold text-foreground" : "text-muted-foreground",
+                isActive
+                  ? "font-semibold text-foreground"
+                  : "text-muted-foreground",
               )}
             >
               {range.label}
@@ -153,7 +167,9 @@ function SeriesFilter() {
               href={createUrl(pathname, params)}
               className={clsx(
                 "text-sm hover:underline underline-offset-4",
-                isActive ? "font-semibold text-foreground" : "text-muted-foreground",
+                isActive
+                  ? "font-semibold text-foreground"
+                  : "text-muted-foreground",
               )}
             >
               {option.label}

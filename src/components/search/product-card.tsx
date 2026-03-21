@@ -6,7 +6,8 @@ import { Product } from "~/lib/shopify/types";
 
 function getColorOption(product: Product) {
   const colorOption = product.options.find(
-    (opt) => opt.name.toLowerCase() === "color" || opt.name.toLowerCase() === "colour",
+    (opt) =>
+      opt.name.toLowerCase() === "color" || opt.name.toLowerCase() === "colour",
   );
   return colorOption?.values ?? [];
 }
@@ -34,7 +35,9 @@ export default function ProductCard({ product }: { product: Product }) {
 
       <div className="mt-3 space-y-1">
         <div className="flex items-center justify-between">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">Keon</p>
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">
+            Keon
+          </p>
           <span
             className="junip-product-summary"
             data-product-id={productIdNumeric}

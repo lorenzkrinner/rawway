@@ -92,7 +92,9 @@ export function ProductDescription({ product }: { product: Product }) {
     <div className="relative flex h-full flex-col gap-8 pt-8 pb-6 lg:pb-6">
       <div>
         <TrustpilotRatedBy />
-        <h1 className="text-4xl font-medium font-loud leading-tight">{product.title}</h1>
+        <h1 className="text-4xl font-medium font-loud leading-tight">
+          {product.title}
+        </h1>
         {selectedVariant && (
           <Price
             amount={selectedVariant.price.amount}
@@ -103,7 +105,10 @@ export function ProductDescription({ product }: { product: Product }) {
       </div>
 
       <div>
-        <VariantSelector options={product.options} variants={product.variants} />
+        <VariantSelector
+          options={product.options}
+          variants={product.variants}
+        />
         {product.description && (
           <p className="text-sm leading-relaxed text-muted-foreground">
             {product.description}

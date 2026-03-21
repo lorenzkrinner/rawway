@@ -4,8 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { SHOPIFY_GRAPHQL_API_ENDPOINT, TAGS } from "src/lib/constants";
 import { isShopifyError } from "src/lib/type-guards";
 import { ensureStartsWith } from "~/lib/utils";
+import { getCountryCode } from "../country";
 import {
   addToCartMutation,
+  cartBuyerIdentityUpdateMutation,
   createCartMutation,
   editCartItemsMutation,
   removeFromCartMutation,
@@ -16,6 +18,7 @@ import {
   getCollectionQuery,
   getCollectionsQuery,
 } from "./queries/collection";
+import { getLocalizationQuery } from "./queries/localization";
 import { getMediaImageByIdQuery } from "./queries/mediaImage";
 import { getMenuQuery } from "./queries/menu";
 import { getMetaobjectByIdQuery } from "./queries/metaobject";
@@ -41,11 +44,14 @@ import {
   Page,
   Product,
   ShopifyAddToCartOperation,
+  ShopifyCartBuyerIdentityUpdateOperation,
   ShopifyCartOperation,
   ShopifyCollectionOperation,
   ShopifyCollectionProductsOperation,
   ShopifyCollectionsOperation,
+  ShopifyCountry,
   ShopifyCreateCartOperation,
+  ShopifyLocalizationOperation,
   ShopifyMediaImageByIdOperation,
   ShopifyMenuOperation,
   ShopifyMetaobjectByIdOperation,
@@ -127,8 +133,12 @@ export const removeEdgesAndNodes = <T>(array: Connection<T>): T[] => {
 };
 
 export async function createCart(): Promise<Cart> {
+  const countryCode = await getCountryCode();
   const res = await shopifyFetch<ShopifyCreateCartOperation>({
     query: createCartMutation,
+    variables: {
+      buyerIdentity: { countryCode },
+    },
   });
 
   return reshapeCart(res.body.data.cartCreate.cart);
@@ -176,20 +186,25 @@ export async function updateCart(
   return reshapeCart(res.body.data.cartLinesUpdate.cart);
 }
 
+// getCart reads cookies itself (not inside "use cache") then delegates to the cached version.
 export async function getCart(): Promise<Cart | undefined> {
+  const cartId = (await cookies()).get("cartId")?.value;
+  if (!cartId) return undefined;
+  const country = await getCountryCode();
+  return getCartCached(cartId, country);
+}
+
+async function getCartCached(
+  cartId: string,
+  country: string,
+): Promise<Cart | undefined> {
   "use cache: private";
   cacheTag(TAGS.cart);
   cacheLife("seconds");
 
-  const cartId = (await cookies()).get("cartId")?.value;
-
-  if (!cartId) {
-    return undefined;
-  }
-
   const res = await shopifyFetch<ShopifyCartOperation>({
     query: getCartQuery,
-    variables: { cartId },
+    variables: { cartId, country },
   });
 
   // Old carts becomes `null` when you checkout.
@@ -200,8 +215,10 @@ export async function getCart(): Promise<Cart | undefined> {
   return reshapeCart(res.body.data.cart);
 }
 
-export async function getCollection(
+// Cached functions receive country as a parameter (cookies() can't be called inside "use cache").
+async function getCollectionCached(
   handle: string,
+  country: string,
 ): Promise<Collection | undefined> {
   "use cache";
   cacheTag(TAGS.collections);
@@ -209,22 +226,29 @@ export async function getCollection(
 
   const res = await shopifyFetch<ShopifyCollectionOperation>({
     query: getCollectionQuery,
-    variables: {
-      handle,
-    },
+    variables: { handle, country },
   });
 
   return reshapeCollection(res.body.data.collection);
 }
 
-export async function getCollectionProducts({
+export async function getCollection(
+  handle: string,
+): Promise<Collection | undefined> {
+  const country = await getCountryCode();
+  return getCollectionCached(handle, country);
+}
+
+async function getCollectionProductsCached({
   collection,
   reverse,
   sortKey,
+  country,
 }: {
   collection: string;
   reverse?: boolean;
   sortKey?: string;
+  country: string;
 }): Promise<Product[]> {
   "use cache";
   cacheTag(TAGS.collections, TAGS.products);
@@ -243,6 +267,7 @@ export async function getCollectionProducts({
       handle: collection,
       reverse,
       sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
+      country,
     },
   });
 
@@ -256,7 +281,20 @@ export async function getCollectionProducts({
   );
 }
 
-export async function getCollections(): Promise<Collection[]> {
+export async function getCollectionProducts({
+  collection,
+  reverse,
+  sortKey,
+}: {
+  collection: string;
+  reverse?: boolean;
+  sortKey?: string;
+}): Promise<Product[]> {
+  const country = await getCountryCode();
+  return getCollectionProductsCached({ collection, reverse, sortKey, country });
+}
+
+async function getCollectionsCached(country: string): Promise<Collection[]> {
   "use cache";
   cacheTag(TAGS.collections);
   cacheLife("days");
@@ -280,6 +318,7 @@ export async function getCollections(): Promise<Collection[]> {
 
   const res = await shopifyFetch<ShopifyCollectionsOperation>({
     query: getCollectionsQuery,
+    variables: { country },
   });
   const shopifyCollections = removeEdgesAndNodes(res.body?.data?.collections);
   const collections = [
@@ -302,6 +341,11 @@ export async function getCollections(): Promise<Collection[]> {
   ];
 
   return collections;
+}
+
+export async function getCollections(): Promise<Collection[]> {
+  const country = await getCountryCode();
+  return getCollectionsCached(country);
 }
 
 export async function getMenu(handle: string): Promise<Menu[]> {
@@ -349,7 +393,10 @@ export async function getPages(): Promise<Page[]> {
   return removeEdgesAndNodes(res.body.data.pages);
 }
 
-export async function getProduct(handle: string): Promise<Product | undefined> {
+async function getProductCached(
+  handle: string,
+  country: string,
+): Promise<Product | undefined> {
   "use cache";
   cacheTag(TAGS.products);
   cacheLife("days");
@@ -361,12 +408,15 @@ export async function getProduct(handle: string): Promise<Product | undefined> {
 
   const res = await shopifyFetch<ShopifyProductOperation>({
     query: getProductQuery,
-    variables: {
-      handle,
-    },
+    variables: { handle, country },
   });
 
   return reshapeProduct(res.body.data.product, false);
+}
+
+export async function getProduct(handle: string): Promise<Product | undefined> {
+  const country = await getCountryCode();
+  return getProductCached(handle, country);
 }
 
 export async function getMetaobjectById(
@@ -411,8 +461,9 @@ export async function getMediaImageById(id: string): Promise<Image | null> {
   return res.body.data.node?.image ?? null;
 }
 
-export async function getProductRecommendations(
+async function getProductRecommendationsCached(
   productId: string,
+  country: string,
 ): Promise<Product[]> {
   "use cache";
   cacheTag(TAGS.products);
@@ -420,12 +471,40 @@ export async function getProductRecommendations(
 
   const res = await shopifyFetch<ShopifyProductRecommendationsOperation>({
     query: getProductRecommendationsQuery,
-    variables: {
-      productId,
-    },
+    variables: { productId, country },
   });
 
   return await reshapeProducts(res.body.data.productRecommendations);
+}
+
+export async function getProductRecommendations(
+  productId: string,
+): Promise<Product[]> {
+  const country = await getCountryCode();
+  return getProductRecommendationsCached(productId, country);
+}
+
+async function getProductsCached({
+  query,
+  reverse,
+  sortKey,
+  country,
+}: {
+  query?: string;
+  reverse?: boolean;
+  sortKey?: string;
+  country: string;
+}): Promise<Product[]> {
+  "use cache";
+  cacheTag(TAGS.products);
+  cacheLife("days");
+
+  const res = await shopifyFetch<ShopifyProductsOperation>({
+    query: getProductsQuery,
+    variables: { query, reverse, sortKey, country },
+  });
+
+  return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
 }
 
 export async function getProducts({
@@ -437,20 +516,35 @@ export async function getProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
+  const country = await getCountryCode();
+  return getProductsCached({ query, reverse, sortKey, country });
+}
+
+export async function getLocalization(): Promise<ShopifyCountry[]> {
   "use cache";
-  cacheTag(TAGS.products);
+  cacheTag(TAGS.collections);
   cacheLife("days");
 
-  const res = await shopifyFetch<ShopifyProductsOperation>({
-    query: getProductsQuery,
+  const res = await shopifyFetch<ShopifyLocalizationOperation>({
+    query: getLocalizationQuery,
+  });
+
+  return res.body.data.localization.availableCountries;
+}
+
+export async function updateCartBuyerIdentity(
+  countryCode: string,
+): Promise<Cart> {
+  const cartId = (await cookies()).get("cartId")?.value!;
+  const res = await shopifyFetch<ShopifyCartBuyerIdentityUpdateOperation>({
+    query: cartBuyerIdentityUpdateMutation,
     variables: {
-      query,
-      reverse,
-      sortKey,
+      cartId,
+      buyerIdentity: { countryCode },
     },
   });
 
-  return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
+  return reshapeCart(res.body.data.cartBuyerIdentityUpdate.cart);
 }
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.

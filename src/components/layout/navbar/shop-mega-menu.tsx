@@ -11,11 +11,7 @@ function visibleMegaMenuCollections(collections: Collection[]) {
   );
 }
 
-function MegaFeaturedProductCard({
-  product,
-}: {
-  product: Product;
-}) {
+function MegaFeaturedProductCard({ product }: { product: Product }) {
   const image = product.images[1] ?? product.images[0];
   if (!image) {
     return null;
@@ -27,9 +23,7 @@ function MegaFeaturedProductCard({
     <Link
       href={href}
       prefetch={true}
-      className={cn(
-        "relative group block min-w-0 bg-muted/40 flex-1",
-      )}
+      className={cn("relative group block min-w-0 bg-muted/40 flex-1")}
     >
       <div
         className={cn(
@@ -62,13 +56,17 @@ export function ShopMegaMenu({
   collections: Collection[];
   originalSeriesProducts: Product[];
 }) {
-  const visible = visibleMegaMenuCollections(collections).filter(c => c.handle !== "all");
+  const visible = visibleMegaMenuCollections(collections).filter(
+    (c) => c.handle !== "all",
+  );
   const featured = originalSeriesProducts.slice(0, 2);
 
   return (
     <div className="mx-auto flex max-w-7xl gap-10 px-6 py-8">
       <div className="flex flex-col gap-4 w-[42%] shrink-0">
-        <h3 className="text-sm font-semibold text-foreground mb-2">Shop by Collection</h3>
+        <h3 className="text-sm font-semibold text-foreground mb-2">
+          Shop by Collection
+        </h3>
         <ul className="flex flex-col gap-2">
           {visible.map((c) => (
             <li key={c.handle || "all"}>
@@ -84,9 +82,7 @@ export function ShopMegaMenu({
         </ul>
       </div>
       <div className="flex min-w-0 flex-1 gap-4">
-        {featured[0] ? (
-          <MegaFeaturedProductCard product={featured[0]} />
-        ) : null}
+        {featured[0] ? <MegaFeaturedProductCard product={featured[0]} /> : null}
         <div className="flex min-w-0 flex-1 flex-col gap-4">
           {featured[1] ? (
             <MegaFeaturedProductCard product={featured[1]} />

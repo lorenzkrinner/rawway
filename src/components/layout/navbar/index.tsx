@@ -1,8 +1,10 @@
 import {
   getCollectionProducts,
   getCollections,
+  getLocalization,
   getMenu,
 } from "src/lib/shopify";
+import { getCountryCode } from "~/lib/country";
 import {
   FRONT_HEADER_MENU_HANDLE,
   HIDDEN_CART_CROSS_SELL_COLLECTION_HANDLE,
@@ -18,6 +20,8 @@ export async function Navbar() {
     cartCrossSellProducts,
     cartRecommendedProducts,
     originalSeriesProducts,
+    countries,
+    countryCode,
   ] = await Promise.all([
     getMenu(FRONT_HEADER_MENU_HANDLE),
     getCollections(),
@@ -30,6 +34,8 @@ export async function Navbar() {
     getCollectionProducts({
       collection: ORIGINAL_SERIES_COLLECTION_HANDLE,
     }),
+    getLocalization(),
+    getCountryCode(),
   ]);
 
   return (
@@ -39,6 +45,8 @@ export async function Navbar() {
       cartCrossSellProducts={cartCrossSellProducts}
       cartRecommendedProducts={cartRecommendedProducts}
       originalSeriesProducts={originalSeriesProducts}
+      countries={countries}
+      currentCountryCode={countryCode}
     />
   );
 }

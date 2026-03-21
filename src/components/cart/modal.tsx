@@ -24,7 +24,11 @@ import {
   SheetTitle,
 } from "~/components/ui/sheet";
 import { cn, createUrl } from "~/lib/utils";
-import { addItem, createCartAndSetCookie, redirectToCheckout } from "../../actions/cart";
+import {
+  addItem,
+  createCartAndSetCookie,
+  redirectToCheckout,
+} from "../../actions/cart";
 import { Badge } from "../ui/badge";
 import { useCart } from "./cart-context";
 import { DeleteItemButton } from "./delete-item-button";
@@ -34,7 +38,26 @@ type MerchandiseSearchParams = {
   [key: string]: string;
 };
 
-const FREE_SHIPPING_THRESHOLD_EUR = 55;
+const FREE_SHIPPING_THRESHOLDS: Record<string, number> = {
+  EUR: 55,
+  USD: 60,
+  GBP: 48,
+  CHF: 55,
+  CAD: 80,
+  AUD: 90,
+  SEK: 650,
+  NOK: 650,
+  DKK: 410,
+  PLN: 250,
+  CZK: 1400,
+  JPY: 9000,
+};
+
+const DEFAULT_FREE_SHIPPING_THRESHOLD = 55;
+
+function getFreeShippingThreshold(currencyCode: string): number {
+  return FREE_SHIPPING_THRESHOLDS[currencyCode] ?? DEFAULT_FREE_SHIPPING_THRESHOLD;
+}
 
 type CartModalProps = {
   navTextClass: string;
@@ -47,9 +70,10 @@ function toPercent(value: number): number {
 }
 
 function formatCurrency(value: number, currencyCode: string): string {
-  return new Intl.NumberFormat("de-DE", {
+  return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency: currencyCode,
+    currencyDisplay: "narrowSymbol",
   }).format(value);
 }
 
@@ -249,16 +273,11 @@ export default function CartModal({
     }
   }, [isOpen, cart?.totalQuantity, quantityRef]);
 
-  const remaining = Math.max(
-    FREE_SHIPPING_THRESHOLD_EUR -
-      parseFloat(cart?.cost.subtotalAmount.amount ?? "0"),
-    0,
-  );
-  const progress = toPercent(
-    (parseFloat(cart?.cost.subtotalAmount.amount ?? "0") /
-      FREE_SHIPPING_THRESHOLD_EUR) *
-      100,
-  );
+  const currencyCode = cart?.cost.subtotalAmount.currencyCode ?? "EUR";
+  const freeShippingThreshold = getFreeShippingThreshold(currencyCode);
+  const subtotal = parseFloat(cart?.cost.subtotalAmount.amount ?? "0");
+  const remaining = Math.max(freeShippingThreshold - subtotal, 0);
+  const progress = toPercent((subtotal / freeShippingThreshold) * 100);
 
   return (
     <>
@@ -294,7 +313,7 @@ export default function CartModal({
             <ShippingBanner
               remaining={remaining}
               progress={progress}
-              currencyCode={cart?.cost.subtotalAmount.currencyCode ?? "EUR"}
+              currencyCode={currencyCode}
             />
           </div>
 

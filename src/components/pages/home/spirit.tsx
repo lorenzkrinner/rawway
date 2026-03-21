@@ -25,7 +25,7 @@ export function Spirit() {
       const rect = section.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      const progress = (1 - rect.bottom / (windowHeight + rect.height));
+      const progress = 1 - rect.bottom / (windowHeight + rect.height);
       setScrollProgress(Math.max(0, Math.min(1, progress)));
     };
 

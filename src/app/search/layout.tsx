@@ -11,7 +11,9 @@ async function SearchLayoutServer({ children }: { children: React.ReactNode }) {
     getProducts({}),
   ]);
 
-  const prices = products.map((p) => parseFloat(p.priceRange.minVariantPrice.amount));
+  const prices = products.map((p) =>
+    parseFloat(p.priceRange.minVariantPrice.amount),
+  );
   const priceRange = {
     min: prices.length > 0 ? Math.floor(Math.min(...prices)) : 0,
     max: prices.length > 0 ? Math.ceil(Math.max(...prices)) : 200,

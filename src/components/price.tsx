@@ -1,7 +1,7 @@
 const Price = ({
   amount,
   className,
-  currencyCode = "USD",
+  currencyCode = "EUR",
 }: {
   amount: string;
   className?: string;

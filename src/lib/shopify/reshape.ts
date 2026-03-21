@@ -13,7 +13,7 @@ import {
   ShopifyMetafield,
   ShopifyMetafieldReference,
   ShopifyMetaobjectByIdOperation,
-  ShopifyProduct
+  ShopifyProduct,
 } from "./types";
 
 export const reshapeCart = (cart: ShopifyCart): Cart => {
@@ -104,9 +104,15 @@ type ReshapableMetaobject =
   | ShopifyMetaobjectByIdOperation["data"]["node"]
   | ShopifyMetafieldReference;
 
-type ReshapableField = { key: string; value: string; reference?: { image?: Image } | null };
+type ReshapableField = {
+  key: string;
+  value: string;
+  reference?: { image?: Image } | null;
+};
 
-export const reshapeMetaobject = async (metaobject: ReshapableMetaobject): Promise<Record<string, unknown>> => {
+export const reshapeMetaobject = async (
+  metaobject: ReshapableMetaobject,
+): Promise<Record<string, unknown>> => {
   const fields = metaobject?.fields as ReshapableField[] | undefined;
   if (!fields) return {};
   const obj: Record<string, unknown> = {};
@@ -121,23 +127,27 @@ export const reshapeMetaobject = async (metaobject: ReshapableMetaobject): Promi
     }
   }
   return obj;
-}
+};
 
 export const reshapeMetaobjects = (metaobjects: ReshapableMetaobject[]) => {
   return metaobjects.map((metaobject) => reshapeMetaobject(metaobject));
-}
+};
 
-export const resolveMetaobjectById = async (id: string): Promise<Record<string, unknown>> => {
+export const resolveMetaobjectById = async (
+  id: string,
+): Promise<Record<string, unknown>> => {
   const metaobject = await getMetaobjectById(id);
   if (!metaobject) return {};
   return reshapeMetaobject(metaobject);
-}
+};
 
-const resolveOptionalMetaobject = async (id: string | undefined): Promise<Record<string, unknown> | undefined> => {
+const resolveOptionalMetaobject = async (
+  id: string | undefined,
+): Promise<Record<string, unknown> | undefined> => {
   if (!id) return undefined;
   const result = await resolveMetaobjectById(id);
   return Object.keys(result).length > 0 ? result : undefined;
-}
+};
 
 export const reshapeCrossSellProducts = (
   metafields: ShopifyProduct["metafields"],
@@ -180,7 +190,7 @@ export const reshapeCrossSellProducts = (
         priceRange: {
           maxVariantPrice: ref.priceRange?.maxVariantPrice ?? {
             amount: "0",
-            currencyCode: "USD",
+            currencyCode: "EUR",
           },
         },
         firstVariantId: firstVariant?.id ?? "",
@@ -212,16 +222,34 @@ export const reshapeProduct = async (
     ...rest,
     images: reshapeImages(images, product.title),
     variants: removeEdgesAndNodes(variants),
-    faqItems: await Promise.all(reshapeMetaobjects(flattenMetafieldReferences(metafields, "faq"))),
+    faqItems: await Promise.all(
+      reshapeMetaobjects(flattenMetafieldReferences(metafields, "faq")),
+    ),
     crossSellProducts: reshapeCrossSellProducts(metafields),
-    featureBullets: parseJsonStringArray(findMetafield(metafields, "feature_bullets")),
+    featureBullets: parseJsonStringArray(
+      findMetafield(metafields, "feature_bullets"),
+    ),
     showcaseImages: flattenMetafieldImages(metafields, "showcase_images"),
     spotlightImages: flattenMetafieldImages(metafields, "spotlight_images"),
-    productFaqs: await Promise.all(reshapeMetaobjects(flattenMetafieldReferences(metafields, "product_faqs"))),
-    includedItems: await Promise.all(reshapeMetaobjects(flattenMetafieldReferences(metafields, "included_items"))),
-    keyboardSpecs: await resolveOptionalMetaobject(findMetafield(metafields, "keyboard_specs")) as KeyboardSpecs | undefined,
-    dimensions: await resolveOptionalMetaobject(findMetafield(metafields, "dimensions")) as Dimensions | undefined,
-    soundTest: await resolveOptionalMetaobject(findMetafield(metafields, "sound_test")) as KeyboardSoundTest | undefined,
+    productFaqs: await Promise.all(
+      reshapeMetaobjects(
+        flattenMetafieldReferences(metafields, "product_faqs"),
+      ),
+    ),
+    includedItems: await Promise.all(
+      reshapeMetaobjects(
+        flattenMetafieldReferences(metafields, "included_items"),
+      ),
+    ),
+    keyboardSpecs: (await resolveOptionalMetaobject(
+      findMetafield(metafields, "keyboard_specs"),
+    )) as KeyboardSpecs | undefined,
+    dimensions: (await resolveOptionalMetaobject(
+      findMetafield(metafields, "dimensions"),
+    )) as Dimensions | undefined,
+    soundTest: (await resolveOptionalMetaobject(
+      findMetafield(metafields, "sound_test"),
+    )) as KeyboardSoundTest | undefined,
     batteryWorkingTime: findMetafield(metafields, "battery_working_time"),
   };
 };

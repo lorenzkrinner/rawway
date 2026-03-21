@@ -231,11 +231,16 @@ export type ShopifyCartOperation = {
   };
   variables: {
     cartId: string;
+    country?: string;
   };
 };
 
 export type ShopifyCreateCartOperation = {
   data: { cartCreate: { cart: ShopifyCart } };
+  variables: {
+    lineItems?: { merchandiseId: string; quantity: number }[];
+    buyerIdentity?: { countryCode: string };
+  };
 };
 
 export type ShopifyAddToCartOperation = {
@@ -281,12 +286,25 @@ export type ShopifyUpdateCartOperation = {
   };
 };
 
+export type ShopifyCartBuyerIdentityUpdateOperation = {
+  data: {
+    cartBuyerIdentityUpdate: {
+      cart: ShopifyCart;
+    };
+  };
+  variables: {
+    cartId: string;
+    buyerIdentity: { countryCode: string };
+  };
+};
+
 export type ShopifyCollectionOperation = {
   data: {
     collection: ShopifyCollection;
   };
   variables: {
     handle: string;
+    country?: string;
   };
 };
 
@@ -300,12 +318,16 @@ export type ShopifyCollectionProductsOperation = {
     handle: string;
     reverse?: boolean;
     sortKey?: string;
+    country?: string;
   };
 };
 
 export type ShopifyCollectionsOperation = {
   data: {
     collections: Connection<ShopifyCollection>;
+  };
+  variables: {
+    country?: string;
   };
 };
 
@@ -338,6 +360,7 @@ export type ShopifyProductOperation = {
   data: { product: ShopifyProduct };
   variables: {
     handle: string;
+    country?: string;
   };
 };
 
@@ -347,6 +370,7 @@ export type ShopifyProductRecommendationsOperation = {
   };
   variables: {
     productId: string;
+    country?: string;
   };
 };
 
@@ -358,6 +382,7 @@ export type ShopifyProductsOperation = {
     query?: string;
     reverse?: boolean;
     sortKey?: string;
+    country?: string;
   };
 };
 
@@ -382,5 +407,23 @@ export type ShopifyMediaImageByIdOperation = {
   };
   variables: {
     id: string;
+  };
+};
+
+export type ShopifyCountry = {
+  isoCode: string;
+  name: string;
+  currency: {
+    isoCode: string;
+    name: string;
+    symbol: string;
+  };
+};
+
+export type ShopifyLocalizationOperation = {
+  data: {
+    localization: {
+      availableCountries: ShopifyCountry[];
+    };
   };
 };

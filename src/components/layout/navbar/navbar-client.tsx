@@ -3,16 +3,21 @@
 import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, UserIcon } from "@heroicons/react/24/solid";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import CartModal from "src/components/cart/modal";
-import type { Collection, Menu, Product } from "src/lib/shopify/types";
+import type {
+  Collection,
+  Menu,
+  Product,
+  ShopifyCountry,
+} from "src/lib/shopify/types";
 import Logo from "~/components/icons/logo";
 import { Button } from "~/components/ui/button";
 import { NAV_HEIGHT } from "~/constants/layout";
 import { cn } from "~/lib/cn";
+import { CountryPicker } from "./country-picker";
 import MobileMenu from "./mobile-menu";
 import Search from "./search";
 import { ShopMegaMenu } from "./shop-mega-menu";
@@ -24,11 +29,6 @@ const NAV_LINKS = [
     title: "Shop",
     path: "/search",
     expandable: true,
-  },
-  {
-    title: "About",
-    path: "/about",
-    expandable: false,
   },
   {
     title: "Contact",
@@ -43,12 +43,16 @@ export default function NavbarClient({
   cartCrossSellProducts,
   cartRecommendedProducts,
   originalSeriesProducts,
+  countries,
+  currentCountryCode,
 }: {
   menu: Menu[];
   collections: Collection[];
   cartCrossSellProducts: Product[];
   cartRecommendedProducts: Product[];
   originalSeriesProducts: Product[];
+  countries: ShopifyCountry[];
+  currentCountryCode: string;
 }) {
   const pathname = usePathname();
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -57,11 +61,12 @@ export default function NavbarClient({
   );
   const [scrollPosition, setScrollPosition] = useState(0);
   const [navTextClass, setNavTextClass] = useState(
-    "text-foreground hover:text-foreground",
+    "text-foreground transition-colors duration-300 ease-in-out",
   );
   const [navTextMutedClass, setNavTextMutedClass] =
-    useState("text-foreground/60");
-  const [searchBgClass, setSearchBgClass] = useState("bg-foreground/5");
+    useState("text-foreground/60 transition-colors duration-300 ease-in-out");
+  const [searchBgClass, setSearchBgClass] = useState("bg-foreground/5 transition-colors duration-300 ease-in-out");
+  const [navBgClass, setNavBgClass] = useState("bg-transparent transition-colors duration-300 ease-in-out");
 
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
@@ -113,9 +118,15 @@ export default function NavbarClient({
   const isHoveringOverExpandable =
     hoverIndex !== null && NAV_LINKS[hoverIndex]?.expandable;
 
-  useEffect(() => {
-    const heroLightNav = isHome && isAboveTheFold && !isHoveringOverExpandable;
+  const heroLightNav = isHome && isAboveTheFold && !isHoveringOverExpandable;
 
+  useEffect(() => {
+
+    setNavBgClass(
+      heroLightNav
+        ? "bg-background transition-colors duration-300 ease-in-out"
+        : "bg-transparent transition-colors duration-300 ease-in-out",
+    );
     setNavTextClass(
       heroLightNav
         ? "text-background hover:text-background dark:text-foreground transition-colors duration-300 ease-in-out"
@@ -150,10 +161,7 @@ export default function NavbarClient({
         )}
         style={{
           height: NAV_HEIGHT,
-          backgroundColor:
-            isHoveringOverExpandable || !isHome
-              ? "var(--color-background)"
-              : `color-mix(in srgb, var(--color-background) ${backgroundAlphaPercent}%, transparent)`,
+          backgroundColor: navBgClass,
           backdropFilter: isHoveringOverExpandable
             ? "none"
             : `blur(${backdropBlurPx}px)`,
@@ -165,7 +173,7 @@ export default function NavbarClient({
         <div className="block flex-none md:hidden">
           <MobileMenu menu={menu} navTextClass={navTextClass} />
         </div>
-        <div className="flex h-full w-full items-center justify-between overflow-clip">
+        <div className="flex h-full w-full items-center justify-between">
           <div className="flex w-1/3 flex-none items-center justify-start">
             <Link
               href="/"
@@ -209,15 +217,11 @@ export default function NavbarClient({
                 navTextMutedClass={navTextMutedClass}
                 searchBgClass={searchBgClass}
               />
-              <button className="size-6 overflow-hidden rounded-full">
-                <Image
-                  src="/images/flags/germany.svg"
-                  alt="German"
-                  width={24}
-                  height={24}
-                  className="h-full w-full object-cover"
-                />
-              </button>
+              <CountryPicker
+                countries={countries}
+                currentCountryCode={currentCountryCode}
+                navTextClass={navTextClass}
+              />
             </div>
             <div className="flex items-center gap-1">
               <Button

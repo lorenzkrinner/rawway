@@ -48,7 +48,9 @@ export default function Hero() {
       <div className="z-0 h-full w-full flex flex-col">
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 p-5">
           <div className="col-span-1 flex flex-col gap-0 items-start flex-1 justify-end">
-          <p className="text-lg font-medium text-end text-green-400">Spring Sale - 20% OFF all orders</p>
+            <p className="text-lg font-medium text-end text-green-400">
+              Spring Sale - 20% OFF all orders
+            </p>
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold leading-tight lg:leading-35 text-background font-loud uppercase tracking-wide">
               Type the next big thing
             </h1>
@@ -62,7 +64,8 @@ export default function Hero() {
                 </Button>
               </Link>
               <p className="text-background text-lg font-medium text-end max-w-100">
-                Keon™ keyboards are crafted for those who ship, those who take bets, and take pride in their work.
+                KEON™ keyboards are crafted for those who ship, those who take
+                bets, and take pride in their work.
               </p>
             </div>
           </div>

@@ -28,12 +28,14 @@ export default async function SearchPage(props: {
 
   if (minPrice) {
     products = products.filter(
-      (p) => parseFloat(p.priceRange.minVariantPrice.amount) >= parseFloat(minPrice),
+      (p) =>
+        parseFloat(p.priceRange.minVariantPrice.amount) >= parseFloat(minPrice),
     );
   }
   if (maxPrice) {
     products = products.filter(
-      (p) => parseFloat(p.priceRange.minVariantPrice.amount) <= parseFloat(maxPrice),
+      (p) =>
+        parseFloat(p.priceRange.minVariantPrice.amount) <= parseFloat(maxPrice),
     );
   }
 
@@ -44,12 +46,12 @@ export default async function SearchPage(props: {
           {products.length === 0
             ? "There are no products that match "
             : `Showing ${products.length} ${products.length === 1 ? "result" : "results"} for `}
-          <span className="font-semibold text-foreground">&quot;{searchValue}&quot;</span>
+          <span className="font-semibold text-foreground">
+            &quot;{searchValue}&quot;
+          </span>
         </p>
       ) : null}
-      {products.length > 0 ? (
-        <ProductGrid products={products} />
-      ) : null}
+      {products.length > 0 ? <ProductGrid products={products} /> : null}
     </>
   );
 }

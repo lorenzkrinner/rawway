@@ -27,7 +27,10 @@ export async function sendContactForm(
 
   if (!apiKey || !contactEmail) {
     console.error("Resend environment variables not configured");
-    return { success: false, message: "Contact form is currently unavailable." };
+    return {
+      success: false,
+      message: "Contact form is currently unavailable.",
+    };
   }
 
   try {
@@ -41,7 +44,7 @@ export async function sendContactForm(
         from: `Keon Contact Form <onboarding@resend.dev>`,
         to: [contactEmail],
         reply_to: email,
-        subject: `[Contact] ${subject.trim()}`,
+        subject: `[Keon Contact] ${subject.trim()}`,
         text: `From: ${email}\n\nSubject: ${subject.trim()}\n\n${body.trim()}`,
       }),
     });
@@ -49,12 +52,21 @@ export async function sendContactForm(
     if (!response.ok) {
       const errorBody = await response.text();
       console.error("Resend API error:", response.status, errorBody);
-      return { success: false, message: "Something went wrong. Please try again." };
+      return {
+        success: false,
+        message: "Something went wrong. Please try again.",
+      };
     }
 
-    return { success: true, message: "Message sent! We'll get back to you soon." };
+    return {
+      success: true,
+      message: "Message sent! We'll get back to you soon.",
+    };
   } catch (error) {
     console.error("Contact form error:", error);
-    return { success: false, message: "Something went wrong. Please try again." };
+    return {
+      success: false,
+      message: "Something went wrong. Please try again.",
+    };
   }
 }

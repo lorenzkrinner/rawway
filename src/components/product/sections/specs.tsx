@@ -3,10 +3,10 @@ import { Dimensions, Product } from "~/lib/shopify/types";
 import { KeyboardSpecs } from "~/types/keyboard";
 
 const weightUnitMap: Record<string, string> = {
-  "GRAMS": "g",
-  "KILOGRAMS": "kg",
-  "POUNDS": "lb",
-  "OUNCES": "oz",
+  GRAMS: "g",
+  KILOGRAMS: "kg",
+  POUNDS: "lb",
+  OUNCES: "oz",
 };
 
 function groupSpecs(
@@ -34,7 +34,10 @@ function groupSpecs(
       Width: dimensions?.width,
       Height: dimensions?.height,
       Depth: dimensions?.depth,
-      Weight: variants[0]?.weight + " " + weightUnitMap[variants[0]?.weightUnit ?? ""],
+      Weight:
+        variants[0]?.weight +
+        " " +
+        weightUnitMap[variants[0]?.weightUnit ?? ""],
     },
     Material: {
       "Top case material": specs.top_case_material,

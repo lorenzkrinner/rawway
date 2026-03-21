@@ -33,16 +33,11 @@ export default function SearchLayoutClient({
         <div
           className={clsx(
             "shrink-0 transition-all duration-300 overflow-hidden",
-            filtersVisible
-              ? "w-56 opacity-100"
-              : "w-0 opacity-0",
+            filtersVisible ? "w-56 opacity-100" : "w-0 opacity-0",
           )}
         >
           {filtersVisible ? (
-            <FilterSidebar
-              collections={collections}
-              priceRange={priceRange}
-            />
+            <FilterSidebar collections={collections} priceRange={priceRange} />
           ) : null}
         </div>
 

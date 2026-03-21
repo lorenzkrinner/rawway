@@ -5,7 +5,6 @@ import NewsletterForm from "./newsletter-form";
 
 const helpLinks = [
   { title: "Shop", href: "/search" },
-  { title: "FAQ", href: "/faq" },
   { title: "Contact", href: "/contact" },
   { title: "Policies", href: "/policies" },
 ];

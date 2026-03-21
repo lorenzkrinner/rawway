@@ -15,7 +15,8 @@ const collectionFragment = /* GraphQL */ `
 `;
 
 export const getCollectionQuery = /* GraphQL */ `
-  query getCollection($handle: String!) {
+  query getCollection($handle: String!, $country: CountryCode)
+  @inContext(country: $country) {
     collection(handle: $handle) {
       ...collection
     }
@@ -24,7 +25,7 @@ export const getCollectionQuery = /* GraphQL */ `
 `;
 
 export const getCollectionsQuery = /* GraphQL */ `
-  query getCollections {
+  query getCollections($country: CountryCode) @inContext(country: $country) {
     collections(first: 100, sortKey: TITLE) {
       edges {
         node {
@@ -41,7 +42,8 @@ export const getCollectionProductsQuery = /* GraphQL */ `
     $handle: String!
     $sortKey: ProductCollectionSortKeys
     $reverse: Boolean
-  ) {
+    $country: CountryCode
+  ) @inContext(country: $country) {
     collection(handle: $handle) {
       products(sortKey: $sortKey, reverse: $reverse, first: 100) {
         edges {
