@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { subscribeToNewsletter } from "~/actions/newsletter";
 import { Spinner } from "../ui/spinner";
 
@@ -10,6 +10,13 @@ export default function NewsletterForm() {
     subscribeToNewsletter,
     null,
   );
+
+  useEffect(() => {
+    if (state?.success) {
+      const expires = new Date(Date.now() + 365 * 86400000).toUTCString();
+      document.cookie = `newsletter_subscribed=1;expires=${expires};path=/;SameSite=Lax`;
+    }
+  }, [state?.success]);
 
   return (
     <div>

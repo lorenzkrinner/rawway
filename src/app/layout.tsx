@@ -6,6 +6,7 @@ import { CartProvider } from "src/components/cart/cart-context";
 import { Navbar } from "src/components/layout/navbar";
 import { getCart } from "src/lib/shopify";
 import Footer from "~/components/layout/footer";
+import NewsletterPopup from "~/components/layout/newsletter-popup";
 import Scripts from "~/components/scripts";
 import { NAV_HEIGHT } from "~/constants/layout";
 import { cn } from "~/lib/cn";
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Suspense>
               <Footer />
             </Suspense>
+            <NewsletterPopup />
           </CartProviderWithData>
         </Suspense>
       </body>
