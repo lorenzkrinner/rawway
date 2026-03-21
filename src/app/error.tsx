@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 
 export default function Error({ reset }: { reset: () => void }) {
   return (
-    <div className="h-[60dvh] center flex">
+    <div className="h-[70dvh] center flex">
       <div className="mx-auto my-4 flex max-w-xl flex-col rounded-lg border border-border p-8 md:p-12 bg-muted">
         <h2 className="text-xl font-bold">Oh no!</h2>
         <p className="my-2">

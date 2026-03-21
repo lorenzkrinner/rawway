@@ -1,38 +1,54 @@
-import Grid from "src/components/grid";
-import ProductGridItems from "src/components/layout/product-grid-items";
-import { defaultSort, sorting } from "src/lib/constants";
-import { getProducts } from "src/lib/shopify";
+import { Metadata } from "next";
+import ProductGrid from "~/components/search/product-grid";
+import { defaultSort, sorting } from "~/lib/constants";
+import { getProducts } from "~/lib/shopify";
 
-export const metadata = {
-  title: "Search",
+export const metadata: Metadata = {
+  title: "Search | Keon",
   description: "Search for products in the store.",
+  openGraph: {
+    type: "website",
+  },
 };
 
 export default async function SearchPage(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
-  const { sort, q: searchValue } = searchParams as { [key: string]: string };
+  const {
+    sort,
+    q: searchValue,
+    minPrice,
+    maxPrice,
+  } = searchParams as { [key: string]: string };
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
 
-  const products = await getProducts({ sortKey, reverse, query: searchValue });
-  const resultsText = products.length > 1 ? "results" : "result";
+  let products = await getProducts({ sortKey, reverse, query: searchValue });
+
+  if (minPrice) {
+    products = products.filter(
+      (p) => parseFloat(p.priceRange.minVariantPrice.amount) >= parseFloat(minPrice),
+    );
+  }
+  if (maxPrice) {
+    products = products.filter(
+      (p) => parseFloat(p.priceRange.minVariantPrice.amount) <= parseFloat(maxPrice),
+    );
+  }
 
   return (
     <>
       {searchValue ? (
-        <p className="mb-4">
+        <p className="mb-6 text-sm text-muted-foreground">
           {products.length === 0
             ? "There are no products that match "
-            : `Showing ${products.length} ${resultsText} for `}
-          <span className="font-bold">&quot;{searchValue}&quot;</span>
+            : `Showing ${products.length} ${products.length === 1 ? "result" : "results"} for `}
+          <span className="font-semibold text-foreground">&quot;{searchValue}&quot;</span>
         </p>
       ) : null}
       {products.length > 0 ? (
-        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          <ProductGridItems products={products} />
-        </Grid>
+        <ProductGrid products={products} />
       ) : null}
     </>
   );

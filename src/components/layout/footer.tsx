@@ -7,10 +7,7 @@ const helpLinks = [
   { title: "Shop", href: "/search" },
   { title: "FAQ", href: "/faq" },
   { title: "Contact", href: "/contact" },
-  { title: "Returns", href: "/returns" },
-  { title: "Shipping", href: "/shipping" },
-  { title: "Privacy", href: "/privacy" },
-  { title: "Legal", href: "/legal" },
+  { title: "Policies", href: "/policies" },
 ];
 
 export default function Footer() {

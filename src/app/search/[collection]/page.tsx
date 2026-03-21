@@ -1,10 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCollection, getCollectionProducts } from "src/lib/shopify";
-
-import Grid from "src/components/grid";
-import ProductGridItems from "src/components/layout/product-grid-items";
-import { defaultSort, sorting } from "src/lib/constants";
+import ProductGrid from "~/components/search/product-grid";
+import { defaultSort, sorting } from "~/lib/constants";
+import { getCollection, getCollectionProducts } from "~/lib/shopify";
 
 export async function generateMetadata(props: {
   params: Promise<{ collection: string }>;
@@ -29,23 +27,35 @@ export default async function CategoryPage(props: {
 }) {
   const searchParams = await props.searchParams;
   const params = await props.params;
-  const { sort } = searchParams as { [key: string]: string };
+  const { sort, minPrice, maxPrice } = searchParams as { [key: string]: string };
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
-  const products = await getCollectionProducts({
+
+  let products = await getCollectionProducts({
     collection: params.collection,
     sortKey,
     reverse,
   });
 
+  if (minPrice) {
+    products = products.filter(
+      (p) => parseFloat(p.priceRange.minVariantPrice.amount) >= parseFloat(minPrice),
+    );
+  }
+  if (maxPrice) {
+    products = products.filter(
+      (p) => parseFloat(p.priceRange.minVariantPrice.amount) <= parseFloat(maxPrice),
+    );
+  }
+
   return (
     <section>
       {products.length === 0 ? (
-        <p className="py-3 text-lg">{`No products found in this collection`}</p>
+        <p className="py-3 text-lg text-muted-foreground">
+          No products found in this collection
+        </p>
       ) : (
-        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          <ProductGridItems products={products} />
-        </Grid>
+        <ProductGrid products={products} />
       )}
     </section>
   );

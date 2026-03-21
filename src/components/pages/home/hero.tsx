@@ -47,7 +47,8 @@ export default function Hero() {
       </div>
       <div className="z-0 h-full w-full flex flex-col">
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 p-5">
-          <div className="col-span-1 flex items-end flex-1 justify-start">
+          <div className="col-span-1 flex flex-col gap-0 items-start flex-1 justify-end">
+          <p className="text-lg font-medium text-end text-green-400">Spring Sale - 20% OFF all orders</p>
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold leading-tight lg:leading-35 text-background font-loud uppercase tracking-wide">
               Type the next big thing
             </h1>

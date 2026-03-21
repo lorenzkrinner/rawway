@@ -1,8 +1,32 @@
 import { Suspense } from "react";
-import Collections from "src/components/layout/search/collections";
-import FilterList from "src/components/layout/search/filter";
-import { sorting } from "src/lib/constants";
+import { TrustpilotReviews } from "~/components/pages/home/trustpilot-reviews";
+import SearchLayoutClient from "~/components/search/search-layout-client";
+import SpringSaleBanner from "~/components/search/spring-sale-banner";
+import { getCollections, getProducts } from "~/lib/shopify";
 import ChildrenWrapper from "./children-wrapper";
+
+async function SearchLayoutServer({ children }: { children: React.ReactNode }) {
+  const [collections, products] = await Promise.all([
+    getCollections(),
+    getProducts({}),
+  ]);
+
+  const prices = products.map((p) => parseFloat(p.priceRange.minVariantPrice.amount));
+  const priceRange = {
+    min: prices.length > 0 ? Math.floor(Math.min(...prices)) : 0,
+    max: prices.length > 0 ? Math.ceil(Math.max(...prices)) : 200,
+  };
+
+  return (
+    <SearchLayoutClient
+      collections={collections}
+      priceRange={priceRange}
+      resultsCount={products.length}
+    >
+      <ChildrenWrapper>{children}</ChildrenWrapper>
+    </SearchLayoutClient>
+  );
+}
 
 export default function SearchLayout({
   children,
@@ -10,18 +34,16 @@ export default function SearchLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="mx-auto flex max-w-(--breakpoint-2xl) flex-col gap-8 px-4 pb-4 text-foreground md:flex-row pt-10">
-      <div className="order-first w-full flex-none md:max-w-[125px]">
-        <Collections />
+    <div className="mx-auto max-w-(--breakpoint-2xl) pt-10 text-foreground">
+      <div className="px-8">
+        <SpringSaleBanner />
+        <div className="my-8">
+          <Suspense fallback={null}>
+            <SearchLayoutServer>{children}</SearchLayoutServer>
+          </Suspense>
+        </div>
       </div>
-      <div className="order-last min-h-screen w-full md:order-none">
-        <Suspense fallback={null}>
-          <ChildrenWrapper>{children}</ChildrenWrapper>
-        </Suspense>
-      </div>
-      <div className="order-none flex-none md:order-last md:w-[125px]">
-        <FilterList list={sorting} title="Sort by" />
-      </div>
+      <TrustpilotReviews />
     </div>
   );
 }
