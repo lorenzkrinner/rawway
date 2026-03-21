@@ -56,17 +56,10 @@ export default function NavbarClient({
 }) {
   const pathname = usePathname();
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [windowHeight, setWindowHeight] = useState(
-    typeof window !== "undefined" ? window.innerHeight : 0,
-  );
+  const [hasMounted, setHasMounted] = useState(false);
+  const [windowHeight, setWindowHeight] = useState(0);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [navTextClass, setNavTextClass] = useState(
-    "text-foreground transition-colors duration-300 ease-in-out",
-  );
-  const [navTextMutedClass, setNavTextMutedClass] =
-    useState("text-foreground/60 transition-colors duration-300 ease-in-out");
-  const [searchBgClass, setSearchBgClass] = useState("bg-foreground/5 transition-colors duration-300 ease-in-out");
-  const [navBgClass, setNavBgClass] = useState("bg-transparent transition-colors duration-300 ease-in-out");
+  const TRANSITION = "transition-colors duration-300 ease-in-out";
 
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
@@ -98,6 +91,10 @@ export default function NavbarClient({
   }, []);
 
   useEffect(() => {
+    setWindowHeight(window.innerHeight);
+    setScrollPosition(window.scrollY);
+    setHasMounted(true);
+
     function handleResize() {
       setWindowHeight(window.innerHeight);
     }
@@ -114,35 +111,24 @@ export default function NavbarClient({
   }, []);
 
   const isHome = pathname === "/";
-  const isAboveTheFold = scrollPosition < windowHeight;
+  const isAboveTheFold = hasMounted && scrollPosition < windowHeight;
   const isHoveringOverExpandable =
     hoverIndex !== null && NAV_LINKS[hoverIndex]?.expandable;
 
   const heroLightNav = isHome && isAboveTheFold && !isHoveringOverExpandable;
 
-  useEffect(() => {
-
-    setNavBgClass(
-      heroLightNav
-        ? "bg-background transition-colors duration-300 ease-in-out"
-        : "bg-transparent transition-colors duration-300 ease-in-out",
-    );
-    setNavTextClass(
-      heroLightNav
-        ? "text-background hover:text-background dark:text-foreground transition-colors duration-300 ease-in-out"
-        : "text-foreground transition-colors duration-300 ease-in-out",
-    );
-    setNavTextMutedClass(
-      heroLightNav
-        ? "text-background/60 dark:text-foreground/60 transition-colors duration-300 ease-in-out"
-        : "text-foreground/60 transition-colors duration-300 ease-in-out",
-    );
-    setSearchBgClass(
-      heroLightNav
-        ? "bg-background/30 transition-colors duration-300 ease-in-out"
-        : "bg-foreground/5 transition-colors duration-300 ease-in-out",
-    );
-  }, [isHome, isAboveTheFold, hoverIndex]);
+  const navBgClass = heroLightNav
+    ? `bg-transparent ${TRANSITION}`
+    : `bg-background ${TRANSITION}`;
+  const navTextClass = heroLightNav
+    ? `text-background hover:text-background dark:text-foreground ${TRANSITION}`
+    : `text-foreground ${TRANSITION}`;
+  const navTextMutedClass = heroLightNav
+    ? `text-background/60 dark:text-foreground/60 ${TRANSITION}`
+    : `text-foreground/60 ${TRANSITION}`;
+  const searchBgClass = heroLightNav
+    ? `bg-background/30 ${TRANSITION}`
+    : `bg-foreground/5 ${TRANSITION}`;
 
   const maxBlurPx = 12;
   const blurProgress = Math.min(
@@ -150,18 +136,16 @@ export default function NavbarClient({
     1,
   );
   const backdropBlurPx = isHome ? blurProgress * maxBlurPx : 0;
-  const backgroundAlphaPercent = isHome ? blurProgress * 30 : 0;
 
   return (
     <>
       <nav
         className={cn(
           "fixed top-0 left-0 right-0 z-50 w-full flex items-center justify-between px-6 transition-[background-color,backdrop-filter] duration-300 ease-in-out",
-          "bg-transparent",
+          navBgClass,
         )}
         style={{
           height: NAV_HEIGHT,
-          backgroundColor: navBgClass,
           backdropFilter: isHoveringOverExpandable
             ? "none"
             : `blur(${backdropBlurPx}px)`,
