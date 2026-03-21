@@ -21,12 +21,12 @@ export default function NewsletterForm() {
   return (
     <div>
       <h3 className="font-loud text-2xl font-black text-foreground">
-        Join our Newsletter
+        Get 10% off your first order
       </h3>
       <p className="mt-4 text-sm leading-relaxed">
-        Sign up now to get exclusive{" "}
-        <span className="font-semibold text-foreground">early access</span> for
-        future drops, important{" "}
+        Sign up now to,{" "}
+        <span className="font-semibold text-foreground">get a 10% discount on your first order</span>{", "}
+        exclusive{" "}
         <span className="font-semibold text-foreground">updates</span>, and
         behind-the-scenes{" "}
         <span className="font-semibold text-foreground">insights</span>!

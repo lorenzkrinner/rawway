@@ -8,16 +8,16 @@ import { Button } from "~/components/ui/button";
 
 const reviews = [
   {
-    title: "A Game Changer for My Workflow",
-    body: "As a founder, I spend 10+ hours a day typing. Switching to Keon was night and day — the tactile feedback keeps me focused and the build quality is **unmatched at this price point**. Worth every cent.",
-    author: "David R.",
-    image: "/images/reviews/david.png",
-  },
-  {
     title: "Finally, a Keyboard That Gets It",
     body: "I've tried dozens of mechanical keyboards over the years. Keon nails the balance between aesthetics and performance. The sound profile is incredibly satisfying and it **looks stunning on my desk**.",
     author: "Sarah K.",
     image: "/images/reviews/sarah.png",
+  },
+  {
+    title: "A Game Changer for My Workflow",
+    body: "As a founder, I spend 10+ hours a day typing. Switching to Keon was night and day — the tactile feedback keeps me focused and the build quality is **unmatched at this price point**. Worth every cent.",
+    author: "David R.",
+    image: "/images/reviews/david.png",
   },
   {
     title: "Built for People Who Ship",

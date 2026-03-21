@@ -4,6 +4,7 @@ import {
 } from "~/constants/shopify";
 import { getCollectionProducts } from "~/lib/shopify";
 import { Accessories } from "./accessories";
+import AnimatedKeyboard from "./animated-keyboard";
 import { BrandStory } from "./brand-story";
 import Hero from "./hero";
 import { ProductSpotlight } from "./product-spotlight";
@@ -27,6 +28,7 @@ export default async function Home() {
 
       <div className="flex flex-col max-w-(--breakpoint-2xl) mx-auto">
         <ProductSpotlight products={featuredProducts} />
+        <AnimatedKeyboard /> 
         <Reviews />
         <Accessories products={accessoryProducts} />
         <Spirit />

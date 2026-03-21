@@ -11,9 +11,9 @@ const helpLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-accent text-muted-foreground">
-      <div className="mx-auto w-full max-w-7xl px-6 py-16 md:px-4 min-[1320px]:px-0">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-16">
+    <footer className="bg-accent text-muted-foreground overflow-hidden">
+      <div className="w-full min-[1320px]:px-0 flex flex-col center">
+        <div className="mx-auto px-6 py-16 lg:py-24 md:px-4  grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-16 max-w-7xl">
           <div>
             <Logo className="text-lg text-foreground" />
             <p className="mt-4 text-sm leading-relaxed">
@@ -50,6 +50,10 @@ export default function Footer() {
           </div>
 
           <NewsletterForm />
+        </div>
+        <div className="relative w-full h-50">
+          <div className="bg-linear-to-t from-muted to-transparent absolute inset-0 z-5 flex-1" />
+          <span className="absolute -top-50 left-1/2 -translate-x-1/2 text-center text-[390px] w-fit font-loud uppercase">KEON</span>
         </div>
       </div>
     </footer>
