@@ -30,6 +30,11 @@ const NAV_LINKS = [
     path: "/about",
     expandable: false,
   },
+  {
+    title: "Contact",
+    path: "/contact",
+    expandable: false,
+  },
 ] as const;
 
 export default function NavbarClient({
